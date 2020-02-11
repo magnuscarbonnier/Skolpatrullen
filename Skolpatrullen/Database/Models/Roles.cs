@@ -6,7 +6,7 @@ namespace Database.Models
 {
     public enum Roles
     {
-        Studen = 0,
+        Student = 0,
         Teacher = 1
     }
 }
