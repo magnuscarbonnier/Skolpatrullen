@@ -8,6 +8,7 @@ namespace Database.Models
     {
         public int UserId { get; set; }
         public int CourseId { get; set; }
-        public Role Role { get; set; }
+        public Roles Role { get; set; }
+        public string Grade { get; set; }
     }
 }

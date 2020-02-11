@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Database.Models
 {
-    public class Role
+    public class Room
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<CourseParticipant> UserCourses { get; set; }
     }
 }
