@@ -6,7 +6,7 @@ namespace Database.Models
     public class Context : DbContext
     {
         public DbSet<Course> Courses { get; set; }
-        public DbSet<CourseParticipant> UserCourses { get; set; }
+        public DbSet<CourseParticipant> CourseParticipants { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<User> Users { get; set; }

@@ -13,7 +13,7 @@ namespace Database.Models
         public string SocialSecurityNr { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public ICollection<CourseParticipant> UserCourses { get; set; }
+        public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
     }
 }

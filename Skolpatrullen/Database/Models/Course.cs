@@ -12,7 +12,7 @@ namespace Database.Models
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public ICollection<CourseParticipant> UserCourses { get; set; }
+        public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public School School { get; set; }
         public Room Room { get; set; }
     }
