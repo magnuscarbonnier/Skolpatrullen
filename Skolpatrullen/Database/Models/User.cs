@@ -21,6 +21,11 @@ namespace Database.Models
         [Required]
         [Range(8,16)]
         public string Password { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        public string City { get; set; }
+        public int PostalCode { get; set; }
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
     }
