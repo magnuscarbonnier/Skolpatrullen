@@ -25,7 +25,8 @@ namespace Database.Models
         public string Address { get; set; }
         [Required]
         public string City { get; set; }
-        public int PostalCode { get; set; }
+        [Required]
+        public string PostalCode { get; set; }
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
     }
