@@ -9,6 +9,5 @@ namespace Database.Models
         public int UserId { get; set; }
         public int SchoolId { get; set; }
         public bool IsAdmin { get; set; }
-
     }
 }
