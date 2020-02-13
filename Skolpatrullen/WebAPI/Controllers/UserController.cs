@@ -30,6 +30,7 @@ namespace WebAPI.Controllers
                 {
                     user.Password = ComputeSha256Hash(user.Password);
                     _context.Users.Add(user);
+                    _context.SaveChanges();
                 }
             }
             return CreatedAtAction(nameof(Register), new { id = user.Id }, user);
