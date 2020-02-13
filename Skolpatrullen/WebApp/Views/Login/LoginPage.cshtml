@@ -1,4 +1,5 @@
-﻿@{
+﻿@model WebApp.ViewModels.LoginViewModel
+@{
     ViewData["Title"] = "LoginPage";
 }
 
@@ -8,22 +9,22 @@
         <div class="col">
         </div>
         <div class="col">
-            <form>
+            <form method="post" asp-action="LoginPage">
                 <div class="form-group">
-                    <label for="exampleInputEmail1">Epostadress</label>
-                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Lägg till email" required>
+                    <label asp-for="Email">Epostadress</label>
+                    <input asp-for="Email" type="email" class="form-control">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label for="exampleInputPassword1">Lösenord</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Lösenord" required>
+                    <label asp-for="Password">Lösenord</label>
+                    <input asp-for="Password" type="password" class="form-control">
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-primary">Logga in</button>
+                <button class="btn btn-outline-primary">Registrera dig</button>
 
             </form>
 
-            <form>
-                <button type="submit" class="btn btn-outline-primary">Registrera dig</button>
-            </form>
 
         </div>
 
