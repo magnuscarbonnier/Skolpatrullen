@@ -19,10 +19,10 @@ namespace WebApp.ViewModels
         [Required]
         public string Email { get; set; }
         [Required]
-        [Range(8, 16)]
+        [StringLength(16, MinimumLength = 8)]
         public string Password { get; set; }
         [Required]
-        [Range(8, 16)]
+        [StringLength(16, MinimumLength = 8)]
         public string RePassword { get; set; }
         [Required]
         public string Address { get; set; }
