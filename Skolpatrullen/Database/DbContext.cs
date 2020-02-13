@@ -17,5 +17,9 @@ namespace Database.Models
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Skolpatrullen;Trusted_Connection=True;");
         }
 
+        public Context(DbContextOptions<Context> options) : base(options)
+        {
+
+        }
     }
 }
