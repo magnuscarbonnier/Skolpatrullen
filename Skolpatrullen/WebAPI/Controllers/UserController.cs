@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using WebApp.ViewModels;
 
 namespace WebAPI.Controllers
 {
@@ -35,7 +36,24 @@ namespace WebAPI.Controllers
             }
             return CreatedAtAction(nameof(Register), new { id = user.Id }, user);
         }
-
+        [HttpPost]
+        [Route("[controller]/Login")]
+        public bool Login(LoginViewModel login)
+        {
+            if (login != null)
+            {
+                User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
+                if (user == null)
+                {
+                    return false;
+                }
+                if (user.Password == ComputeSha256Hash(login.Password))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         static string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
