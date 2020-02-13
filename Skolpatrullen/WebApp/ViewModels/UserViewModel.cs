@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -29,5 +30,21 @@ namespace WebApp.ViewModels
         public string City { get; set; }
         [Required]
         public string PostalCode { get; set; }
+
+        public User ToUser()
+        {
+            return new User
+            {
+                FirstName = this.FirstName,
+                LastNames = this.LastNames,
+                Phone = this.Phone,
+                SocialSecurityNr = this.SocialSecurityNr,
+                Email = this.Email,
+                Password = this.Password,
+                Address = this.Address,
+                City = this.City,
+                PostalCode = this.PostalCode
+            };
+        }
     }
 }
