@@ -46,7 +46,7 @@ namespace WebAPI.Controllers
         public APIResponse<LoginSession> Login(LoginViewModel login)
         {
             APIResponse<LoginSession> response = new APIResponse<LoginSession>();
-            User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
+            User user = _context.Users.SingleOrDefault(u => u.Email == login.Email);
             if (user == null)
             {
                 response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
