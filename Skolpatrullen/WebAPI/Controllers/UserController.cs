@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.ViewModels;
 
@@ -55,6 +56,34 @@ namespace WebAPI.Controllers
             else if (user.Password == ComputeSha256Hash(login.Password))
             {
                 response.Data = AddOrUpdateLoginSession(user);
+                response.Success = true;
+            }
+            else
+            {
+                response.ErrorMessages.Add("Fel lösenord");
+                response.Success = false;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("[controller]/GetLoginSession")]
+        public APIResponse<LoginSession> GetLoginSession(TokenBody token)
+        {
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            LoginSession session = _context.LoginSessions.Include(ls => ls.User).SingleOrDefault(ls => ls.Token == token.token);
+            if (session == null)
+            {
+                response.ErrorMessages.Add($"Hittade ingen LoginSession med token: {token}");
+                response.Success = false;
+            }
+            else if (session.Expires < DateTime.Now.ToUniversalTime())
+            {
+                response.ErrorMessages.Add($"LoginSession har gått ut");
+                response.Success = false;
+            }
+            else
+            {
+                response.Data = session;
                 response.Success = true;
             }
             return response;
@@ -107,6 +136,10 @@ namespace WebAPI.Controllers
                 }
                 return builder.ToString();
             }
+        }
+        public class TokenBody
+        {
+            public string token { get; set; }
         }
     }
 }
