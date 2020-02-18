@@ -69,7 +69,6 @@ namespace WebAPI.Controllers
             else
             {
                 session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
-                session.Token = Guid.NewGuid().ToString();
                 _context.LoginSessions.Update(session);
             }
             return session;
