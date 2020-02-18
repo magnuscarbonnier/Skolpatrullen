@@ -1,4 +1,5 @@
 ﻿using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -53,15 +54,15 @@ namespace WebApp.Controllers
                 return response;
             }
         }
-        public async Task<APIResponse<bool>> APILogin(LoginViewModel loginVM)
+        public async Task<APIResponse<LoginSession>> APILogin(LoginViewModel loginVM)
         {
             HttpResponseMessage response = await APIPost("/User/Login", loginVM);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),typeof(APIResponse<LoginSession>));
         }
         public async Task<APIResponse<LoginSession>> APIGetLoginSession(string token)
         {
-            HttpResponseMessage response = await APIPost("/User/GetLoginSession", token);
-            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync());
+            HttpResponseMessage response = await APIPost("/User/GetLoginSession", new TokenBody { token = token });
+            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
     }
 }

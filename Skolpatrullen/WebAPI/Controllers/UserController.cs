@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -137,10 +138,6 @@ namespace WebAPI.Controllers
                 }
                 return builder.ToString();
             }
-        }
-        public class TokenBody
-        {
-            public string token { get; set; }
         }
     }
 }
