@@ -68,8 +68,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
-                _context.LoginSessions.Update(session);
+                session = UpdateLoginSession(session);
             }
             return session;
         }
@@ -82,6 +81,12 @@ namespace WebAPI.Controllers
                 UserId = user.Id
             };
             _context.LoginSessions.Add(session);
+            return session;
+        }
+        LoginSession UpdateLoginSession(LoginSession session)
+        {
+            session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
+            _context.LoginSessions.Update(session);
             return session;
         }
         static string ComputeSha256Hash(string rawData)
