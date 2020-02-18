@@ -19,6 +19,8 @@ namespace Database.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<CourseRoom>().HasKey(cr => new { cr.CourseId, cr.RoomId });
+
+            builder.Entity<User>().Property(u => u.IsSuperUser).HasDefaultValue(false);
         }
 
         public Context(DbContextOptions<Context> options) : base(options)
