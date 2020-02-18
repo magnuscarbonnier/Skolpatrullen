@@ -81,12 +81,14 @@ namespace WebAPI.Controllers
                 UserId = user.Id
             };
             _context.LoginSessions.Add(session);
+            _context.SaveChanges();
             return session;
         }
         LoginSession UpdateLoginSession(LoginSession session)
         {
             session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
             _context.LoginSessions.Update(session);
+            _context.SaveChanges();
             return session;
         }
         static string ComputeSha256Hash(string rawData)
