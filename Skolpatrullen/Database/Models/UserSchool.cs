@@ -10,5 +10,8 @@ namespace Database.Models
         public int UserId { get; set; }
         public int SchoolId { get; set; }
         public bool IsAdmin { get; set; }
+
+        public User User { get; set; }
+        public School School { get; set; }
     }
 }
