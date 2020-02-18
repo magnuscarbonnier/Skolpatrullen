@@ -22,9 +22,24 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]")]
-        public IActionResult LoginPage()
+        public async Task<IActionResult> LoginPage()
         {
-            return View();
+            try
+            {
+                await GetUser();
+            }
+            catch
+            {
+
+            }
+            if (User == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
         [HttpPost]
         [Route("[controller]")]
