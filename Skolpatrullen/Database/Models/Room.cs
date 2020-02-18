@@ -13,6 +13,6 @@ namespace Database.Models
         public string Name { get; set; }
 
         public School School { get; set; }
-        public ICollection<Course> Courses{ get; set; }
+        public ICollection<CourseRoom> CourseRooms { get; set; }
     }
 }
