@@ -83,6 +83,7 @@ namespace WebAPI.Controllers
             }
             else
             {
+                UpdateLoginSession(session);
                 response.Data = session;
                 response.Success = true;
             }
