@@ -33,9 +33,6 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
 
@@ -43,8 +40,6 @@ namespace Database.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
 
                     b.HasIndex("SchoolId");
 
@@ -77,6 +72,21 @@ namespace Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CourseParticipants");
+                });
+
+            modelBuilder.Entity("Database.Models.CourseRoom", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("CourseRoom");
                 });
 
             modelBuilder.Entity("Database.Models.Room", b =>
@@ -160,7 +170,8 @@ namespace Database.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -206,12 +217,6 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Models.Course", b =>
                 {
-                    b.HasOne("Database.Models.Room", "Room")
-                        .WithMany("Courses")
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Models.School", "School")
                         .WithMany("Courses")
                         .HasForeignKey("SchoolId")
@@ -230,6 +235,21 @@ namespace Database.Migrations
                     b.HasOne("Database.Models.User", "User")
                         .WithMany("CourseParticipants")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Models.CourseRoom", b =>
+                {
+                    b.HasOne("Database.Models.Course", "Course")
+                        .WithMany("CourseRooms")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Models.Room", "Room")
+                        .WithMany("CourseRooms")
+                        .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

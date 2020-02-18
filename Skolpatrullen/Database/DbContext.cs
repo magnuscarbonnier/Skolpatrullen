@@ -16,6 +16,10 @@ namespace Database.Models
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Skolpatrullen;Trusted_Connection=True;");
         }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<CourseRoom>().HasKey(cr => new { cr.CourseId, cr.RoomId });
+        }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
