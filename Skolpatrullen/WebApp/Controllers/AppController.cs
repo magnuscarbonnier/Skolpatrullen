@@ -15,7 +15,7 @@ namespace WebApp.Controllers
     public abstract class AppController : Controller
     {
         private readonly HttpClient HttpClient;
-        private User User;
+        public User User = null;
         public AppController()
         {
             HttpClient = new HttpClient();
