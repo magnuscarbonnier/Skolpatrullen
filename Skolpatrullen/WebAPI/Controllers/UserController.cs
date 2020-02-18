@@ -23,36 +23,42 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/Register")]
-        public ActionResult<User> Register(User user)
+        public APIResponse<LoginSession> Register(User user)
         {
-            if (user != null)
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            if (!_context.Users.Any(u => u.Email == user.Email))
             {
-                if (!_context.Users.Any(u => u.Email == user.Email))
-                {
-                    user.Password = ComputeSha256Hash(user.Password);
-                    _context.Users.Add(user);
-                    _context.SaveChanges();
-                }
+                user.Password = ComputeSha256Hash(user.Password);
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                //create login session for new user
+                response.Success = true;
             }
-            return CreatedAtAction(nameof(Register), new { id = user.Id }, user);
+            else
+            {
+                response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                response.Success = false;
+            }
+            return response;
         }
         [HttpPost]
         [Route("[controller]/Login")]
-        public bool Login(LoginViewModel login)
+        public APIResponse<bool> Login(LoginViewModel login)
         {
-            if (login != null)
+            APIResponse<bool> response = new APIResponse<bool>();
+            User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
+            if (user == null)
             {
-                User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
-                if (user == null)
-                {
-                    return false;
-                }
-                if (user.Password == ComputeSha256Hash(login.Password))
-                {
-                    return true;
-                }
+                response.Data = false;
+                response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
+                response.Success = false;
             }
-            return false;
+            else if (user.Password == ComputeSha256Hash(login.Password))
+            {
+                response.Data = true;
+                response.Success = true;
+            }
+            return response;
         }
         static string ComputeSha256Hash(string rawData)
         {
