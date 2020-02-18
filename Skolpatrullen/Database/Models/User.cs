@@ -27,6 +27,7 @@ namespace Database.Models
         public string City { get; set; }
         [Required]
         public string PostalCode { get; set; }
+        public bool IsSuperUser { get; set; }
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
     }
