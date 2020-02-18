@@ -22,12 +22,12 @@ namespace WebApp.Controllers
             HttpClient = new HttpClient();
         }
 
-        public async void GetUser()
+        public async Task<string> GetUser()
         {
             KeyValuePair<string,string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
             if (cookie.Value.Value == null)
             {
-                throw new Exception("Inte inloggad");
+                return "Inte inloggad";
             }
             var response = await APIGetLoginSession(cookie.Value.Value);
             if (response.Success)
@@ -41,8 +41,9 @@ namespace WebApp.Controllers
                 {
                     errorMessage += em + "\n";
                 }
-                throw new Exception(errorMessage);
+                return errorMessage;
             }
+            return "Något gick fel ¯\\_(ツ)_/¯";
         }
 
         public async Task<HttpResponseMessage> APIPost<T>(string route, T body)
