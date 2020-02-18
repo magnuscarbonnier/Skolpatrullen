@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
                 user.Password = ComputeSha256Hash(user.Password);
                 _context.Users.Add(user);
                 _context.SaveChanges();
-                //create login session for new user
+                response.Data = AddLoginSession(user);
                 response.Success = true;
             }
             else
@@ -43,22 +43,47 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/Login")]
-        public APIResponse<bool> Login(LoginViewModel login)
+        public APIResponse<LoginSession> Login(LoginViewModel login)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
             User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
             if (user == null)
             {
-                response.Data = false;
                 response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
                 response.Success = false;
             }
             else if (user.Password == ComputeSha256Hash(login.Password))
             {
-                response.Data = true;
+                response.Data = AddOrUpdateLoginSession(user);
                 response.Success = true;
             }
             return response;
+        }
+        LoginSession AddOrUpdateLoginSession(User user)
+        {
+            var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
+            if (session == null)
+            {
+                session = AddLoginSession(user);
+            }
+            else
+            {
+                session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
+                session.Token = Guid.NewGuid().ToString();
+                _context.LoginSessions.Update(session);
+            }
+            return session;
+        }
+        LoginSession AddLoginSession(User user)
+        {
+            LoginSession session = new LoginSession()
+            {
+                Token = Guid.NewGuid().ToString(),
+                Expires = DateTime.Now.AddMinutes(15).ToUniversalTime(),
+                UserId = user.Id
+            };
+            _context.LoginSessions.Add(session);
+            return session;
         }
         static string ComputeSha256Hash(string rawData)
         {
