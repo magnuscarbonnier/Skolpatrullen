@@ -12,21 +12,8 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class RoomController : Controller
+    public class RoomController : AppController
     {
-        private readonly HttpClient _client;
-
-        public RoomController()
-        {
-            _client = new HttpClient();
-        }
-
-        [BindProperty]
-        public int SelectedSchool { get; set; }
-
-        [BindProperty]
-        public IEnumerable<School> SchoolList { get; set; }
-
         [HttpGet]
         [Route("[controller]")]
         public IActionResult AddRoomPage()
