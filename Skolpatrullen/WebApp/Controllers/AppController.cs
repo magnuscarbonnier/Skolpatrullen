@@ -67,6 +67,11 @@ namespace WebApp.Controllers
                 return response;
             }
         }
+        public async Task<HttpResponseMessage> APIGet(string route)
+        {
+                HttpResponseMessage response = await HttpClient.GetAsync("https://localhost:44367" + route);
+                return response;
+        }
         public async Task<APIResponse<LoginSession>> APILogin(LoginViewModel loginVM)
         {
             HttpResponseMessage response = await APIPost("/User/Login", loginVM);
