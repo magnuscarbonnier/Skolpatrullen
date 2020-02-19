@@ -24,6 +24,15 @@ namespace WebApp.Controllers
 
             HttpClient = new HttpClient(clientHandler);
         }
+        public override ViewResult View()
+        {
+            var vm = new LayoutViewModel();
+            if (User != null)
+            {
+                vm.User = User;
+            }
+            return View(vm);
+        }
 
         public async Task<string> GetUser()
         {
