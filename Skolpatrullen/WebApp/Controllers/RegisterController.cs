@@ -11,28 +11,32 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class RegisterController : Controller
+    public class RegisterController : AppController
     {
-        private readonly HttpClient _client;
-        public RegisterController()
-        {
-            _client = new HttpClient();
-        }
         [HttpGet]
         [Route("[controller]")]
-        public IActionResult RegisterPage()
+        public async Task<IActionResult> RegisterPage()
         {
+            string message = await GetUser();
+            if (User != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
         [Route("[controller]")]
         public async Task<IActionResult> RegisterPage(UserViewModel userVM)
         {
+            string message = await GetUser();
+            if (User != null)
+            {
+                return RedirectToAction("Index", "Home"); 
+            }
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            HttpResponseMessage response;
             try
             {
                 if (!(userVM.Password == userVM.RePassword))
@@ -41,10 +45,11 @@ namespace WebApp.Controllers
                     userVM.RePassword = "";
                     return View(userVM);
                 }
-                var json = JsonConvert.SerializeObject(userVM.ToUser());
-                using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
+                var response = await APIRegister(userVM);
+                if (response.Data != null)
                 {
-                    response = await _client.PostAsync("https://localhost:44367/User/Register", stringContent);
+                    Response.Cookies.Append("LoginToken", response.Data.Token);
+                    return RedirectToAction("Index", "Home");
                 }
             }
             catch
