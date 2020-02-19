@@ -8,10 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApp.Models;
 using WebApp.ViewModels;
+using Database.Models;
+using Lib;
 
 namespace WebApp.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : AppController
     {
         private readonly HttpClient _client;
         public LoginController()
@@ -20,9 +22,24 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]")]
-        public IActionResult LoginPage()
+        public async Task<IActionResult> LoginPage()
         {
-            return View();
+            try
+            {
+                await GetUser();
+            }
+            catch
+            {
+
+            }
+            if (User == null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
         [HttpPost]
         [Route("[controller]")]
@@ -36,14 +53,19 @@ namespace WebApp.Controllers
             {
                 if (loginVM != null)
                 {
-                    var json = JsonConvert.SerializeObject(loginVM);
-                    using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
+                    APIResponse<LoginSession> response = await APILogin(loginVM);
+                    if (response.Success)
                     {
-                        HttpResponseMessage response = await _client.PostAsync("https://localhost:44367/User/Login", stringContent);
-                        if (bool.Parse(await response.Content.ReadAsStringAsync()))
+                        if (response.Data != null)
                         {
+                            Response.Cookies.Append("LoginToken", response.Data.Token);
                             return RedirectToAction("Index", "Home");
                         }
+                    }
+                    else
+                    {
+                        //forward error messages in response to view
+                        return View();
                     }
                 }
             }
