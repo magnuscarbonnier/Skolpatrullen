@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -14,7 +15,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string message = await GetUser();
-            return View();
+            return View(new LayoutViewModel { User = User });
         }
 
         public async Task<IActionResult> Privacy()

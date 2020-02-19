@@ -43,19 +43,23 @@ namespace WebApp.Controllers
                 {
                     userVM.Password = "";
                     userVM.RePassword = "";
+                    TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
                     return View(userVM);
                 }
                 var response = await APIRegister(userVM);
                 if (response.Data != null)
                 {
                     Response.Cookies.Append("LoginToken", response.Data.Token);
+                    TempData["SuccessMessage"] = $"Användare tillagd.";
                     return RedirectToAction("Index", "Home");
                 }
             }
             catch
             {
+                TempData["ErrorMessage"] = $"Error!";
                 //send to error?
             }
+            
             return View();
         }
     }

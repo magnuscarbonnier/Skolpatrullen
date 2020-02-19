@@ -18,7 +18,11 @@ namespace WebApp.Controllers
         public User User = null;
         public AppController()
         {
-            HttpClient = new HttpClient();
+            //det här behövs för att Issas dator är fucked
+            HttpClientHandler clientHandler = new HttpClientHandler();
+            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
+
+            HttpClient = new HttpClient(clientHandler);
         }
 
         public async Task<string> GetUser()
