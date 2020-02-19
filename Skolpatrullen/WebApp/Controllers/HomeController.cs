@@ -15,7 +15,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string message = await GetUser();
-            return View(new LayoutViewModel { User = User });
+            return View();
         }
 
         public async Task<IActionResult> Privacy()
