@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@model WebApp.ViewModels.LayoutViewModel
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -24,12 +25,32 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="LoginPage">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Profil</a>
-                        </li>
+
+                        @{
+                            if (Model.User != null)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Logout" asp-action="LogoutPage">Logout</a>
+                                </li>
+                                if (Model.User.IsSuperUser == true)
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="SuperUser" asp-action="SuperUserPage">SuperUser</a>
+                                    </li>
+                                }
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Profil</a>
+                            </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="LoginPage">Login</a>
+                                </li>
+                            }
+
+                        }
+                        
                     </ul>
                 </div>
             </div>
@@ -37,6 +58,18 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissable">
+                    <strong>@TempData["SuccessMessage"]</strong>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissable">
+                    <strong>@TempData["ErrorMessage"]</strong>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>
