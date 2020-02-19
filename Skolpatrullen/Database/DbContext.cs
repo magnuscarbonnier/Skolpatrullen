@@ -11,6 +11,7 @@ namespace Database.Models
         public DbSet<School> Schools { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSchool> UserSchools { get; set; }
+        public DbSet<LoginSession> LoginSessions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

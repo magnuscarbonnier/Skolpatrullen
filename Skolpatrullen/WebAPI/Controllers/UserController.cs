@@ -5,7 +5,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.ViewModels;
 
@@ -23,36 +25,102 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/Register")]
-        public ActionResult<User> Register(User user)
+        public APIResponse<LoginSession> Register(User user)
         {
-            if (user != null)
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            if (!_context.Users.Any(u => u.Email == user.Email))
             {
-                if (!_context.Users.Any(u => u.Email == user.Email))
-                {
-                    user.Password = ComputeSha256Hash(user.Password);
-                    _context.Users.Add(user);
-                    _context.SaveChanges();
-                }
+                user.Password = ComputeSha256Hash(user.Password);
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                response.Data = AddLoginSession(user);
+                response.Success = true;
             }
-            return CreatedAtAction(nameof(Register), new { id = user.Id }, user);
+            else
+            {
+                response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                response.Success = false;
+            }
+            return response;
         }
         [HttpPost]
         [Route("[controller]/Login")]
-        public bool Login(LoginViewModel login)
+        public APIResponse<LoginSession> Login(LoginViewModel login)
         {
-            if (login != null)
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            User user = _context.Users.SingleOrDefault(u => u.Email == login.Email);
+            if (user == null)
             {
-                User user = _context.Users.Where(u => u.Email == login.Email).FirstOrDefault();
-                if (user == null)
-                {
-                    return false;
-                }
-                if (user.Password == ComputeSha256Hash(login.Password))
-                {
-                    return true;
-                }
+                response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
+                response.Success = false;
             }
-            return false;
+            else if (user.Password == ComputeSha256Hash(login.Password))
+            {
+                response.Data = AddOrUpdateLoginSession(user);
+                response.Success = true;
+            }
+            else
+            {
+                response.ErrorMessages.Add("Fel lösenord");
+                response.Success = false;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("[controller]/GetLoginSession")]
+        public APIResponse<LoginSession> GetLoginSession(TokenBody token)
+        {
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            LoginSession session = _context.LoginSessions.Include(ls => ls.User).SingleOrDefault(ls => ls.Token == token.token);
+            if (session == null)
+            {
+                response.ErrorMessages.Add($"Hittade ingen LoginSession med token: {token}");
+                response.Success = false;
+            }
+            else if (session.Expires < DateTime.Now.ToUniversalTime())
+            {
+                response.ErrorMessages.Add($"LoginSession har gått ut");
+                response.Success = false;
+            }
+            else
+            {
+                UpdateLoginSession(session);
+                response.Data = session;
+                response.Success = true;
+            }
+            return response;
+        }
+        LoginSession AddOrUpdateLoginSession(User user)
+        {
+            var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
+            if (session == null)
+            {
+                session = AddLoginSession(user);
+            }
+            else
+            {
+                session = UpdateLoginSession(session);
+            }
+            return session;
+        }
+        LoginSession AddLoginSession(User user)
+        {
+            LoginSession session = new LoginSession()
+            {
+                Token = Guid.NewGuid().ToString(),
+                Expires = DateTime.Now.AddMinutes(15).ToUniversalTime(),
+                UserId = user.Id
+            };
+            _context.LoginSessions.Add(session);
+            _context.SaveChanges();
+            return session;
+        }
+        LoginSession UpdateLoginSession(LoginSession session)
+        {
+            session.Expires = DateTime.Now.AddMinutes(15).ToUniversalTime();
+            _context.LoginSessions.Update(session);
+            _context.SaveChanges();
+            return session;
         }
         static string ComputeSha256Hash(string rawData)
         {
