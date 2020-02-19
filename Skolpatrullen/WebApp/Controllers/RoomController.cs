@@ -18,7 +18,9 @@ namespace WebApp.Controllers
         [Route("[controller]")]
         public async Task<IActionResult> AddRoomPage()
         {
+            string message = await GetUser();
             var model = new RoomViewModel();
+            model.User = User;
             var response = await APIGetAllSchools();
             if (response.Data != null)
             {
@@ -31,6 +33,7 @@ namespace WebApp.Controllers
         [Route("[controller]")]
         public async Task<IActionResult> AddRoomPage(RoomViewModel roomVM)
         {
+            string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View();
