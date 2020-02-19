@@ -12,28 +12,22 @@ namespace WebApp.Controllers
 {
     public class HomeController : AppController
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
         public async Task<IActionResult> Index()
         {
-            await GetUser();
-
+            string message = await GetUser();
             return View(new LayoutViewModel { User = User });
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+            string message = await GetUser();
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public async Task<IActionResult> Error()
         {
+            string message = await GetUser();
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

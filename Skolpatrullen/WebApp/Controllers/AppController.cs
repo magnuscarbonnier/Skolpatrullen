@@ -68,5 +68,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/GetLoginSession", new TokenBody { token = token });
             return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
+        public async Task<APIResponse<LoginSession>> APIRegister(UserViewModel UserVM)
+        {
+            HttpResponseMessage response = await APIPost("/User/Register", UserVM);
+            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
+        }
     }
 }
