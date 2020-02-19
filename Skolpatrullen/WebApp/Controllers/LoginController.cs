@@ -34,7 +34,7 @@ namespace WebApp.Controllers
             }
             if (User == null)
             {
-                return View();
+                return View(new LoginViewModel());
             }
             else
             {
