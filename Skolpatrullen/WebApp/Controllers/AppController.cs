@@ -87,5 +87,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Register", UserVM);
             return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
+        public async Task<APIResponse<IEnumerable<School>>> APIGetAllSchools()
+        {
+            HttpResponseMessage response = await APIGet("/School/GetAllSchools");
+            return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
+        }
+        public async Task<APIResponse<Room>> APIAddRoom(Room room)
+        {
+            HttpResponseMessage response = await APIPost("/Room/Add", room);
+            return (APIResponse<Room>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Room>));
+        }
     }
 }
