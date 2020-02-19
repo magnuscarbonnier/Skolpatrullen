@@ -17,9 +17,7 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SchoolId" class="control-label">Skolans ID</label>
-                <input asp-for="SchoolId" class="form-control" />
-                <span asp-validation-for="SchoolId" class="text-danger"></span>
+                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.SchoolList, "Id", "Name"), "Select")
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApp.ViewModels;
+
 
 namespace WebApp.Controllers
 {
@@ -19,11 +21,19 @@ namespace WebApp.Controllers
             _client = new HttpClient();
         }
 
+        [BindProperty]
+        public int SelectedSchool { get; set; }
+
+        [BindProperty]
+        public IEnumerable<School> SchoolList { get; set; }
+
         [HttpGet]
         [Route("[controller]")]
         public IActionResult AddRoomPage()
         {
-            return View();
+            var model = new RoomViewModel();
+            model.SchoolList = GetAllSchools();
+            return View(model);
         }
 
         [HttpPost]
@@ -42,12 +52,24 @@ namespace WebApp.Controllers
                 {
                     response = await _client.PostAsync("https://localhost:44367/Room/Add", stringContent);
                 }
+                return RedirectToAction("Index", "Home");
             }
             catch
             {
                 //send to error?
             }
             return View();
+        }
+
+        public IEnumerable<School> GetAllSchools()
+        {
+            //HttpResponseMessage response;
+            _client.DefaultRequestHeaders.Add("Get", "application/json");
+            var json = _client.GetAsync("https://localhost:44367/School/GetAllSchools").Result;
+
+            string schools = json.Content.ReadAsStringAsync().Result;
+            SchoolList = JsonConvert.DeserializeObject<IEnumerable<School>>(schools);
+            return SchoolList;
         }
     }
 }

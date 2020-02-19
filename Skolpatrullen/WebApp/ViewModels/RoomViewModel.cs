@@ -1,5 +1,6 @@
 ﻿using Database.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.ViewModels
@@ -8,14 +9,15 @@ namespace WebApp.ViewModels
     {
         [Required]
         public string Name { get; set; }
-        public string SchoolId { get; set; }
-        
+        public int SchoolId { get; set; }
+        public IEnumerable<School> SchoolList { get; set; }
+
         public Room ToRoom()
         {
             return new Room
             {
                 Name = this.Name,
-                SchoolId = Int32.Parse(this.SchoolId)
+                SchoolId = this.SchoolId
             };
         }
     }
