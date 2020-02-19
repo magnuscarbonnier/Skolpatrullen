@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : AppController
     {
         private readonly ILogger<HomeController> _logger;
 
@@ -18,9 +19,11 @@ namespace WebApp.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            await GetUser();
+
+            return View(new LayoutViewModel { User = User });
         }
 
         public IActionResult Privacy()

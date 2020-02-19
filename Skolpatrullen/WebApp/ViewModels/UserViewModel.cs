@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class UserViewModel
+    public class UserViewModel : LayoutViewModel
     {
         [Required(ErrorMessage = "Du måste skriva ditt förnamn")]
         [StringLength(50, ErrorMessage = "Ditt förnamn måste vara minst 2 tecken långt", MinimumLength = 2)]
