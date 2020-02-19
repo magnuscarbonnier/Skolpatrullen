@@ -16,10 +16,14 @@ namespace WebApp.Controllers
     {
         [HttpGet]
         [Route("[controller]")]
-        public IActionResult AddRoomPage()
+        public async Task<IActionResult> AddRoomPage()
         {
             var model = new RoomViewModel();
-            model.SchoolList = GetAllSchools();
+            var response = await APIGetAllSchools();
+            if (response.Data != null)
+            {
+                model.SchoolList = response.Data;
+            }
             return View(model);
         }
 
@@ -31,32 +35,16 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            HttpResponseMessage response;
             try
             {
-                var json = JsonConvert.SerializeObject(roomVM.ToRoom());
-                using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
-                {
-                    response = await _client.PostAsync("https://localhost:44367/Room/Add", stringContent);
-                }
-                return RedirectToAction("Index", "Home");
+                var response = await APIAddRoom(roomVM.ToRoom());
+                return RedirectToAction("AddRoomPage", "Room");
             }
             catch
             {
                 //send to error?
             }
-            return View();
-        }
-
-        public IEnumerable<School> GetAllSchools()
-        {
-            //HttpResponseMessage response;
-            _client.DefaultRequestHeaders.Add("Get", "application/json");
-            var json = _client.GetAsync("https://localhost:44367/School/GetAllSchools").Result;
-
-            string schools = json.Content.ReadAsStringAsync().Result;
-            SchoolList = JsonConvert.DeserializeObject<IEnumerable<School>>(schools);
-            return SchoolList;
+            return RedirectToAction("AddRoomPage", "Room");
         }
     }
 }
