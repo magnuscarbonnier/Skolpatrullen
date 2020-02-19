@@ -66,5 +66,16 @@ namespace WebApp.Controllers
 
             return View();
         }
+        [HttpGet]
+        [Route("[controller]/Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var response = await APILogout(User);
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
