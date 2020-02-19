@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,10 +23,16 @@ namespace WebAPI.Controllers
 
         [HttpGet]
         [Route("[controller]/GetAllSchools")]
-        public IEnumerable<School> GetAllSchools()
+        public APIResponse<IEnumerable<School>> GetAllSchools()
         {
+            APIResponse<IEnumerable<School>> response = new APIResponse<IEnumerable<School>>();
             var schoollist = _context.Schools.OrderBy(s => s.Name).ToList();
-            return schoollist;
+            if (schoollist != null)
+            {
+                response.Success = true;
+                response.Data = schoollist;
+            }
+            return response;
         }
     }
 }
