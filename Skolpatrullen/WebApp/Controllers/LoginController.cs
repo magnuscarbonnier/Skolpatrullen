@@ -15,31 +15,16 @@ namespace WebApp.Controllers
 {
     public class LoginController : AppController
     {
-        private readonly HttpClient _client;
-        public LoginController()
-        {
-            _client = new HttpClient();
-        }
         [HttpGet]
         [Route("[controller]")]
         public async Task<IActionResult> LoginPage()
         {
-            try
-            {
-                await GetUser();
-            }
-            catch
-            {
-
-            }
-            if (User == null)
-            {
-                return View();
-            }
-            else
+            string message = await GetUser();
+            if (User != null)
             {
                 return RedirectToAction("Index", "Home");
             }
+            return View(new LoginViewModel());
         }
         [HttpPost]
         [Route("[controller]")]
@@ -48,6 +33,11 @@ namespace WebApp.Controllers
             if (!ModelState.IsValid)
             {
                 return View();
+            }
+            string message = await GetUser();
+            if (User != null)
+            {
+                return RedirectToAction("Index", "Home");
             }
             try
             {
@@ -73,6 +63,7 @@ namespace WebApp.Controllers
             {
 
             }
+
             return View();
         }
     }
