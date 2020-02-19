@@ -39,18 +39,22 @@ namespace WebApp.Controllers
                 {
                     userVM.Password = "";
                     userVM.RePassword = "";
+                    TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
                     return View(userVM);
                 }
                 var json = JsonConvert.SerializeObject(userVM.ToUser());
                 using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
                 {
                     response = await _client.PostAsync("https://localhost:44367/User/Register", stringContent);
+                    TempData["SuccessMessage"] = $"Användare tillagd.";
                 }
             }
             catch
             {
+                TempData["ErrorMessage"] = $"Error!";
                 //send to error?
             }
+            
             return View();
         }
     }
