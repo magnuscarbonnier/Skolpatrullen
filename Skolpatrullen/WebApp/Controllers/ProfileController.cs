@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -10,7 +11,7 @@ namespace WebApp.Controllers
     {
         public IActionResult ProfilePage()
         {
-            return View();
+            return View(new UserViewModel());
         }
     }
 }
