@@ -90,6 +90,27 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/Logout")]
+        public APIResponse<bool> Logout(User user)
+        {
+            APIResponse<bool> response = new APIResponse<bool>();
+            LoginSession session = _context.LoginSessions.SingleOrDefault(ls => ls.UserId == user.Id);
+            if (session == null)
+            {
+                // finns ingen session är användaren redan utloggad
+                response.Data = true;
+                response.Success = true;
+            }
+            else
+            {
+                _context.LoginSessions.Remove(session);
+                _context.SaveChanges();
+                response.Data = true;
+                response.Success = true;
+            }
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
