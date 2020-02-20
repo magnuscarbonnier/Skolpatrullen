@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -20,14 +21,17 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/Add")]
-        public ActionResult<Room> Add(Room room)
+        public APIResponse<Room> Add(Room room)
          {
+            APIResponse<Room> response = new APIResponse<Room>();
             if (room != null)
             {
                 _context.Rooms.Add(room);
                 _context.SaveChanges();
+                response.Success = true;
+                response.Data = room;
             }
-            return CreatedAtAction(nameof(Add), new { id = room.Id }, room);
+            return response;
         }
     }
 }
