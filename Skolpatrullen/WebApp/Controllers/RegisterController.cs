@@ -22,7 +22,7 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View();
+            return View(new UserViewModel());
         }
         [HttpPost]
         [Route("[controller]")]
