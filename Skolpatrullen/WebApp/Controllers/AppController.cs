@@ -87,6 +87,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Register", UserVM);
             return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
+        public async Task<APIResponse<bool>> APILogout(User user)
+        {
+            HttpResponseMessage response = await APIPost("/User/Logout", user);
+            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+        }
         public async Task<APIResponse<IEnumerable<School>>> APIGetAllSchools()
         {
             HttpResponseMessage response = await APIGet("/School/GetAllSchools");
