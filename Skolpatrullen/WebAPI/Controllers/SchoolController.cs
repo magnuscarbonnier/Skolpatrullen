@@ -34,5 +34,23 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/AddSchool")]
+        public APIResponse<LoginSession> Register(School school)
+        {
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            if (!_context.Schools.Any(s => s.Name == school.Name))
+            {
+                _context.Schools.Add(school);
+                _context.SaveChanges();
+                response.Success = true;
+            }
+            else
+            {
+                response.ErrorMessages.Add($"Det finns redan en skola med det namnet");
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }
