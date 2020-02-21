@@ -15,7 +15,6 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new AdminViewModel();
-            model.User = User;
             var schoolResponse = await APIGetAllSchools();
             if (schoolResponse.Data != null)
             {

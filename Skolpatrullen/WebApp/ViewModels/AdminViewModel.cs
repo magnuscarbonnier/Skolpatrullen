@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class AdminViewModel:LayoutViewModel
+    public class AdminViewModel
     {
         public int UserId { get; set; }
         public int SchoolId { get; set; }
