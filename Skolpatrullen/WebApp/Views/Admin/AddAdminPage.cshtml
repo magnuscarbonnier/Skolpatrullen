@@ -1,0 +1,42 @@
+﻿@model WebApp.ViewModels.AdminViewModel
+
+@{
+    ViewData["Title"] = "Lägg till admin";
+}
+
+<h1>Lägg till admin</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAdminPage">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.SchoolList, "Id", "Name"), new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <input asp-for="UserId" class="form-control" />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsAdmin" class="control-label"></label>
+                <input type="checkbox" asp-for="IsAdmin" class="form-control" />
+                <span asp-validation-for="IsAdmin" class="text-danger"></span>
+            </div>
+
+            @*<div class="form-group">
+            @Html.DropDownListFor(model => model.UserId, new SelectList(Model.UserList, "Id", "SocialSecurityNr"), new { @class = "form-control" })
+        </div>*@
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
