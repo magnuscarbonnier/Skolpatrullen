@@ -9,11 +9,8 @@ namespace WebApp.ViewModels
 {
     public class AdminViewModel:LayoutViewModel
     {
-        [Required]
         public int UserId { get; set; }
-        [Required]
         public int SchoolId { get; set; }
-        public bool IsAdmin { get; set; }
         public IEnumerable<School> SchoolList { get; set; }
         public IEnumerable<User> UserList { get; set; }
 
@@ -22,8 +19,7 @@ namespace WebApp.ViewModels
             return new UserSchool
             {
                  UserId = this.UserId,
-                 SchoolId = this.SchoolId,
-                 IsAdmin=this.IsAdmin
+                 SchoolId = this.SchoolId
             };
         }
     }

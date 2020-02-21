@@ -16,16 +16,16 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new AdminViewModel();
             model.User = User;
-            var response = await APIGetAllSchools();
-            if (response.Data != null)
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse.Data != null)
             {
-                model.SchoolList = response.Data;
+                model.SchoolList = schoolResponse.Data;
             }
-            //var response2 = await APIGetAllUsers();
-            //if (response.Data != null)
-            //{
-            //    model.UserList = response2.Data;
-            //}
+            var userResponse = await APIGetAllUsers();
+            if (schoolResponse.Data != null)
+            {
+                model.UserList = userResponse.Data;
+            }
             return View(model);
         }
 
@@ -40,7 +40,9 @@ namespace WebApp.Controllers
             }
             try
             {
-                var response = await APIAddUserSchool(adminVM.ToUserSchool());
+                var admin = adminVM.ToUserSchool();
+                admin.IsAdmin = true;
+                var response = await APIAddOrUpdateUserSchool(admin);
                 return RedirectToAction("AddAdminPage", "Admin");
             }
             catch
