@@ -26,12 +26,12 @@
                         </li>
 
                         @{
-                            if (Model.User != null)
+                            if (ViewBag.User != null)
                             {
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
                                 </li>
-                                if (Model.User.IsSuperUser == true)
+                                if (ViewBag.User.IsSuperUser == true)
                                 {
                                     <li class="nav-item">
                                         <a class="nav-link text-light" asp-area="" asp-controller="SuperUser" asp-action="SuperUserPage">SuperUser</a>

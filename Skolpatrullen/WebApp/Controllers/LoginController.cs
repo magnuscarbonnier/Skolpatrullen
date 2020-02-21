@@ -24,7 +24,7 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(new LoginViewModel());
+            return View();
         }
         [HttpPost]
         [Route("[controller]")]
