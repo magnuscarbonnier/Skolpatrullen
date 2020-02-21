@@ -38,6 +38,8 @@ namespace WebApp.Controllers
                 var response = await APIUpdateUser(User);
                 if (response.Success)
                 {
+
+                    TempData["SuccessMessage"] = $"Namn ändrat.";
                     return RedirectToAction("ChangeNamePage", "ChangeName");
                 }
             }

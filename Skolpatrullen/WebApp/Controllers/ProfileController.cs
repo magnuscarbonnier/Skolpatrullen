@@ -40,6 +40,8 @@ namespace WebApp.Controllers
                 var response = await APIUpdateUser(User);
                 if (response.Success)
                 {
+
+                    TempData["SuccessMessage"] = $"Ändringar sparade.";
                     return RedirectToAction("ProfilePage", "Profile");
                 }
             }

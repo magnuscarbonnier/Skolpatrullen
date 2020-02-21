@@ -35,6 +35,7 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddCourse(CourseVM.ToCourse());
+                TempData["SuccessMessage"] = $"Kurs tillagd.";
                 return RedirectToAction("AddCoursePage", "Course");
             }
             catch
