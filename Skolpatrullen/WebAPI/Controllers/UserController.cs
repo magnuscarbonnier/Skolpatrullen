@@ -98,7 +98,7 @@ namespace WebAPI.Controllers
             LoginSession session = _context.LoginSessions.SingleOrDefault(ls => ls.UserId == user.Id);
             if (session == null)
             {
-                // finns ingen session är användaren redan utloggad
+                // finns ingen session är användaren redan utloggad hej
                 response.Data = true;
                 response.Success = true;
             }
