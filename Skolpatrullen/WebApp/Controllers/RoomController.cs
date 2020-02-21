@@ -20,7 +20,6 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new RoomViewModel();
-            model.User = User;
             var response = await APIGetAllSchools();
             if (response.Data != null)
             {

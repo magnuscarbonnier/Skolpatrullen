@@ -15,7 +15,7 @@ namespace WebApp.Controllers
     public abstract class AppController : Controller
     {
         private readonly HttpClient HttpClient;
-        public User User = null;
+        public new User User = null;
         public AppController()
         {
             //det här behövs för att Issas dator är fucked
@@ -24,18 +24,10 @@ namespace WebApp.Controllers
 
             HttpClient = new HttpClient(clientHandler);
         }
-        public override ViewResult View()
-        {
-            var vm = new LayoutViewModel();
-            if (User != null)
-            {
-                vm.User = User;
-            }
-            return View(vm);
-        }
 
         public async Task<string> GetUser()
         {
+            ViewBag.User = null;
             KeyValuePair<string,string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
             if (cookie.Value.Value == null)
             {
@@ -45,6 +37,7 @@ namespace WebApp.Controllers
             if (response.Success)
             {
                 User = response.Data.User;
+                ViewBag.User = User;
             }
             else
             {
