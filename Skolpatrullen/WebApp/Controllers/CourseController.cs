@@ -14,11 +14,14 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AddCoursePage()
         {
             string message = await GetUser();
-            if (User != null)
+            var model = new CourseViewModel();
+            var response = await APIGetAllSchools();
+            if (response.Data != null)
             {
-                return View();
+                model.SchoolList = response.Data;
             }
-            return RedirectToAction("Index", "Home");
+            return View(model);
+
         }
         [HttpPost]
         [Route("[controller]")]
