@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class LoginViewModel : LayoutViewModel
+    public class LoginViewModel
     {
         [Required]
         public string Email { get; set; }

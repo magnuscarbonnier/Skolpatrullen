@@ -24,7 +24,7 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View(new LoginViewModel());
+            return View();
         }
         [HttpPost]
         [Route("[controller]")]
@@ -32,7 +32,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(new LoginViewModel());
             }
             string message = await GetUser();
             if (User != null)

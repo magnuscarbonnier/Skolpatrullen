@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WebApp.ViewModels
 {
-    public class RoomViewModel : LayoutViewModel
+    public class RoomViewModel
     {
         [Required]
         public string Name { get; set; }
