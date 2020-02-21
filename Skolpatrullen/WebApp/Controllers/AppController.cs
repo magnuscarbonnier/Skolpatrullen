@@ -102,5 +102,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/Room/Add", room);
             return (APIResponse<Room>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Room>));
         }
+
+        public async Task<APIResponse<User>> APIUpdateUser(User user)
+        {
+            HttpResponseMessage response = await APIPost("/User/Update", user);
+            return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
+        }
     }
 }

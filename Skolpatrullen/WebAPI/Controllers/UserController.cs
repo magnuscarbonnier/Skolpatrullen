@@ -91,6 +91,21 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpPost]
+        [Route("[controller]/Update")]
+        public APIResponse<LoginSession> Update(User user)
+        {
+            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+
+            var result = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+            
+
+            _context.SaveChanges();
+            response.Data = AddLoginSession(user);
+            response.Success = true;
+
+            return response;
+        }
+        [HttpPost]
         [Route("[controller]/Logout")]
         public APIResponse<bool> Logout(User user)
         {
@@ -160,5 +175,6 @@ namespace WebAPI.Controllers
                 return builder.ToString();
             }
         }
+
     }
 }

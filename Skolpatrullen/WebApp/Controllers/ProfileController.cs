@@ -9,9 +9,37 @@ namespace WebApp.Controllers
 {
     public class ProfileController : AppController
     {
-        public IActionResult ProfilePage()
+
+        [HttpGet]
+        [Route("[controller]")]
+        public async Task<IActionResult> ProfilePage()
         {
-            return View(new UserViewModel());
+            string message = await GetUser();
+            var model = new ProfileViewModel();
+            model.User = User;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("[controller]")]
+        public async Task<IActionResult> ProfilePage(ProfileViewModel ProfileVM)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                var response = await APIUpdateUser(ProfileVM.ToUser());
+                return RedirectToAction("ProfilePage", "Profile");
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("ProfilePage", "User");
         }
     }
 }
