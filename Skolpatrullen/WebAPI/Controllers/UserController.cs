@@ -97,12 +97,29 @@ namespace WebAPI.Controllers
             APIResponse<User> response = new APIResponse<User>();
 
             var result = _context.Users.SingleOrDefault(u => u.Id == user.Id);
-
+            result.FirstName = user.FirstName;
+            result.LastNames = user.LastNames;
             result.Phone = user.Phone;
             result.Email = user.Email;
             result.Address = user.Address;
             result.City = user.City;
             result.PostalCode = user.PostalCode;
+            _context.SaveChanges();
+            response.Data = user;
+            response.Success = true;
+
+            return response;
+        }
+        [HttpPost]
+        [Route("[controller]/UpdateName")]
+        public APIResponse<User> UpdateName(User user)
+        {
+            APIResponse<User> response = new APIResponse<User>();
+
+            var result = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+
+            result.FirstName = user.FirstName;
+            result.LastNames = user.LastNames;
             _context.SaveChanges();
             response.Data = user;
             response.Success = true;
