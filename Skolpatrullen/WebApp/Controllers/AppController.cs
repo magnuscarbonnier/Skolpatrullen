@@ -96,6 +96,12 @@ namespace WebApp.Controllers
             return (APIResponse<Room>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Room>));
         }
 
+        public async Task<APIResponse<Course>> APIAddCourse(Course course)
+        {
+            HttpResponseMessage response = await APIPost("/Course/Add", course);
+            return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
+        }
+
         public async Task<APIResponse<User>> APIUpdateUser(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Update", user);
