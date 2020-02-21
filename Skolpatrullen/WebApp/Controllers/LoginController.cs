@@ -32,7 +32,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(new LoginViewModel());
             }
             string message = await GetUser();
             if (User != null)

@@ -91,6 +91,25 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpPost]
+        [Route("[controller]/Update")]
+        public APIResponse<User> Update(User user)
+        {
+            APIResponse<User> response = new APIResponse<User>();
+
+            var result = _context.Users.SingleOrDefault(u => u.Id == user.Id);
+
+            result.Phone = user.Phone;
+            result.Email = user.Email;
+            result.Address = user.Address;
+            result.City = user.City;
+            result.PostalCode = user.PostalCode;
+            _context.SaveChanges();
+            response.Data = user;
+            response.Success = true;
+
+            return response;
+        }
+        [HttpPost]
         [Route("[controller]/Logout")]
         public APIResponse<bool> Logout(User user)
         {
@@ -160,5 +179,6 @@ namespace WebAPI.Controllers
                 return builder.ToString();
             }
         }
+
     }
 }
