@@ -32,8 +32,16 @@ namespace WebApp.Controllers
             }
             try
             {
-                var response = await APIUpdateUser(ProfileVM.ToUser());
-                return RedirectToAction("ProfilePage", "Profile");
+                User.Phone = ProfileVM.Phone;
+                User.Email = ProfileVM.Email;
+                User.Address = ProfileVM.Address;
+                User.City = ProfileVM.City;
+                User.PostalCode = ProfileVM.PostalCode;
+                var response = await APIUpdateUser(User);
+                if (response.Success)
+                {
+                    return RedirectToAction("ProfilePage", "Profile");
+                }
             }
             catch
             {

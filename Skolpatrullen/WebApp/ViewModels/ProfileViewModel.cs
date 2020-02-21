@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class ProfileViewModel : LayoutViewModel
+    public class ProfileViewModel
     {
         public string Phone { get; set; }
         public string Email { get; set; }
@@ -14,6 +14,7 @@ namespace WebApp.ViewModels
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string Password { get; set; }
+        public User User { get; set; }
 
         public User ToUser()
         {
