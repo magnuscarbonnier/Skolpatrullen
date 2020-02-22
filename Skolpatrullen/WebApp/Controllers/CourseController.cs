@@ -19,6 +19,8 @@ namespace WebApp.Controllers
             if (response.Data != null)
             {
                 model.SchoolList = response.Data;
+                model.StartDate = DateTime.Now.ToLocalTime();
+                model.EndDate = DateTime.Now.AddMonths(1).ToLocalTime();
             }
             return View(model);
 
