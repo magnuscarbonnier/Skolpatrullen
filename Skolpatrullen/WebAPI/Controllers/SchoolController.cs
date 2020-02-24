@@ -34,5 +34,24 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/AddSchool")]
+        public APIResponse<School> Add(School school)
+        {
+            APIResponse<School> response = new APIResponse<School>();
+            if (!_context.Schools.Any(s => s.Name == school.Name))
+            {
+                _context.Schools.Add(school);
+                _context.SaveChanges();
+                response.Success = true;
+                response.Data = school;
+            }
+            else
+            {
+                response.ErrorMessages.Add($"Det finns redan en skola med det namnet");
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }

@@ -1,36 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
-using Database.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using WebApp.ViewModels;
-
 
 namespace WebApp.Controllers
 {
-    public class RoomController : AppController
+    public class CourseController : AppController
     {
         [HttpGet]
         [Route("[controller]")]
-        public async Task<IActionResult> AddRoomPage()
+        public async Task<IActionResult> AddCoursePage()
         {
             string message = await GetUser();
-            var model = new RoomViewModel();
+            var model = new CourseViewModel();
             var response = await APIGetAllSchools();
             if (response.Data != null)
             {
                 model.SchoolList = response.Data;
+                model.StartDate = DateTime.Now.ToLocalTime();
+                model.EndDate = DateTime.Now.AddMonths(1).ToLocalTime();
             }
             return View(model);
-        }
 
+        }
         [HttpPost]
         [Route("[controller]")]
-        public async Task<IActionResult> AddRoomPage(RoomViewModel roomVM)
+        public async Task<IActionResult> AddCoursePage(CourseViewModel CourseVM)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -39,15 +36,19 @@ namespace WebApp.Controllers
             }
             try
             {
-                var response = await APIAddRoom(roomVM.ToRoom());
-                TempData["SuccessMessage"] = $"Rum tillagt.";
-                return RedirectToAction("AddRoomPage", "Room");
+                var response = await APIAddCourse(CourseVM.ToCourse());
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Kurs tillagd.";
+                    return RedirectToAction("AddCoursePage", "Course");
+                }
             }
             catch
             {
                 //send to error?
             }
-            return RedirectToAction("AddRoomPage", "Room");
+            return RedirectToAction("AddCoursePage", "Course");
+
         }
     }
 }

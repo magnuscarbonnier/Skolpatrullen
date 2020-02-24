@@ -90,15 +90,41 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/School/GetAllSchools");
             return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
         }
+        public async Task<APIResponse<IEnumerable<User>>> APIGetAllUsers()
+        {
+            HttpResponseMessage response = await APIGet("/User/GetAllUsers");
+            return (APIResponse<IEnumerable<User>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<User>>));
+        }
         public async Task<APIResponse<Room>> APIAddRoom(Room room)
         {
             HttpResponseMessage response = await APIPost("/Room/Add", room);
             return (APIResponse<Room>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Room>));
         }
+        public async Task<APIResponse<UserSchool>> APIAddOrUpdateUserSchool(UserSchool userSchool)
+        {
+            HttpResponseMessage response = await APIPost("/UserSchool/AddOrUpdate", userSchool);
+            return (APIResponse<UserSchool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserSchool>));
+        }
+
+        public async Task<APIResponse<Course>> APIAddCourse(Course course)
+        {
+            HttpResponseMessage response = await APIPost("/Course/Add", course);
+            return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
+        }
 
         public async Task<APIResponse<User>> APIUpdateUser(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Update", user);
+            return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
+        }
+        public async Task<APIResponse<School>> APIAddSchool(School school)
+        {
+            HttpResponseMessage response = await APIPost("/School/AddSchool", school);
+            return (APIResponse<School>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<School>));
+        }
+        public async Task<APIResponse<User>> APIGetUserById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/User/GetUserById/" + Id.ToString());
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
     }

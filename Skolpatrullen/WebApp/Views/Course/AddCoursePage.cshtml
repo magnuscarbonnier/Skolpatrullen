@@ -1,0 +1,42 @@
+﻿@model WebApp.ViewModels.CourseViewModel
+
+@{
+    ViewData["Title"] = "AddCoursePage";
+}
+
+<h1>Lägg till kurs</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddCoursePage">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label class="control-label">Välj skola</label>
+                @Html.DropDownListFor(model => model.SchoolId, new SelectList(Model.SchoolList, "Id", "Name"), new { @class = "form-control" })
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Namn</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label">Startdatum</label>
+                <input asp-for="StartDate" type="date" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label">Slutdatum</label>
+                <input asp-for="EndDate" type="date" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Lägg till" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
