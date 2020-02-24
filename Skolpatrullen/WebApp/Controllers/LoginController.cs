@@ -55,6 +55,7 @@ namespace WebApp.Controllers
                     else
                     {
                         //forward error messages in response to view
+                        TempData["ErrorMessage"] = $"Försök igen.";
                         return View();
                     }
                 }

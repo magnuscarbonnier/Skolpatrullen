@@ -36,8 +36,20 @@
                                 </li>
                                 if (ViewBag.User.IsSuperUser == true)
                                 {
-                                    <li class="nav-item">
-                                        <a class="nav-link text-light" asp-area="" asp-controller="SuperUser" asp-action="SuperUserPage">SuperUser</a>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            SuperPowers
+                                        </a>
+                                        <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Room" asp-action="AddRoomPage">Lägg till rum</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Admin" asp-action="AddAdminPage">Lägg till admin</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="School" asp-action="AddSchoolPage">Lägg till skola</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="AddCoursePage">Lägg till kurs</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Profile" asp-action="UserListPage">Ändra namn på användare</a>
+
+                                        </div>
+
                                     </li>
                                 }
 
@@ -50,9 +62,7 @@
                             }
 
                         }
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Room" asp-action="AddRoomPage">Lägg till rum</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
