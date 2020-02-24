@@ -151,7 +151,7 @@ namespace WebAPI.Controllers
                 else
                 {
                     response.Success = false;
-                    response.ErrorMessages.Add("Lösenordet stämmer inte");
+                    response.ErrorMessages.Add("Lösenordet du skrev in stämmer inte överrens med ditt nuvarande");
                 }
             }
             else

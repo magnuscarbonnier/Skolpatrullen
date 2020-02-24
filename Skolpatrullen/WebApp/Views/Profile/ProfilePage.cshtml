@@ -61,17 +61,17 @@
                 </button>
             </div>
             <form asp-action="ChangePassword">
-                <div class="form-group modal-body">
+                <div class=" modal-body">
                     <label asp-for="Password" class="control-label">Nuvarande lösenord</label>
                     <input asp-for="Password" type="password" class="form-control" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
-                <div class="form-group modal-body">
+                <div class=" modal-body">
                     <label asp-for="NewPassword" class="control-label">Nytt lösenord</label>
                     <input asp-for="NewPassword" type="password" class="form-control" />
                     <span asp-validation-for="NewPassword" class="text-danger"></span>
                 </div>
-                <div class="form-group modal-body">
+                <div class=" modal-body">
                     <label asp-for="ReNewPassword" class="control-label">Upprepa nytt lösenord</label>
                     <input asp-for="ReNewPassword" type="password" class="form-control" />
                     <span asp-validation-for="ReNewPassword" class="text-danger"></span>

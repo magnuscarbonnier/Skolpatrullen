@@ -66,7 +66,7 @@ namespace WebApp.Controllers
                 {
                     ProfileVM.NewPassword = "";
                     ProfileVM.ReNewPassword = "";
-                    TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
+                    TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
                 }
                 else
                 {
