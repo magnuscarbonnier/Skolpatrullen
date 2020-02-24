@@ -106,9 +106,25 @@ namespace WebApp.Controllers
             return (APIResponse<UserSchool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserSchool>));
         }
 
+        public async Task<APIResponse<Course>> APIAddCourse(Course course)
+        {
+            HttpResponseMessage response = await APIPost("/Course/Add", course);
+            return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
+        }
+
         public async Task<APIResponse<User>> APIUpdateUser(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Update", user);
+            return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
+        }
+        public async Task<APIResponse<School>> APIAddSchool(School school)
+        {
+            HttpResponseMessage response = await APIPost("/School/AddSchool", school);
+            return (APIResponse<School>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<School>));
+        }
+        public async Task<APIResponse<User>> APIGetUserById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/User/GetUserById/" + Id.ToString());
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
     }
