@@ -130,6 +130,15 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetAllUsers")]
+        public APIResponse<IEnumerable<User>> GetAllUsers()
+        {
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.Users.ToList();
+            response.Success = true;
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
