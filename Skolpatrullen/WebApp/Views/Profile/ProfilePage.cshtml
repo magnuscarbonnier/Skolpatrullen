@@ -5,7 +5,10 @@
 }
 
 <h1>Profil</h1>
-<h4>@Model.User.FirstName @Model.User.LastNames</h4>
+@if (Model != null)
+{
+    <h4>@Model.User.FirstName @Model.User.LastNames</h4>
+}
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -13,7 +16,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label">Telefon</label>
-                <input asp-for="Phone" value="@Model.User.Phone" class="form-control"/>
+                <input asp-for="Phone" value="@Model.User.Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
