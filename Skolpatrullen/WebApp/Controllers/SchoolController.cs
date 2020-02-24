@@ -51,6 +51,7 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddSchool(school.ToSchool());
+                TempData["SuccessMessage"] = $"Skola tillagd.";
                 return RedirectToAction("AddSchoolPage", "School");
             }
             catch

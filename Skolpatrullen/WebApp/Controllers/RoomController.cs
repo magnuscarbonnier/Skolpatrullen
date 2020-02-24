@@ -40,6 +40,7 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddRoom(roomVM.ToRoom());
+                TempData["SuccessMessage"] = $"Rum tillagt.";
                 return RedirectToAction("AddRoomPage", "Room");
             }
             catch

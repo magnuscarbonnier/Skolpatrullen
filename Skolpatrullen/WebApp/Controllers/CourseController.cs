@@ -19,6 +19,8 @@ namespace WebApp.Controllers
             if (response.Data != null)
             {
                 model.SchoolList = response.Data;
+                model.StartDate = DateTime.Now.ToLocalTime();
+                model.EndDate = DateTime.Now.AddMonths(1).ToLocalTime();
             }
             return View(model);
 
@@ -35,7 +37,11 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddCourse(CourseVM.ToCourse());
-                return RedirectToAction("AddCoursePage", "Course");
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Kurs tillagd.";
+                    return RedirectToAction("AddCoursePage", "Course");
+                }
             }
             catch
             {

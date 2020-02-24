@@ -36,14 +36,15 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/AddSchool")]
-        public APIResponse<LoginSession> Register(School school)
+        public APIResponse<School> Add(School school)
         {
-            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            APIResponse<School> response = new APIResponse<School>();
             if (!_context.Schools.Any(s => s.Name == school.Name))
             {
                 _context.Schools.Add(school);
                 _context.SaveChanges();
                 response.Success = true;
+                response.Data = school;
             }
             else
             {

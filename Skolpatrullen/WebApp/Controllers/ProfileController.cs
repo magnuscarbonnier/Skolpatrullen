@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -11,7 +12,7 @@ namespace WebApp.Controllers
     {
 
         [HttpGet]
-        [Route("[controller]")]
+        [Route("[controller]/Profile")]
         public async Task<IActionResult> ProfilePage()
         {
             string message = await GetUser();
@@ -22,7 +23,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/Profile")]
         public async Task<IActionResult> ProfilePage(ProfileViewModel ProfileVM)
         {
             string message = await GetUser();
@@ -40,6 +41,8 @@ namespace WebApp.Controllers
                 var response = await APIUpdateUser(User);
                 if (response.Success)
                 {
+
+                    TempData["SuccessMessage"] = $"Ändringar sparade.";
                     return RedirectToAction("ProfilePage", "Profile");
                 }
             }
@@ -48,6 +51,80 @@ namespace WebApp.Controllers
                 //send to error?
             }
             return RedirectToAction("ProfilePage", "User");
+        }
+        [HttpGet]
+        [Route("[controller]/AdminChangeProfile")]
+        public async Task<IActionResult> AdminChangeProfile(int Id)
+        {
+            string message = await GetUser();
+            var model = new AdminChangeProfileViewModel();
+            var userResponse = await APIGetUserById(Id);
+            if (userResponse.Data != null)
+            {
+                model.User = userResponse.Data;
+                model.IsSuperUser = userResponse.Data.IsSuperUser;
+            }
+            model.UserId = Id;
+            return View(model);
+        }
+        [HttpPost]
+        [Route("[controller]/AdminChangeProfile")]
+        public async Task<IActionResult> AdminChangeProfile(AdminChangeProfileViewModel changeProfile)
+        {
+
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                var userResponse = await APIGetUserById(changeProfile.UserId);
+                if (userResponse.Success)
+                {
+                    var user = userResponse.Data;
+                    user.Id = changeProfile.UserId;
+                    user.FirstName = changeProfile.FirstName;
+                    user.LastNames = changeProfile.LastNames;
+                    user.SocialSecurityNr = changeProfile.SocialSecurityNr;
+                    user.IsSuperUser = changeProfile.IsSuperUser;
+                    var response = await APIUpdateUser(user);
+                    if (response.Success)
+                    {
+
+                        TempData["SuccessMessage"] = $"Ändringar sparade för {user.FirstName} {user.LastNames}, {user.SocialSecurityNr}.";
+                        return RedirectToAction("UserListPage", "Profile");
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = response.ErrorMessages[0];
+                    }
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = userResponse.ErrorMessages[0];
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("UserListPage", "Profile");
+        }
+        [HttpGet]
+        [Route("[controller]/UserList")]
+        public async Task<IActionResult> UserListPage()
+        {
+
+            string message = await GetUser();
+            var model = new List<User>();
+            var userResponse = await APIGetAllUsers();
+            if (userResponse.Data != null)
+            {
+                model = userResponse.Data.ToList();
+            }
+            return View(model);
+
         }
     }
 }
