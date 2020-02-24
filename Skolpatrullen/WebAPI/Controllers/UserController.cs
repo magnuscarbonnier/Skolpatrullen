@@ -100,10 +100,12 @@ namespace WebAPI.Controllers
             result.FirstName = user.FirstName;
             result.LastNames = user.LastNames;
             result.Phone = user.Phone;
+            result.SocialSecurityNr=user.SocialSecurityNr;
             result.Email = user.Email;
             result.Address = user.Address;
             result.City = user.City;
             result.PostalCode = user.PostalCode;
+            result.IsSuperUser = user.IsSuperUser;
             _context.SaveChanges();
             response.Data = user;
             response.Success = true;
@@ -145,6 +147,16 @@ namespace WebAPI.Controllers
                 response.Data = true;
                 response.Success = true;
             }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetUserById/{Id}")]
+        public APIResponse<User> GetUserById(int Id)
+        {
+            APIResponse<User> response = new APIResponse<User>();
+            response.Data = _context.Users.SingleOrDefault(c=>c.Id==Id);
+           
+            response.Success = true;
             return response;
         }
         [HttpGet]

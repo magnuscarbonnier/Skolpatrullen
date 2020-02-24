@@ -10,6 +10,7 @@
 <div class="row">
     <div class="col-md-4">
         <form asp-action="ChangeNamePage">
+            @Html.HiddenFor(m => m.UserId)
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label">Förnamn</label>
@@ -23,7 +24,19 @@
                 <span asp-validation-for="LastNames" class="text-danger"></span>
             </div>
 
-            
+            <div class="form-group">
+                <label asp-for="SocialSecurityNr" class="control-label">Personnummer</label>
+                <input asp-for="SocialSecurityNr" value="@Model.User.SocialSecurityNr" class="form-control" />
+                <span asp-validation-for="SocialSecurityNr" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IsSuperUser" class="control-label">SuperUser</label>
+                @*@Html.CheckBox("IsSuperUser", false)*@
+                <input asp-for="IsSuperUser" value="@Model.IsSuperUser" class="form-control" />
+                <span asp-validation-for="IsSuperUser" class="text-danger"></span>
+            </div>
+
+
 
             <div class="form-group">
                 <input type="submit" value="Ändra" class="btn btn-primary" />
