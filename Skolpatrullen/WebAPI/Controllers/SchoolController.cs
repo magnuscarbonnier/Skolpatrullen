@@ -54,9 +54,9 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/RemoveSchool")]
-        public APIResponse<LoginSession> Remove(School school)
+        public APIResponse<bool> Remove(School school)
         {
-            APIResponse<LoginSession> response = new APIResponse<LoginSession>();
+            APIResponse<bool> response = new APIResponse<bool>();
             var removeschool = _context.Schools.SingleOrDefault(s => s.Id == school.Id);
             if (removeschool != null)
             {

@@ -11,6 +11,25 @@ namespace WebApp.Controllers
     {
         [HttpGet]
         [Route("[controller]")]
+        public async Task<IActionResult> SchoolListPage()
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var model = new SchoolViewModel();
+                var response = await APIGetAllSchools();
+                if (response.Data != null)
+                {
+                    model.SchoolList = response.Data;
+                }
+                return View(model);
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Route("[controller]/Add")]
         public async Task<IActionResult> AddSchoolPage()
         {
             string message = await GetUser();
@@ -22,7 +41,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/Add")]
         public async Task<IActionResult> AddSchoolPage(SchoolViewModel school)
         {
             if (!ModelState.IsValid)
@@ -40,5 +59,23 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("AddSchoolPage", "School");
         }
+
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public async Task<IActionResult> RemoveSchoolPage(SchoolViewModel schoolVM, int id)
+        {
+            try
+            {
+                schoolVM.Id = id;
+                var response = await APIRemoveSchool(schoolVM.ToSchool());
+                return RedirectToAction("SchoolListPage", "School");
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
