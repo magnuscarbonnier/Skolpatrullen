@@ -52,8 +52,8 @@ namespace WebApp.Controllers
             return RedirectToAction("ProfilePage", "User");
         }
         [HttpGet]
-        [Route("[controller]/ChangeName")]
-        public async Task<IActionResult> ChangeNamePage(int Id)
+        [Route("[controller]/AdminChangeProfile")]
+        public async Task<IActionResult> AdminChangeProfile(int Id)
         {
             string message = await GetUser();
             var model = new ChangeNameViewModel();
@@ -67,8 +67,8 @@ namespace WebApp.Controllers
             return View(model);
         }
         [HttpPost]
-        [Route("[controller]/ChangeName")]
-        public async Task<IActionResult> ChangeNamePage(ChangeNameViewModel changeNameVM)
+        [Route("[controller]/AdminChangeProfile")]
+        public async Task<IActionResult> AdminChangeProfile(ChangeNameViewModel changeNameVM)
         {
 
             string message = await GetUser();
