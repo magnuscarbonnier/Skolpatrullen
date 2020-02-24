@@ -42,7 +42,7 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [Route("[controller]/Add")]
-        public async Task<IActionResult> AddSchoolPage(SchoolViewModel school)
+        public async Task<IActionResult> AddSchool(SchoolViewModel school)
         {
             if (!ModelState.IsValid)
             {
@@ -51,8 +51,11 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddSchool(school.ToSchool());
-                TempData["SuccessMessage"] = $"Skola tillagd.";
-                return RedirectToAction("AddSchoolPage", "School");
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Skola tillagd.";
+                    return RedirectToAction("AddSchoolPage", "School");
+                }
             }
             catch
             {
@@ -69,7 +72,11 @@ namespace WebApp.Controllers
             {
                 schoolVM.Id = id;
                 var response = await APIRemoveSchool(schoolVM.ToSchool());
-                return RedirectToAction("SchoolListPage", "School");
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Skola borttagen";
+                    return RedirectToAction("SchoolListPage", "School");
+                }
             }
             catch
             {
