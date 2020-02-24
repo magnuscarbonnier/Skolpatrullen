@@ -14,6 +14,8 @@ namespace WebApp.ViewModels
         public string City { get; set; }
         public string PostalCode { get; set; }
         public string Password { get; set; }
+        public string NewPassword { get; set; }
+        public string ReNewPassword { get; set; }
         public User User { get; set; }
 
         public User ToUser()

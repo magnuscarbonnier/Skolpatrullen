@@ -49,5 +49,33 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("ProfilePage", "User");
         }
+
+        [HttpPost]
+        [Route("[controller]")]
+        public async Task<IActionResult> ProfilePageModal(ProfileViewModel ProfileVM)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                if (!(ProfileVM.NewPassword == ProfileVM.ReNewPassword))
+                {
+                    ProfileVM.NewPassword = "";
+                    ProfileVM.ReNewPassword = "";
+                    TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
+                    return View(ProfileVM);
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("ProfilePage", "User");
+        }
+
+
     }
 }
