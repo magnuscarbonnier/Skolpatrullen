@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -116,11 +117,11 @@ namespace WebApp.Controllers
         {
 
             string message = await GetUser();
-            var model = new UserListViewModel();
+            var model = new List<User>();
             var userResponse = await APIGetAllUsers();
             if (userResponse.Data != null)
             {
-                model.UserList = userResponse.Data;
+                model = userResponse.Data.ToList();
             }
             return View(model);
 

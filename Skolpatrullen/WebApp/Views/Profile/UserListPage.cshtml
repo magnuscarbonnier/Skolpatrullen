@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModels.UserListViewModel
+﻿@model System.Collections.Generic.List<Database.Models.User>
 
 @{
     ViewData["Title"] = "UserList";
@@ -8,7 +8,7 @@
 
 
 
-@foreach (var item in Model.UserList) {
+@foreach (var item in Model) {
 <div class="bg-light ">
     <div class="alert-primary">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastNames)</div>
     <div> @Html.DisplayFor(modelItem => item.SocialSecurityNr), SuperUser: @Html.DisplayFor(modelItem => item.IsSuperUser)</div>
