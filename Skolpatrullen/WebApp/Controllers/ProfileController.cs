@@ -50,50 +50,5 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("ProfilePage", "User");
         }
-
-        [HttpPost]
-        [Route("[controller]/ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ProfileViewModel ProfileVM)
-        {
-            string message = await GetUser();
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            try
-            {
-                if (!(ProfileVM.NewPassword == ProfileVM.ReNewPassword))
-                {
-                    ProfileVM.NewPassword = "";
-                    ProfileVM.ReNewPassword = "";
-                    TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
-                }
-                else
-                {
-                    ChangePasswordBody body = new ChangePasswordBody();
-                    body.UserId = User.Id;
-                    body.CurrentPassword = ProfileVM.Password;
-                    body.NewPassword = ProfileVM.NewPassword;
-
-                    var response = await APIChangePassword(body);
-
-                    if (response.Success)
-                    {
-                        TempData["SuccessMessage"] = "Ditt lösenord är nu ändrat!";
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = response.ErrorMessages[0];
-                    }
-                }
-            }
-            catch
-            {
-                //send to error?
-            }
-            return RedirectToAction("ProfilePage", "Profile");
-        }
-
-
     }
 }
