@@ -60,7 +60,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="ProfilePageModal">
+            <form asp-action="ChangePassword">
                 <div class="form-group modal-body">
                     <label asp-for="Password" class="control-label">Nuvarande lösenord</label>
                     <input asp-for="Password" type="password" class="form-control" />
@@ -78,7 +78,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
-                    <input type="submit" asp-action="ProfilePageModal" value="Spara" class="btn btn-primary" />
+                    <input type="submit" asp-action="ChangePassword" value="Spara" class="btn btn-primary" />
                 </div>
             </form>
 

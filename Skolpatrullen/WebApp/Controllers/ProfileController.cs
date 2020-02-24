@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -51,8 +52,8 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]")]
-        public async Task<IActionResult> ProfilePageModal(ProfileViewModel ProfileVM)
+        [Route("[controller]/ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ProfileViewModel ProfileVM)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -66,14 +67,31 @@ namespace WebApp.Controllers
                     ProfileVM.NewPassword = "";
                     ProfileVM.ReNewPassword = "";
                     TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
-                    return View(ProfileVM);
+                }
+                else
+                {
+                    ChangePasswordBody body = new ChangePasswordBody();
+                    body.UserId = User.Id;
+                    body.CurrentPassword = ProfileVM.Password;
+                    body.NewPassword = ProfileVM.NewPassword;
+
+                    var response = await APIChangePassword(body);
+
+                    if (response.Success)
+                    {
+                        TempData["SuccessMessage"] = "Ditt lösenord är nu ändrat!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = response.ErrorMessages[0];
+                    }
                 }
             }
             catch
             {
                 //send to error?
             }
-            return RedirectToAction("ProfilePage", "User");
+            return RedirectToAction("ProfilePage", "Profile");
         }
 
 

@@ -13,4 +13,10 @@ namespace Lib
         public List<string> ErrorMessages { get; set; } = new List<string>();
         public bool Success { get; set; }
     }
+    public class ChangePasswordBody
+    {
+        public int UserId { get; set; }
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
+    }
 }

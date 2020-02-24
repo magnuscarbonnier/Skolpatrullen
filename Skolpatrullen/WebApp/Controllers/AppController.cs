@@ -101,5 +101,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Update", user);
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
+        public async Task<APIResponse<bool>> APIChangePassword(ChangePasswordBody body)
+        {
+            HttpResponseMessage response = await APIPost("/User/ChangePassword", body);
+            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+        }
     }
 }
