@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class ChangeNameViewModel
+    public class AdminChangeProfileViewModel
     {
         public int UserId { get; set; }
         [Required(ErrorMessage = "Du måste skriva ditt förnamn")]
@@ -23,14 +23,5 @@ namespace WebApp.ViewModels
         public string SocialSecurityNr { get; set; }
         public bool IsSuperUser { get; set; }
         public User User { get; set; }
-        //public User ToUser()
-        //{
-        //    return new User
-        //    {
-        //        FirstName = this.FirstName,
-        //        LastNames = this.LastNames,
-        //        SocialSecurityNr = this.SocialSecurityNr
-        //    };
-        //}
     }
 }

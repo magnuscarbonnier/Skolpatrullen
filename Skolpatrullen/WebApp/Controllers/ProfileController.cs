@@ -56,7 +56,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AdminChangeProfile(int Id)
         {
             string message = await GetUser();
-            var model = new ChangeNameViewModel();
+            var model = new AdminChangeProfileViewModel();
             var userResponse = await APIGetUserById(Id);
             if (userResponse.Data != null)
             {
@@ -68,7 +68,7 @@ namespace WebApp.Controllers
         }
         [HttpPost]
         [Route("[controller]/AdminChangeProfile")]
-        public async Task<IActionResult> AdminChangeProfile(ChangeNameViewModel changeNameVM)
+        public async Task<IActionResult> AdminChangeProfile(AdminChangeProfileViewModel changeProfile)
         {
 
             string message = await GetUser();
@@ -78,15 +78,15 @@ namespace WebApp.Controllers
             }
             try
             {
-                var userResponse = await APIGetUserById(changeNameVM.UserId);
+                var userResponse = await APIGetUserById(changeProfile.UserId);
                 if (userResponse.Success)
                 {
                     var user = userResponse.Data;
-                    user.Id = changeNameVM.UserId;
-                    user.FirstName = changeNameVM.FirstName;
-                    user.LastNames = changeNameVM.LastNames;
-                    user.SocialSecurityNr = changeNameVM.SocialSecurityNr;
-                    user.IsSuperUser = changeNameVM.IsSuperUser;
+                    user.Id = changeProfile.UserId;
+                    user.FirstName = changeProfile.FirstName;
+                    user.LastNames = changeProfile.LastNames;
+                    user.SocialSecurityNr = changeProfile.SocialSecurityNr;
+                    user.IsSuperUser = changeProfile.IsSuperUser;
                     var response = await APIUpdateUser(user);
                     if (response.Success)
                     {
