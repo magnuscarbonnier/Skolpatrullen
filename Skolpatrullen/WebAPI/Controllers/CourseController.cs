@@ -47,7 +47,7 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/Remove/{id}")]
+        [Route("[controller]/RemoveCourse/{id}")]
         public APIResponse<bool> Remove(int id)
         {
             APIResponse<bool> response = new APIResponse<bool>();

@@ -48,8 +48,8 @@ namespace WebApp.Controllers
             return RedirectToAction("CourseList", "Course");
         }
         [HttpPost]
-        [Route("[controller]/Add")]
-        public async Task<IActionResult> AddCoursePage(CourseViewModel CourseVM)
+        [Route("[controller]")]
+        public async Task<IActionResult> AddCourse(CourseViewModel course)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -58,7 +58,7 @@ namespace WebApp.Controllers
             }
             try
             {
-                var response = await APIAddCourse(CourseVM.ToCourse());
+                var response = await APIAddCourse(course.ToCourse());
                 if (response.Success)
                 {
                     TempData["SuccessMessage"] = $"Kurs tillagd.";
@@ -71,6 +71,7 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("AddCoursePage", "Course");
         }
+
         [HttpGet]
         [Route("[controller]/Remove/{id}")]
         public async Task<IActionResult> RemoveCourse(int id)
@@ -88,7 +89,7 @@ namespace WebApp.Controllers
             {
                 //send to error?
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("CourseList", "Course");
         }
     }
 }

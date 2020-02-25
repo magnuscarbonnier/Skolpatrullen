@@ -117,7 +117,7 @@ namespace WebApp.Controllers
         }
         public async Task<APIResponse<bool>> APIRemoveCourse(int id)
         {
-            HttpResponseMessage response = await APIGet("/Course/Remove/" + id);
+            HttpResponseMessage response = await APIGet("/Course/RemoveCourse/"+id);
             return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
         }
         public async Task<APIResponse<User>> APIUpdateUser(User user)
