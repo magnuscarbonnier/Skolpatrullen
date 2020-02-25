@@ -95,20 +95,44 @@ namespace WebAPI.Controllers
         public APIResponse<User> Update(User user)
         {
             APIResponse<User> response = new APIResponse<User>();
-
             var result = _context.Users.SingleOrDefault(u => u.Id == user.Id);
-            result.FirstName = user.FirstName;
-            result.LastNames = user.LastNames;
-            result.Phone = user.Phone;
-            result.SocialSecurityNr=user.SocialSecurityNr;
-            result.Email = user.Email;
-            result.Address = user.Address;
-            result.City = user.City;
-            result.PostalCode = user.PostalCode;
-            result.IsSuperUser = user.IsSuperUser;
-            _context.SaveChanges();
-            response.Data = user;
-            response.Success = true;
+            if (result.Email != user.Email)
+            {
+                if (!_context.Users.Any(u => u.Email == user.Email))
+                {
+                    result.FirstName = user.FirstName;
+                    result.LastNames = user.LastNames;
+                    result.Phone = user.Phone;
+                    result.SocialSecurityNr = user.SocialSecurityNr;
+                    result.Email = user.Email;
+                    result.Address = user.Address;
+                    result.City = user.City;
+                    result.PostalCode = user.PostalCode;
+                    result.IsSuperUser = user.IsSuperUser;
+                    _context.SaveChanges();
+                    response.Data = user;
+                    response.Success = true;
+                }
+                else
+                {
+                    response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                    response.Success = false;
+                }
+            }
+            else
+            {
+                result.FirstName = user.FirstName;
+                result.LastNames = user.LastNames;
+                result.Phone = user.Phone;
+                result.SocialSecurityNr = user.SocialSecurityNr;
+                result.Address = user.Address;
+                result.City = user.City;
+                result.PostalCode = user.PostalCode;
+                result.IsSuperUser = user.IsSuperUser;
+                _context.SaveChanges();
+                response.Data = user;
+                response.Success = true;
+            }
 
             return response;
         }
@@ -157,9 +181,9 @@ namespace WebAPI.Controllers
 
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
-            if(user != null)
+            if (user != null)
             {
-                if(user.Password == ComputeSha256Hash(body.CurrentPassword))
+                if (user.Password == ComputeSha256Hash(body.CurrentPassword))
                 {
                     user.Password = ComputeSha256Hash(body.NewPassword);
                     _context.SaveChanges();
@@ -187,8 +211,8 @@ namespace WebAPI.Controllers
         public APIResponse<User> GetUserById(int Id)
         {
             APIResponse<User> response = new APIResponse<User>();
-            response.Data = _context.Users.SingleOrDefault(c=>c.Id==Id);
-           
+            response.Data = _context.Users.SingleOrDefault(c => c.Id == Id);
+
             response.Success = true;
             return response;
         }
