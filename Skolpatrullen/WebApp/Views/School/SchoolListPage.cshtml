@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
-                @Html.ActionLink("Delete", "RemoveSchoolPage", new { id=item.Id, name = item.Name, address = item.Address, phone = item.Phone, city = item.City, postalcode = item.PostalCode })
+                @Html.ActionLink("Delete", "RemoveSchoolPage", new { id=item.Id })
             </td>
         </tr>
 }

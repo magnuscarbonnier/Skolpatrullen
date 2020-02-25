@@ -66,12 +66,11 @@ namespace WebApp.Controllers
 
         [HttpGet]
         [Route("[controller]/Remove/{id}")]
-        public async Task<IActionResult> RemoveSchoolPage(SchoolViewModel schoolVM, int id)
+        public async Task<IActionResult> RemoveSchoolPage(int id)
         {
             try
             {
-                schoolVM.Id = id;
-                var response = await APIRemoveSchool(schoolVM.ToSchool());
+                var response = await APIRemoveSchool(id);
                 if (response.Success)
                 {
                     TempData["SuccessMessage"] = $"Skola borttagen";

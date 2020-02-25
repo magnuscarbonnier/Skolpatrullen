@@ -53,12 +53,12 @@ namespace WebAPI.Controllers
             }
             return response;
         }
-        [HttpPost]
-        [Route("[controller]/RemoveSchool")]
-        public APIResponse<bool> Remove(School school)
+        [HttpGet]
+        [Route("[controller]/RemoveSchool/{id}")]
+        public APIResponse<bool> Remove(int id)
         {
             APIResponse<bool> response = new APIResponse<bool>();
-            var removeschool = _context.Schools.SingleOrDefault(s => s.Id == school.Id);
+            var removeschool = _context.Schools.SingleOrDefault(s => s.Id == id);
             if (removeschool != null)
             {
                 _context.Remove(removeschool);
