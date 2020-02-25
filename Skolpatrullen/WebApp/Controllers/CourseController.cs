@@ -66,6 +66,10 @@ namespace WebApp.Controllers
                         TempData["SuccessMessage"] = $"Kurs tillagd.";
                         return RedirectToAction("CourseList", "Course");
                     }
+                } else
+                {
+                    TempData["ErrorMessage"] = "Startdatum måste vara senare än slutdatum.";
+                    return RedirectToAction("AddCoursePage", "Course");
                 }
             }
             catch
