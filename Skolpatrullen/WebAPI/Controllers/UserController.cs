@@ -149,6 +149,39 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/ChangePassword")]
+        public APIResponse<bool> ChangePassword(ChangePasswordBody body)
+        {
+            APIResponse<bool> response = new APIResponse<bool>();
+
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+            if(user != null)
+            {
+                if(user.Password == ComputeSha256Hash(body.CurrentPassword))
+                {
+                    user.Password = ComputeSha256Hash(body.NewPassword);
+                    _context.SaveChanges();
+
+                    response.Success = true;
+                    response.Data = true;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.ErrorMessages.Add("Lösenordet du skrev in stämmer inte överrens med ditt nuvarande");
+                }
+            }
+            else
+            {
+                response.ErrorMessages.Add("Hittar inte användare med Id: " + body.UserId);
+                response.Success = false;
+            }
+
+            return response;
+        }
+
         [HttpGet]
         [Route("[controller]/GetUserById/{Id}")]
         public APIResponse<User> GetUserById(int Id)

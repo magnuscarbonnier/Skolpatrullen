@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Lib;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
@@ -16,8 +17,8 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ProfilePage()
         {
             string message = await GetUser();
-            var model = new ProfileViewModel();
-            model.User = User;
+            var model = new ProfileCombinedViewModel();
+            model.PVM.User = User;
 
             return View(model);
         }
@@ -125,6 +126,48 @@ namespace WebApp.Controllers
             }
             return View(model);
 
+        }
+        [HttpPost]
+        [Route("[controller]/ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel ChangePasswordVM)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                if (!(ChangePasswordVM.NewPassword == ChangePasswordVM.ReNewPassword))
+                {
+                    ChangePasswordVM.NewPassword = "";
+                    ChangePasswordVM.ReNewPassword = "";
+                    TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
+                }
+                else
+                {
+                    ChangePasswordBody body = new ChangePasswordBody();
+                    body.UserId = User.Id;
+                    body.CurrentPassword = ChangePasswordVM.Password;
+                    body.NewPassword = ChangePasswordVM.NewPassword;
+
+                    var response = await APIChangePassword(body);
+
+                    if (response.Success)
+                    {
+                        TempData["SuccessMessage"] = "Ditt lösenord är nu ändrat!";
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = response.ErrorMessages[0];
+                    }
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("ProfilePage", "Profile");
         }
     }
 }
