@@ -33,5 +33,24 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public APIResponse<bool> Remove(int id)
+        {
+            APIResponse<bool> response = new APIResponse<bool>();
+            var removecourse = _context.Courses.SingleOrDefault(s => s.Id == id);
+            if (removecourse != null)
+            {
+                _context.Remove(removecourse);
+                _context.SaveChanges();
+                response.Success = true;
+            }
+            else
+            {
+                response.ErrorMessages.Add($"Kursen fanns inte");
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }
