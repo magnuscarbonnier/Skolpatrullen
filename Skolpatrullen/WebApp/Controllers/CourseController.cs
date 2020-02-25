@@ -58,11 +58,14 @@ namespace WebApp.Controllers
             }
             try
             {
-                var response = await APIAddCourse(course.ToCourse());
-                if (response.Success)
+                if(course.EndDate > course.StartDate)
                 {
-                    TempData["SuccessMessage"] = $"Kurs tillagd.";
-                    return RedirectToAction("CourseList", "Course");
+                    var response = await APIAddCourse(course.ToCourse());
+                    if (response.Success)
+                    {
+                        TempData["SuccessMessage"] = $"Kurs tillagd.";
+                        return RedirectToAction("CourseList", "Course");
+                    }
                 }
             }
             catch
