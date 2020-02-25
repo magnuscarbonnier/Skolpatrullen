@@ -32,16 +32,20 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AddCoursePage()
         {
             string message = await GetUser();
-            var model = new CourseViewModel();
-            var response = await APIGetAllSchools();
-            if (response.Data != null)
+            if(User != null)
             {
-                model.SchoolList = response.Data;
-                model.StartDate = DateTime.Now.ToLocalTime();
-                model.EndDate = DateTime.Now.AddMonths(1).ToLocalTime();
+                var model = new CourseViewModel();
+                var response = await APIGetAllSchools();
+                if(response.Data != null)
+                {
+                    model.SchoolList = response.Data.ToList();
+                    model.StartDate = DateTime.Now.ToLocalTime();
+                    model.EndDate = DateTime.Now.AddMonths(1).ToLocalTime();
+                    return View(model);
+                }
             }
-            return View(model);
 
+            return RedirectToAction("CourseList", "Course");
         }
         [HttpPost]
         [Route("[controller]/Add")]
@@ -58,7 +62,7 @@ namespace WebApp.Controllers
                 if (response.Success)
                 {
                     TempData["SuccessMessage"] = $"Kurs tillagd.";
-                    return RedirectToAction("AddCoursePage", "Course");
+                    return RedirectToAction("CourseList", "Course");
                 }
             }
             catch
@@ -66,7 +70,25 @@ namespace WebApp.Controllers
                 //send to error?
             }
             return RedirectToAction("AddCoursePage", "Course");
-
+        }
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public async Task<IActionResult> RemoveCourse(int id)
+        {
+            try
+            {
+                var response = await APIRemoveCourse(id);
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Kurs borttagen";
+                    return RedirectToAction("CourseList", "Course");
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
