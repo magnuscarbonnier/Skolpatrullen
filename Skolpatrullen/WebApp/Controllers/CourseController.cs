@@ -34,6 +34,11 @@ namespace WebApp.Controllers
             {
                 return View();
             }
+            if (CourseVM.StartDate > CourseVM.EndDate)
+            {
+                TempData["ErrorMessage"] = "Startdatum kan inte vara senare än slutdatum";
+                return View();
+            }
             try
             {
                 var response = await APIAddCourse(CourseVM.ToCourse());
@@ -46,6 +51,7 @@ namespace WebApp.Controllers
             catch
             {
                 //send to error?
+                TempData["ErrorMessage"] = "Något gick fel. Försök igen.";
             }
             return RedirectToAction("AddCoursePage", "Course");
 
