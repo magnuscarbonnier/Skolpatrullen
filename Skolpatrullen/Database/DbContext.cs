@@ -24,9 +24,9 @@ namespace Database.Models
             builder.Entity<User>().Property(u => u.IsSuperUser).HasDefaultValue(false);
         }
 
-        public Context(DbContextOptions<Context> options) : base(options)
-        {
+        //public Context(DbContextOptions<Context> options) : base(options)
+        //{
 
-        }
+        //}
     }
 }
