@@ -17,8 +17,8 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ProfilePage()
         {
             string message = await GetUser();
-            var model = new ProfileViewModel();
-            model.User = User;
+            var model = new ProfileCombinedViewModel();
+            model.PVM.User = User;
 
             return View(model);
         }
@@ -129,7 +129,7 @@ namespace WebApp.Controllers
         }
         [HttpPost]
         [Route("[controller]/ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ProfileViewModel ProfileVM)
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel ChangePasswordVM)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -138,18 +138,18 @@ namespace WebApp.Controllers
             }
             try
             {
-                if (!(ProfileVM.NewPassword == ProfileVM.ReNewPassword))
+                if (!(ChangePasswordVM.NewPassword == ChangePasswordVM.ReNewPassword))
                 {
-                    ProfileVM.NewPassword = "";
-                    ProfileVM.ReNewPassword = "";
+                    ChangePasswordVM.NewPassword = "";
+                    ChangePasswordVM.ReNewPassword = "";
                     TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
                 }
                 else
                 {
                     ChangePasswordBody body = new ChangePasswordBody();
                     body.UserId = User.Id;
-                    body.CurrentPassword = ProfileVM.Password;
-                    body.NewPassword = ProfileVM.NewPassword;
+                    body.CurrentPassword = ChangePasswordVM.Password;
+                    body.NewPassword = ChangePasswordVM.NewPassword;
 
                     var response = await APIChangePassword(body);
 
