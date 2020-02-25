@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -11,6 +12,23 @@ namespace WebApp.Controllers
     {
         [HttpGet]
         [Route("[controller]")]
+        public async Task<IActionResult> CourseList()
+        {
+            string message = await GetUser();
+            if(User != null)
+            {
+                IEnumerable<Course> courses = new List<Course>();
+                var response = await APIGetAllCourses();
+                if (response.Data != null)
+                {
+                    courses = response.Data;
+                }
+                return View(courses);
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        [Route("[controller]/Add")]
         public async Task<IActionResult> AddCoursePage()
         {
             string message = await GetUser();
@@ -26,7 +44,7 @@ namespace WebApp.Controllers
 
         }
         [HttpPost]
-        [Route("[controller]")]
+        [Route("[controller]/Add")]
         public async Task<IActionResult> AddCoursePage(CourseViewModel CourseVM)
         {
             string message = await GetUser();
