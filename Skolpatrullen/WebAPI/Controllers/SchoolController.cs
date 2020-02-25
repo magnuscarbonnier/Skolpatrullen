@@ -53,5 +53,24 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/RemoveSchool/{id}")]
+        public APIResponse<bool> Remove(int id)
+        {
+            APIResponse<bool> response = new APIResponse<bool>();
+            var removeschool = _context.Schools.SingleOrDefault(s => s.Id == id);
+            if (removeschool != null)
+            {
+                _context.Remove(removeschool);
+                _context.SaveChanges();
+                response.Success = true;
+            }
+            else
+            {
+                response.ErrorMessages.Add($"Skolan fanns inte");
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }

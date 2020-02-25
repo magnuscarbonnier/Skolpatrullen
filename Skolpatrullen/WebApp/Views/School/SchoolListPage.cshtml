@@ -1,0 +1,54 @@
+﻿@model WebApp.ViewModels.SchoolViewModel
+
+@{
+    ViewData["Title"] = "SchoolListPage";
+}
+
+<h1>Alla skolor</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Namn
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Telefon
+            </th>
+            <th>
+                Stad
+            </th>
+            <th>
+                Postkod
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.SchoolList) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PostalCode)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "RemoveSchoolPage", new { id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

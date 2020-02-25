@@ -11,6 +11,25 @@ namespace WebApp.Controllers
     {
         [HttpGet]
         [Route("[controller]")]
+        public async Task<IActionResult> SchoolListPage()
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var model = new SchoolViewModel();
+                var response = await APIGetAllSchools();
+                if (response.Data != null)
+                {
+                    model.SchoolList = response.Data;
+                }
+                return View(model);
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        [Route("[controller]/Add")]
         public async Task<IActionResult> AddSchoolPage()
         {
             string message = await GetUser();
@@ -22,8 +41,8 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]")]
-        public async Task<IActionResult> AddSchoolPage(SchoolViewModel school)
+        [Route("[controller]/Add")]
+        public async Task<IActionResult> AddSchool(SchoolViewModel school)
         {
             if (!ModelState.IsValid)
             {
@@ -32,8 +51,11 @@ namespace WebApp.Controllers
             try
             {
                 var response = await APIAddSchool(school.ToSchool());
-                TempData["SuccessMessage"] = $"Skola tillagd.";
-                return RedirectToAction("AddSchoolPage", "School");
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Skola tillagd.";
+                    return RedirectToAction("AddSchoolPage", "School");
+                }
             }
             catch
             {
@@ -41,5 +63,26 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("AddSchoolPage", "School");
         }
+
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public async Task<IActionResult> RemoveSchoolPage(int id)
+        {
+            try
+            {
+                var response = await APIRemoveSchool(id);
+                if (response.Success)
+                {
+                    TempData["SuccessMessage"] = $"Skola borttagen";
+                    return RedirectToAction("SchoolListPage", "School");
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
     }
 }
