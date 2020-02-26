@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Database.Migrations
 {
-    public partial class Add_ProfilePicture : Migration
+    public partial class ProfileImage : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<byte[]>(
-                name: "ProfilePicture",
+                name: "ProfilePictureImage",
                 table: "Users",
                 nullable: true);
         }
@@ -16,7 +16,7 @@ namespace Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ProfilePicture",
+                name: "ProfilePictureImage",
                 table: "Users");
         }
     }

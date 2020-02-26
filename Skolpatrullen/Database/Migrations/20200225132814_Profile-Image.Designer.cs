@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200225132216_Add_ProfilePicture")]
-    partial class Add_ProfilePicture
+    [Migration("20200225132814_Profile-Image")]
+    partial class ProfileImage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -211,7 +211,7 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ProfilePicture")
+                    b.Property<byte[]>("ProfilePictureImage")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SocialSecurityNr")

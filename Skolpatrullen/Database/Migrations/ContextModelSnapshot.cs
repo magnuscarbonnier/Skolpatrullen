@@ -209,7 +209,7 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ProfilePicture")
+                    b.Property<byte[]>("ProfilePictureImage")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SocialSecurityNr")

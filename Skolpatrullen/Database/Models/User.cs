@@ -27,7 +27,7 @@ namespace Database.Models
         [Required]
         public string PostalCode { get; set; }
         public bool IsSuperUser { get; set; }
-        public byte[] ProfilePicture { get; set; }
+        public byte[] ProfilePictureImage { get; set; }
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
     }
