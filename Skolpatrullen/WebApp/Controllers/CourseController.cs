@@ -50,5 +50,24 @@ namespace WebApp.Controllers
             return RedirectToAction("AddCoursePage", "Course");
 
         }
+        [HttpGet]
+        [Route("[controller]/CourseList")]
+        public async Task<IActionResult> CourseList()
+        {
+            string message = await GetUser();
+            var model = new CourseListViewModel();
+            var courseResponse = await APIGetAllCourses();
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse.Data != null)
+            {
+                model.SchoolList = schoolResponse.Data;
+            }
+            return View(model);
+
+        }
     }
 }

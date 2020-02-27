@@ -11,7 +11,8 @@ namespace Database.Models
         public int CourseId { get; set; }
         public Roles Role { get; set; }
         public string Grade { get; set; }
-
+        public Status Status { get; set; }
+       
         public User User { get; set; }
         public Course Course { get; set; }
     }
