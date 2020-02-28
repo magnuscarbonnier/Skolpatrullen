@@ -56,7 +56,7 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            if (CourseVM.StartDate > CourseVM.EndDate)
+            if (course.StartDate > course.EndDate)
             {
                 TempData["ErrorMessage"] = "Startdatum kan inte vara senare än slutdatum";
             }
