@@ -11,6 +11,7 @@ namespace WebApp.ViewModels
     {
         public ProfileViewModel PVM { get; set; } = new ProfileViewModel();
         public ChangePasswordViewModel CPVM { get; set; } = new ChangePasswordViewModel();
+        public ChangeProfilePictureViewModel CPPVM { get; set; } = new ChangeProfilePictureViewModel();
     }
     public class ProfileViewModel
     {
@@ -19,7 +20,6 @@ namespace WebApp.ViewModels
         public string Address { get; set; }
         public string City { get; set; }
         public string PostalCode { get; set; }
-        public byte[] ProfilePic { get; set; }
         public User User { get; set; }
         public User ToUser()
         {
@@ -45,5 +45,10 @@ namespace WebApp.ViewModels
         public string NewPassword { get; set; }
         [Required(ErrorMessage = "Fyll i fältet")]
         public string ReNewPassword { get; set; }
+    }
+
+    public class ChangeProfilePictureViewModel
+    {
+        public byte[] ProfilePicture { get; set; }
     }
 }
