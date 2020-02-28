@@ -13,13 +13,30 @@
                     @Html.HiddenFor(m => m.UserId)
                     @Html.HiddenFor(m => m.CourseId)
                     <div class="font-weight-bold">Kurs: @Html.DisplayFor(m => m.Course.Name)</div>
-                    <div>Startdatum: @Html.DisplayFor(m => m.Course.StartDate)</div>
-                    <div>Slutdatum: @Html.DisplayFor(m => m.Course.EndDate)</div>
+                    <div>Startdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.StartDate))</div>
+                    <div>Slutdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.EndDate))</div>
                     <div>Max antal platser på kurs: </div>
 
-                    <div class="form-group">
-                        <input type="submit" value="Ansök" class="btn btn-primary" />
-                    </div>
+                    @{
+                        if (Model.Status == Database.Models.Status.Applied)
+                        {
+                            <div>Du har redan ansökt till den här kursen</div>
+                        }
+                        else if (Model.Status == Database.Models.Status.Accepted)
+                        {
+                            <div>Du är redan med i den här kursen</div>
+                        }
+                        else if (Model.Status == Database.Models.Status.NotActive)
+                        {
+                            <div>Du har gjort någet fel (behöver något bättre medelande)</div>
+                        }
+                        else if(Model.Status == Database.Models.Status.NotApplied)
+                        {
+                            <div class="form-group">
+                                <input type="submit" value="Ansök" class="btn btn-primary" />
+                            </div>
+                        }
+                    }
                 </form>
             </div>
         </div>

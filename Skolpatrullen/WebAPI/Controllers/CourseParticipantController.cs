@@ -19,12 +19,35 @@ namespace WebAPI.Controllers
             _context = context;
             _logger = logger;
         }
+        [HttpGet]
+        [Route("[controller]/GetAll")]
+        public APIResponse<IEnumerable<CourseParticipant>> GetAll()
+        {
+            APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
+            var courseParticipants = _context.CourseParticipants.ToList();
+            if (courseParticipants != null)
+            {
+                response.Success = true;
+                response.Data = courseParticipants;
+            }
+            return response;
+        }
         [HttpPost]
         [Route("[controller]/AddOrUpdate")]
         public APIResponse<CourseParticipant> AddOrUpdate(CourseParticipant courseParticipant)
         {
             APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
             response.Data = AddOrUpdateCourseParticipant(courseParticipant);
+            response.Success = true;
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetCourseParticipantsByUserId/{Id}")]
+        public APIResponse<IEnumerable<CourseParticipant>> GetCourseParticipantsByUserId(int Id)
+        {
+            APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
+            response.Data = _context.CourseParticipants.Where(u => u.UserId == Id).ToList();
+
             response.Success = true;
             return response;
         }

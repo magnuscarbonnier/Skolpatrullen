@@ -23,6 +23,16 @@ namespace WebApp.Controllers
                 model.Course = courseResponse.Data;
                 model.CourseId = courseResponse.Data.Id;
             }
+            var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseParticipant = cpResponse.Data.SingleOrDefault(cp => cp.CourseId == Id);
+            if (courseParticipant != null)
+            {
+                model.Status = courseParticipant.Status;
+            }
+            else
+            {
+                model.Status = Database.Models.Status.NotApplied;
+            }
             return View(model);
         }
 
