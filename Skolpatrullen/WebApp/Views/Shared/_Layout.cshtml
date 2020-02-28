@@ -25,15 +25,20 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
 
+
                         @{
                             if (ViewBag.User != null)
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Profil</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logout</a>
+                                </li>
+
                                 if (ViewBag.User.IsSuperUser == true)
                                 {
                                     <li class="nav-item dropdown">

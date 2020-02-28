@@ -73,5 +73,15 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetCourseById/{Id}")]
+        public APIResponse<Course> GetCourseById(int Id)
+        {
+            APIResponse<Course> response = new APIResponse<Course>();
+            response.Data = _context.Courses.SingleOrDefault(c => c.Id == Id);
+
+            response.Success = true;
+            return response;
+        }
     }
 }

@@ -1,0 +1,30 @@
+﻿@model WebApp.ViewModels.CourseParticipantViewModel
+
+@{
+    ViewData["Title"] = "Lägg till admin";
+}
+
+<h1>Information om kurs</h1>
+<hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="AddCourseParticipant">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    @Html.HiddenFor(m => m.UserId)
+                    @Html.HiddenFor(m => m.CourseId)
+                    <div class="font-weight-bold">Kurs: @Html.DisplayFor(m => m.Course.Name)</div>
+                    <div>Startdatum: @Html.DisplayFor(m => m.Course.StartDate)</div>
+                    <div>Slutdatum: @Html.DisplayFor(m => m.Course.EndDate)</div>
+                    <div>Max antal platser på kurs: </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Ansök" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

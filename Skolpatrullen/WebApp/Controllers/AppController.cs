@@ -110,6 +110,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/UserSchool/AddOrUpdate", userSchool);
             return (APIResponse<UserSchool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserSchool>));
         }
+        public async Task<APIResponse<CourseParticipant>> APIAddOrUpdateCourseParticipant(CourseParticipant courseParticipant)
+        {
+            HttpResponseMessage response = await APIPost("/CourseParticipant/AddOrUpdate", courseParticipant);
+            return (APIResponse<CourseParticipant>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<CourseParticipant>));
+        }
         public async Task<APIResponse<Course>> APIAddCourse(Course course)
         {
             HttpResponseMessage response = await APIPost("/Course/Add", course);
@@ -144,6 +149,11 @@ namespace WebApp.Controllers
         {
             HttpResponseMessage response = await APIGet("/User/GetUserById/" + Id.ToString());
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
+        }
+        public async Task<APIResponse<Course>> APIGetCourseById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/Course/GetCourseById/" + Id.ToString());
+            return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
         }
     }
 }
