@@ -120,6 +120,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/CourseParticipant/AddOrUpdate", courseParticipant);
             return (APIResponse<CourseParticipant>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<CourseParticipant>));
         }
+        public async Task<APIResponse<CourseParticipant>> APIGetCourseParticipantsByUserId(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/CourseParticipant/GetCourseParticipantsByUserId/" + Id.ToString());
+            return (APIResponse<CourseParticipant>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<CourseParticipant>));
+        }
         public async Task<APIResponse<Course>> APIAddCourse(Course course)
         {
             HttpResponseMessage response = await APIPost("/Course/Add", course);

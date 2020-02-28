@@ -42,8 +42,8 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetCourseParticipantsById/{Id}")]
-        public APIResponse<IEnumerable<CourseParticipant>> GetCourseById(int Id)
+        [Route("[controller]/GetCourseParticipantsByUserId/{Id}")]
+        public APIResponse<IEnumerable<CourseParticipant>> GetCourseParticipantsByUserId(int Id)
         {
             APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
             response.Data = _context.CourseParticipants.Where(u => u.UserId == Id).ToList();
