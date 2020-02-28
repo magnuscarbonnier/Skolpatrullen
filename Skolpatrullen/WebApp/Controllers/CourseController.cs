@@ -11,8 +11,8 @@ namespace WebApp.Controllers
     public class CourseController : AppController
     {
         [HttpGet]
-        [Route("[controller]")]
-        public async Task<IActionResult> CourseList()
+        [Route("[controller]/SuperCourseList")]
+        public async Task<IActionResult> SuperCourseList()
         {
             string message = await GetUser();
             if(User != null)
