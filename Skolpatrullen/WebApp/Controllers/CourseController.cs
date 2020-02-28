@@ -15,7 +15,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> SuperCourseList()
         {
             string message = await GetUser();
-            if(User != null)
+            if (User != null)
             {
                 IEnumerable<Course> courses = new List<Course>();
                 var response = await APIGetAllCourses();
@@ -32,11 +32,11 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AddCoursePage()
         {
             string message = await GetUser();
-            if(User != null)
+            if (User != null)
             {
                 var model = new CourseViewModel();
                 var response = await APIGetAllSchools();
-                if(response.Data != null)
+                if (response.Data != null)
                 {
                     model.SchoolList = response.Data.ToList();
                     model.StartDate = DateTime.Now.ToLocalTime();
@@ -62,7 +62,7 @@ namespace WebApp.Controllers
             }
             try
             {
-                if(course.EndDate > course.StartDate)
+                if (course.EndDate > course.StartDate)
                 {
                     var response = await APIAddCourse(course.ToCourse());
                     if (response.Success)
@@ -70,7 +70,8 @@ namespace WebApp.Controllers
                         TempData["SuccessMessage"] = $"Kurs tillagd.";
                         return RedirectToAction("CourseList", "Course");
                     }
-                } else
+                }
+                else
                 {
                     TempData["ErrorMessage"] = "Startdatum måste vara senare än slutdatum.";
                     return RedirectToAction("AddCoursePage", "Course");
@@ -102,6 +103,29 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("CourseList", "Course");
         }
+        [HttpPost]
+        [Route("[controller]/SearchCourses")]
+        public async Task<IActionResult> SearchCourses(CourseListViewModel courseVM)
+        {
+            string message = await GetUser();
+            var model = new CourseListViewModel();
+            var courseResponse = await APIGetAllCourses();
+            if (courseResponse.Data != null)
+            {
+                if (!string.IsNullOrEmpty(courseVM.Search))
+                {
+                    model.CourseList = courseResponse.Data.Where(s => s.Name.Contains(courseVM.Search));
+                }
+                else
+                    model.CourseList = courseResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse.Data != null)
+            {
+                model.SchoolList = schoolResponse.Data;
+            }
+            return View("CourseList", model);
+        }
         [HttpGet]
         [Route("[controller]/CourseList")]
         public async Task<IActionResult> CourseList()
@@ -119,7 +143,6 @@ namespace WebApp.Controllers
                 model.SchoolList = schoolResponse.Data;
             }
             return View(model);
-
         }
     }
 }
