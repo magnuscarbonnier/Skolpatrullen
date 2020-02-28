@@ -8,6 +8,7 @@ namespace Database.Models
     {
         Applied = 0,
         Accepted = 1,
-        Not_Active = 2
+        NotActive = 2,
+        NotApplied = 3
     }
 }
