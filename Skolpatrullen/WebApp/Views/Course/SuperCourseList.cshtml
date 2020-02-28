@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Database.Models.Course>
+
+@{
+    ViewData["Title"] = "CourseList";
+}
+
+<h1>CourseList</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Kursnamn
+            </th>
+            <th>
+                Start datum
+            </th>
+            <th>
+                Slut datum
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "RemoveCourse", new { id=item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
