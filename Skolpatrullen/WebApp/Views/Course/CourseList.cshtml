@@ -4,9 +4,9 @@
 }
 
 <h1>Alla kurser</h1>
-<form asp-controller="Course" asp-action="CourseList">
+<form asp-controller="Course" asp-action="SearchCourses">
     <p>
-        Kursnamn: <input type="text" name="id">
+        Kursnamn: <input asp-for="Search" type="text">
         <input type="submit" value="Sök" />
     </p>
 </form>
