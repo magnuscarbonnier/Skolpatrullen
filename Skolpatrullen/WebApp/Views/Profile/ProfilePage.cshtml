@@ -12,6 +12,9 @@
             <h4>@Model.PVM.User.FirstName @Model.PVM.User.LastNames</h4>
         </div>
         <div class="col-md-10" align="right">
+
+
+
             @{
                 if (Model.PVM.User.ProfilePictureImage != null)
                 {
@@ -26,16 +29,11 @@
             }
         </div>
     </div>
-    <div class="row">
-        <div class="col-12" align="right">
-            <a href="/profile/profile">Byt profilbild</a>
 
-        </div>
-
-    </div>
 }
 
 @await Html.PartialAsync("_ChangeProfilePicture", Model.CPPVM)
+
 
 @await Html.PartialAsync("_ChangeProfile", Model.PVM)
 

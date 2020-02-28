@@ -50,5 +50,7 @@ namespace WebApp.ViewModels
     public class ChangeProfilePictureViewModel
     {
         public byte[] ProfilePicture { get; set; }
+        public User User { get; set; }
+
     }
 }

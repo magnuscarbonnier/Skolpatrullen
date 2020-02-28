@@ -169,5 +169,20 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("ProfilePage", "Profile");
         }
+
+
+        [HttpPost]
+        [Route("[controller]/ChangeProfilePicture")]
+        public async Task<IActionResult> ChangeProfilePicture(ChangeProfilePictureViewModel ChangeProfilePictureVM)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            return RedirectToAction("ProfilePage", "Profile");
+
+
+        }
     }
 }
