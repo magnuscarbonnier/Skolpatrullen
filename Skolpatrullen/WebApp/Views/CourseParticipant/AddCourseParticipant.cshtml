@@ -17,9 +17,26 @@
                     <div>Slutdatum: @Html.DisplayFor(m => m.Course.EndDate)</div>
                     <div>Max antal platser på kurs: </div>
 
-                    <div class="form-group">
-                        <input type="submit" value="Ansök" class="btn btn-primary" />
-                    </div>
+                    @{
+                        if (Model.Status == Database.Models.Status.Applied)
+                        {
+                            <div>Du har redan ansökt till den här kursen</div>
+                        }
+                        else if (Model.Status == Database.Models.Status.Accepted)
+                        {
+                            <div>Du är redan med i den här kursen</div>
+                        }
+                        else if (Model.Status == Database.Models.Status.NotActive)
+                        {
+                            <div>Du har gjort någet fel (behöver något bättre medelande)</div>
+                        }
+                        else if(Model.Status == Database.Models.Status.NotApplied)
+                        {
+                            <div class="form-group">
+                                <input type="submit" value="Ansök" class="btn btn-primary" />
+                            </div>
+                        }
+                    }
                 </form>
             </div>
         </div>
