@@ -102,16 +102,21 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("CourseList", "Course");
         }
-        [HttpGet]
-        [Route("[controller]/CourseList")]
-        public async Task<IActionResult> CourseList()
+        [HttpPost]
+        [Route("[controller]/CourseList/{id}")]
+        public async Task<IActionResult> CourseList(string id)
         {
             string message = await GetUser();
             var model = new CourseListViewModel();
             var courseResponse = await APIGetAllCourses();
             if (courseResponse.Data != null)
             {
-                model.CourseList = courseResponse.Data;
+                if (!string.IsNullOrEmpty(id))
+                {
+                    model.CourseList = courseResponse.Data.Where(s => s.Name.Contains(id));
+                }
+                else
+                    model.CourseList = courseResponse.Data;
             }
             var schoolResponse = await APIGetAllSchools();
             if (schoolResponse.Data != null)
@@ -119,7 +124,6 @@ namespace WebApp.Controllers
                 model.SchoolList = schoolResponse.Data;
             }
             return View(model);
-
         }
     }
 }
