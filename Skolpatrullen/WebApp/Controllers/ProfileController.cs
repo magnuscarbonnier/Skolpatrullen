@@ -19,8 +19,18 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new ProfileCombinedViewModel();
             model.PVM.User = User;
+            var courseParticipantsResponse = APIGetAllCourseParticipants();
+            if(courseParticipantsResponse != null)
+            {
+                model.PVM.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c=>c.UserId==User.Id).ToList();
+            }
+            var courseResponse = APIGetAllCourses();
+            if (courseResponse != null)
+            {
+                model.PVM.CourseList = courseResponse.Result.Data.ToList();
+            }
 
-            return View(model);
+                return View(model);
         }
 
         [HttpPost]
