@@ -74,19 +74,6 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetAllCourses")]
-        public APIResponse<IEnumerable<Course>> GetAllCourses()
-        {
-            APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
-            var courseList = _context.Courses.OrderBy(s => s.Name).ToList();
-            if (courseList != null)
-            {
-                response.Success = true;
-                response.Data = courseList;
-            }
-            return response;
-        }
-        [HttpGet]
         [Route("[controller]/GetCourseById/{Id}")]
         public APIResponse<Course> GetCourseById(int Id)
         {
