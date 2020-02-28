@@ -93,14 +93,14 @@ namespace WebApp.Controllers
                 if (response.Success)
                 {
                     TempData["SuccessMessage"] = $"Kurs borttagen";
-                    return RedirectToAction("CourseList", "Course");
+                    return RedirectToAction("SuperCourseList", "Course");
                 }
             }
             catch
             {
                 //send to error?
             }
-            return RedirectToAction("CourseList", "Course");
+            return RedirectToAction("SuperCourseList", "Course");
         }
         [HttpGet]
         [Route("[controller]/CourseList")]
