@@ -26,10 +26,18 @@ namespace WebAPI.Controllers
             APIResponse<Course> response = new APIResponse<Course>();
             if (course != null)
             {
-                _context.Courses.Add(course);
-                _context.SaveChanges();
-                response.Success = true;
-                response.Data = course;
+                if (course.StartDate > course.EndDate)
+                {
+                    response.ErrorMessages[0] = "Startdatum kan inte vara senare än slutdatum";
+                    response.Success = false;
+                }
+                else
+                {
+                    _context.Courses.Add(course);
+                    _context.SaveChanges();
+                    response.Success = true;
+                    response.Data = course;
+                }
             }
             return response;
         }
