@@ -59,5 +59,29 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("CourseList", "Course");
         }
+        [HttpGet]
+        [Route("[controller]")]
+        public async Task<IActionResult> AdminCourseParticipant()
+        {
+            string message = await GetUser();
+            var model = new AdminCourseParticipantViewModel();
+            
+            var courseResponse = await APIGetAllCourses();
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+            var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseParticipant = cpResponse.Data;
+            if (courseParticipant != null)
+            {
+                model.Status = courseParticipant.Status;
+            }
+            else
+            {
+                model.Status = Database.Models.Status.NotApplied;
+            }
+            return View(model);
+        }
     }
 }
