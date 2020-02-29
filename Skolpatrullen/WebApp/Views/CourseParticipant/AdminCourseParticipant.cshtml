@@ -1,4 +1,4 @@
-﻿@model WebApp.ViewModels.CourseParticipantViewModel
+﻿@model WebApp.ViewModels.AdminCourseParticipantViewModel
 
 @{
     ViewData["Title"] = "AdminCourseParticipant";
@@ -8,41 +8,22 @@
 
 <h4>CourseParticipantViewModel</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="AdminCourseParticipant">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <input asp-for="UserId" class="form-control" />
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CourseId" class="control-label"></label>
-                <input asp-for="CourseId" class="form-control" />
-                <span asp-validation-for="CourseId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" />
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Grade" class="control-label"></label>
-                <input asp-for="Grade" class="form-control" />
-                <span asp-validation-for="Grade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <input asp-for="Status" class="form-control" />
-                <span asp-validation-for="Status" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+@foreach (var cp in Model.CourseParticipantList)
+{
+<div>
+    @Html.HiddenFor(c => cp.Id)
+    <div><label>Användarid: </label>@Html.DisplayFor(c => cp.UserId)</div>
+    @foreach (var course in Model.CourseList.Where(d => d.Id == cp.CourseId))
+    {
+        <div><label>Kurs: </label>@Html.DisplayFor(d => course.Name)</div>
+    }
+    <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
+    <a class="btn btn-info" asp-area="" asp-controller="CourseParticipant"
+       asp-action="EditCourseParticipant" asp-route-Id="@cp.Id">Ändra</a>
 </div>
+    }
+
 
 <div>
     <a asp-action="Index">Back to List</a>

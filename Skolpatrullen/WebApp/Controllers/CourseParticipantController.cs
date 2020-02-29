@@ -60,7 +60,7 @@ namespace WebApp.Controllers
             return RedirectToAction("CourseList", "Course");
         }
         [HttpGet]
-        [Route("[controller]")]
+        [Route("Admin/CourseParticipants")]
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
@@ -71,16 +71,12 @@ namespace WebApp.Controllers
             {
                 model.CourseList = courseResponse.Data;
             }
-            var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
-            var courseParticipant = cpResponse.Data;
-            if (courseParticipant != null)
+            var cpResponse = await APIGetAllCourseParticipants();
+            if (cpResponse != null)
             {
-                model.Status = courseParticipant.Status;
+                model.CourseParticipantList = cpResponse.Data;
             }
-            else
-            {
-                model.Status = Database.Models.Status.NotApplied;
-            }
+            
             return View(model);
         }
     }
