@@ -51,6 +51,16 @@ namespace WebAPI.Controllers
             response.Success = true;
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetCourseParticipantById/{Id}")]
+        public APIResponse<CourseParticipant> GetCourseParticipantById(int Id)
+        {
+            APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
+            response.Data = _context.CourseParticipants.Where(u => u.Id == Id).SingleOrDefault();
+
+            response.Success = true;
+            return response;
+        }
         CourseParticipant AddOrUpdateCourseParticipant(CourseParticipant courseParticipant)
         {
             var existingCourseParticipant = _context.CourseParticipants.SingleOrDefault(cp => cp.CourseId == courseParticipant.CourseId && cp.UserId == courseParticipant.UserId);
