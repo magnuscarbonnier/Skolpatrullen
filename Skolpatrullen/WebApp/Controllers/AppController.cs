@@ -41,16 +41,42 @@ namespace WebApp.Controllers
             }
             else
             {
-                string errorMessage = "";
-                foreach (string em in response.ErrorMessages)
-                {
-                    errorMessage += em + "\n";
-                }
-                return errorMessage;
+                return response.FailureMessage;
             }
             return "Något gick fel ¯\\_(ツ)_/¯";
         }
-
+        public void SetFailureMessage(string message)
+        {
+            TempData["ErrorMessage"] = message;
+        }
+        public void SetSuccessMessage(string message)
+        {
+            TempData["SuccessMessage"] = message;
+        }
+        public void SetResponseMessage(APIResponse response)
+        {
+            if (response.Success)
+            {
+                SetSuccessMessage(response.SuccessMessage);
+            }
+            else
+            {
+                SetFailureMessage(response.FailureMessage);
+            }
+        }
+        public IActionResult SetResponseMessage(APIResponse response, IActionResult successView, IActionResult failureView)
+        {
+            if (response.Success)
+            {
+                TempData["SuccessMessage"] = response.SuccessMessage;
+                return successView;
+            }
+            else
+            {
+                TempData["ErrorMessage"] = response.FailureMessage;
+                return failureView;
+            }
+        }
         public async Task<HttpResponseMessage> APIPost<T>(string route, T body)
         {
             var json = JsonConvert.SerializeObject(body);

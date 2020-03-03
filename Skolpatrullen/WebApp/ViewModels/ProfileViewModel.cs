@@ -20,16 +20,14 @@ namespace WebApp.ViewModels
         public string City { get; set; }
         public string PostalCode { get; set; }
         public User User { get; set; }
-        public User ToUser()
+        public User UpdateUser(User user)
         {
-            return new User
-            {
-                Phone = this.Phone,
-                Email = this.Email,
-                Address = this.Address,
-                City = this.City,
-                PostalCode = this.PostalCode,
-            };
+            user.Phone = Phone;
+            user.Email = Email;
+            user.Address = Address;
+            user.City = City;
+            user.PostalCode = PostalCode;
+            return user;
         }
     }
 

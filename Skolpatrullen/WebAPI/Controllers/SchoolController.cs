@@ -48,7 +48,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.ErrorMessages.Add($"Det finns redan en skola med det namnet");
+                response.FailureMessage = $"Det finns redan en skola med det namnet";
                 response.Success = false;
             }
             return response;
@@ -67,7 +67,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.ErrorMessages.Add($"Skolan fanns inte");
+                response.FailureMessage = $"Skolan fanns inte";
                 response.Success = false;
             }
             return response;

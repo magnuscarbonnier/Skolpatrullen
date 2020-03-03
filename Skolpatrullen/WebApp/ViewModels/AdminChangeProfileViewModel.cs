@@ -23,5 +23,14 @@ namespace WebApp.ViewModels
         public string SocialSecurityNr { get; set; }
         public bool IsSuperUser { get; set; }
         public User User { get; set; }
+        public User UpdateUser(User user)
+        {
+            user.Id = UserId;
+            user.FirstName = FirstName;
+            user.LastNames = LastNames;
+            user.SocialSecurityNr = SocialSecurityNr;
+            user.IsSuperUser = IsSuperUser;
+            return user;
+        }
     }
 }

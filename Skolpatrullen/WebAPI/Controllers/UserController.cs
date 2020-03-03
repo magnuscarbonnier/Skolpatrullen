@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                response.FailureMessage = $"Det finns redan en användare med mejladressen {user.Email}";
                 response.Success = false;
             }
             return response;
@@ -51,7 +51,7 @@ namespace WebAPI.Controllers
             User user = _context.Users.SingleOrDefault(u => u.Email == login.Email);
             if (user == null)
             {
-                response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
+                response.FailureMessage = $"Det finns ingen användare med mejladressen {login.Email}";
                 response.Success = false;
             }
             else if (user.Password == ComputeSha256Hash(login.Password))
@@ -61,7 +61,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.ErrorMessages.Add("Fel lösenord");
+                response.FailureMessage = $"Fel lösenord";
                 response.Success = false;
             }
             return response;
@@ -74,12 +74,12 @@ namespace WebAPI.Controllers
             LoginSession session = _context.LoginSessions.Include(ls => ls.User).SingleOrDefault(ls => ls.Token == token.token);
             if (session == null)
             {
-                response.ErrorMessages.Add($"Hittade ingen LoginSession med token: {token}");
+                response.FailureMessage = $"Hittade ingen LoginSession med token: {token}";
                 response.Success = false;
             }
             else if (session.Expires < DateTime.Now.ToUniversalTime())
             {
-                response.ErrorMessages.Add($"LoginSession har gått ut");
+                response.FailureMessage = $"LoginSession har gått ut";
                 response.Success = false;
             }
             else
@@ -115,7 +115,7 @@ namespace WebAPI.Controllers
                 }
                 else
                 {
-                    response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                    response.FailureMessage = $"Det finns redan en användare med mejladressen {user.Email}";
                     response.Success = false;
                 }
             }
@@ -194,12 +194,12 @@ namespace WebAPI.Controllers
                 else
                 {
                     response.Success = false;
-                    response.ErrorMessages.Add("Lösenordet du skrev in stämmer inte överrens med ditt nuvarande");
+                    response.FailureMessage = $"Lösenordet du skrev in stämmer inte överrens med ditt nuvarande";
                 }
             }
             else
             {
-                response.ErrorMessages.Add("Hittar inte användare med Id: " + body.UserId);
+                response.FailureMessage = $"Hittar inte användare med Id: " + body.UserId;
                 response.Success = false;
             }
 

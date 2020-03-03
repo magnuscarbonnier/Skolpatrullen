@@ -41,7 +41,7 @@ namespace WebAPI.Controllers
             {
                 if (course.StartDate > course.EndDate)
                 {
-                    response.ErrorMessages[0] = "Startdatum kan inte vara senare än slutdatum";
+                    response.FailureMessage = $"Startdatum kan inte vara senare än slutdatum";
                     response.Success = false;
                 }
                 else
@@ -68,7 +68,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.ErrorMessages.Add($"Kursen fanns inte");
+                response.FailureMessage = $"Kursen fanns inte";
                 response.Success = false;
             }
             return response;
