@@ -79,5 +79,24 @@ namespace WebApp.Controllers
             
             return View(model);
         }
+        [HttpGet]
+        [Route("[controller]/EditCourseParticipant/{id}")]
+        public async Task<IActionResult> EditCourseParticipant(int Id)
+        {
+            string message = await GetUser();
+            var model = new EditCourseParticipantViewModel();
+
+            var cpResponse = await APIGetCourseParticipantById(Id);
+            if (cpResponse.Data != null)
+            {
+                model.Id = cpResponse.Data.Id;
+                model.CourseId = cpResponse.Data.CourseId;
+                model.Grade = cpResponse.Data.Grade;
+                model.Role = cpResponse.Data.Role;
+                model.Status = cpResponse.Data.Status;
+                model.UserId = cpResponse.Data.UserId;
+            }
+            return View(model);
+        }
     }
 }
