@@ -88,18 +88,11 @@ namespace WebApp.Controllers
         [Route("[controller]/Remove/{id}")]
         public async Task<IActionResult> RemoveCourse(int id)
         {
-            try
+            var response = await APIRemoveCourse(id);
+            if (response.Success)
             {
-                var response = await APIRemoveCourse(id);
-                if (response.Success)
-                {
-                    TempData["SuccessMessage"] = $"Kurs borttagen";
-                    return RedirectToAction("CourseList", "Course");
-                }
-            }
-            catch
-            {
-                //send to error?
+                TempData["SuccessMessage"] = $"Kurs borttagen";
+                return RedirectToAction("CourseList", "Course");
             }
             return RedirectToAction("CourseList", "Course");
         }
