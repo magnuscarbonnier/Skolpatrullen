@@ -15,7 +15,7 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new CourseParticipantViewModel();
-            model.UserId= User.Id;
+            model.UserId = User.Id;
 
             var courseResponse = await APIGetCourseById(Id);
             if (courseResponse.Data != null)
@@ -45,18 +45,9 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
-            {
-                courseParticipantVM.User = User;
-                var response = await APIAddOrUpdateCourseParticipant(courseParticipantVM.ToCourseParticipant());
-                TempData["SuccessMessage"] = $"Du har ansökt till kursen.";
-                return RedirectToAction("CourseList", "Course");
-            }
-            catch
-            {
-                //send to error?
-                TempData["ErrorMessage"] = $"Något gick fel..";
-            }
+            courseParticipantVM.User = User;
+            var response = await APIAddOrUpdateCourseParticipant(courseParticipantVM.ToCourseParticipant());
+            SetResponseMessage(response);
             return RedirectToAction("CourseList", "Course");
         }
     }
