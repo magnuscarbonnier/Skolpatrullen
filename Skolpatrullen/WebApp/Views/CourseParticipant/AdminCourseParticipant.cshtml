@@ -4,25 +4,41 @@
     ViewData["Title"] = "AdminCourseParticipant";
 }
 
-<h1>AdminCourseParticipant</h1>
+<h1>Inkomna ansökningar</h1>
 
-<h4>CourseParticipantViewModel</h4>
 <hr />
 
-@foreach (var cp in Model.CourseParticipantList)
-{
-<div>
-    @Html.HiddenFor(c => cp.Id)
-    <div><label>Användarid: </label>@Html.DisplayFor(c => cp.UserId)</div>
-    @foreach (var course in Model.CourseList.Where(d => d.Id == cp.CourseId))
+  @foreach (var cp in Model.CourseParticipantList.Where(c => c.Status == Database.Models.Status.Applied).OrderBy(c => c.Id))
     {
-        <div><label>Kurs: </label>@Html.DisplayFor(d => course.Name)</div>
-    }
-    <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
-    <a class="btn btn-info" asp-area="" asp-controller="CourseParticipant"
-       asp-action="EditCourseParticipant" asp-route-Id="@cp.Id">Ändra</a>
+
+<div class="list-group-item bg-light border-dark">
+    <form asp-action="Update">
+        @Html.HiddenFor(c => cp.Id)
+        @foreach (var user in Model.UserList.Where(e => e.Id == cp.UserId))
+        {
+            <div>@user.FirstName @user.LastNames, @user.SocialSecurityNr</div>
+        }
+        @foreach (var course in Model.CourseList.Where(d => d.Id == cp.CourseId))
+        {
+            foreach (var school in Model.SchoolList.Where(f => f.Id == course.SchoolId))
+            {
+                <div>Skola: @Html.DisplayFor(f => school.Name) Kurs: @Html.DisplayFor(d => course.Name)</div>
+            }
+        }
+        <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
+
+        <div class="form-group">
+            <input type="submit" name="answer" value="Godkänn ansökan" asp-route-Id="@cp.Id" class="btn btn-success" />
+            <input type="submit" name="answer" value="Avslå ansökan" asp-route-Id="@cp.Id" class="btn btn-danger" />
+            <input type="submit" name="answer" value="Registrera som lärare" asp-route-Id="@cp.Id" class="btn btn-outline-warning" />
+        </div>
+    </form>
+    
 </div>
+
+        
     }
+
 
 
 <div>

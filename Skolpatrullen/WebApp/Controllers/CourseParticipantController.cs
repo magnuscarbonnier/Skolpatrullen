@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -60,43 +61,86 @@ namespace WebApp.Controllers
             return RedirectToAction("CourseList", "Course");
         }
         [HttpGet]
-        [Route("Admin/CourseParticipants")]
+        [Route("[controller]/AdminCourseParticipant")]
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
             var model = new AdminCourseParticipantViewModel();
-            
+            var userSchoolResponse = await apigetallu();
+            if (userSchoolResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
             var courseResponse = await APIGetAllCourses();
             if (courseResponse.Data != null)
             {
                 model.CourseList = courseResponse.Data;
             }
+
             var cpResponse = await APIGetAllCourseParticipants();
             if (cpResponse != null)
             {
                 model.CourseParticipantList = cpResponse.Data;
             }
-            
+            var userResponse = await APIGetAllUsers();
+            if (userResponse != null)
+            {
+                model.UserList = userResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse != null)
+            {
+                model.SchoolList = schoolResponse.Data;
+            }
+
             return View(model);
         }
-        [HttpGet]
-        [Route("[controller]/EditCourseParticipant/{id}")]
-        public async Task<IActionResult> EditCourseParticipant(int Id)
+        [HttpPost]
+        [Route("[controller]/AdminCourseParticipant")]
+        public async Task<IActionResult> Update(AdminCourseParticipantViewModel adminCourseParticipantVM, int Id, string answer)
         {
             string message = await GetUser();
-            var model = new EditCourseParticipantViewModel();
-
-            var cpResponse = await APIGetCourseParticipantById(Id);
-            if (cpResponse.Data != null)
+            if (!ModelState.IsValid)
             {
-                model.Id = cpResponse.Data.Id;
-                model.CourseId = cpResponse.Data.CourseId;
-                model.Grade = cpResponse.Data.Grade;
-                model.Role = cpResponse.Data.Role;
-                model.Status = cpResponse.Data.Status;
-                model.UserId = cpResponse.Data.UserId;
+                return View();
             }
-            return View(model);
+            if (ModelState.IsValid && !String.IsNullOrWhiteSpace(answer))
+            {
+                var cpResponse = await APIGetCourseParticipantById(Id);
+                adminCourseParticipantVM.Id = Id;
+                adminCourseParticipantVM.CourseId = cpResponse.Data.CourseId;
+                adminCourseParticipantVM.Grade = cpResponse.Data.Grade;
+                adminCourseParticipantVM.UserId = cpResponse.Data.UserId;
+                
+                switch (answer)
+                {
+                    case "Godkänn ansökan":
+                        adminCourseParticipantVM.Status = Status.Accepted;
+                        break;
+                    case "Avslå ansökan":
+                        adminCourseParticipantVM.Status = Status.NotApplied;
+                        break;
+                    case "Registrera som lärare":
+                        adminCourseParticipantVM.Role = Roles.Teacher;
+                        adminCourseParticipantVM.Status = Status.Accepted;
+                        break;
+                    default:
+                        adminCourseParticipantVM.Status = Status.Applied;
+                        break;
+                }
+            }
+            try
+            {
+                var response = await APIAddOrUpdateCourseParticipant(adminCourseParticipantVM.ToCourseParticipant());
+                TempData["SuccessMessage"] = $"Ändringar sparade.";
+                return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
+            }
+            catch
+            {
+                //send to error?
+                TempData["ErrorMessage"] = $"Något gick fel..";
+            }
+            return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
         }
     }
 }

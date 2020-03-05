@@ -20,6 +20,19 @@ namespace WebAPI.Controllers
             _context = context;
             _logger = logger;
         }
+        [HttpGet]
+        [Route("[controller]/GetAllUserSchools")]
+        public APIResponse<IEnumerable<UserSchool>> GetAllUserSchools()
+        {
+            APIResponse<IEnumerable<UserSchool>> response = new APIResponse<IEnumerable<UserSchool>>();
+            var userSchoolList = _context.UserSchools.ToList();
+            if (userSchoolList != null)
+            {
+                response.Success = true;
+                response.Data = userSchoolList;
+            }
+            return response;
+        }
         [HttpPost]
         [Route("[controller]/AddOrUpdate")]
         public APIResponse<UserSchool> AddOrUpdate(UserSchool userSchool)
