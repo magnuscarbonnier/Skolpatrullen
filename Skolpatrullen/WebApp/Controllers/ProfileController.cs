@@ -50,7 +50,7 @@ namespace WebApp.Controllers
                 model.IsSuperUser = response.Data.IsSuperUser;
             }
             model.UserId = Id;
-            SetResponseMessage(response);
+            SetFailureMessage(response.FailureMessage);
             return View(model);
         }
         [HttpPost]
@@ -87,7 +87,7 @@ namespace WebApp.Controllers
             {
                 model = response.Data.ToList();
             }
-            SetResponseMessage(response);
+            SetFailureMessage(response.FailureMessage);
             return View(model);
 
         }
