@@ -106,10 +106,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Register", UserVM);
             return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
-        public async Task<APIResponse<bool>> APILogout(User user)
+        public async Task<APIResponse> APILogout(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Logout", user);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<IEnumerable<CourseParticipant>>> APIGetAllCourseParticipants()
         {
@@ -166,10 +166,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Update", user);
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
-        public async Task<APIResponse<bool>> APIChangePassword(ChangePasswordBody body)
+        public async Task<APIResponse> APIChangePassword(ChangePasswordBody body)
         {
             HttpResponseMessage response = await APIPost("/User/ChangePassword", body);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<School>> APIAddSchool(School school)
         {

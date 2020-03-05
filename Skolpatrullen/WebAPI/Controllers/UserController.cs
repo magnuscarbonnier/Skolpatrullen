@@ -32,6 +32,7 @@ namespace WebAPI.Controllers
                 _context.SaveChanges();
                 response.Data = AddLoginSession(user);
                 response.Success = true;
+                response.SuccessMessage = $"Användare med mejladdress {user.Email} är nu registrerad";
             }
             else
             {
@@ -55,6 +56,7 @@ namespace WebAPI.Controllers
             {
                 response.Data = AddOrUpdateLoginSession(user);
                 response.Success = true;
+                response.SuccessMessage = $"Användare med mejladdress {user.Email} är nu inloggad";
             }
             else
             {
@@ -84,6 +86,7 @@ namespace WebAPI.Controllers
                 UpdateLoginSession(session);
                 response.Data = session;
                 response.Success = true;
+                response.SuccessMessage = "LoginSession är fortfaraned giltig";
             }
             return response;
         }
@@ -109,6 +112,7 @@ namespace WebAPI.Controllers
                     _context.SaveChanges();
                     response.Data = user;
                     response.Success = true;
+                    response.SuccessMessage = $"Updaterade användare med mejladdress {result.Email}";
                 }
                 else
                 {
@@ -129,6 +133,7 @@ namespace WebAPI.Controllers
                 _context.SaveChanges();
                 response.Data = user;
                 response.Success = true;
+                response.SuccessMessage = $"Updaterade användare med mejladdress {result.Email}";
             }
 
             return response;
@@ -146,35 +151,36 @@ namespace WebAPI.Controllers
             _context.SaveChanges();
             response.Data = user;
             response.Success = true;
+            response.SuccessMessage = $"Updaterade namn på användare med mejladdress {result.Email}";
 
             return response;
         }
         [HttpPost]
         [Route("[controller]/Logout")]
-        public APIResponse<bool> Logout(User user)
+        public APIResponse Logout(User user)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
             LoginSession session = _context.LoginSessions.SingleOrDefault(ls => ls.UserId == user.Id);
             if (session == null)
             {
                 // finns ingen session är användaren redan utloggad
-                response.Data = true;
                 response.Success = true;
+                response.SuccessMessage = "Du är redan utloggad";
             }
             else
             {
                 _context.LoginSessions.Remove(session);
                 _context.SaveChanges();
-                response.Data = true;
                 response.Success = true;
+                response.SuccessMessage = "Du är nu utloggad";
             }
             return response;
         }
         [HttpPost]
         [Route("[controller]/ChangePassword")]
-        public APIResponse<bool> ChangePassword(ChangePasswordBody body)
+        public APIResponse ChangePassword(ChangePasswordBody body)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
 
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
@@ -186,7 +192,7 @@ namespace WebAPI.Controllers
                     _context.SaveChanges();
 
                     response.Success = true;
-                    response.Data = true;
+                    response.SuccessMessage = $"Ändrade lösenord för användare med mejladdress {user.Email}";
                 }
                 else
                 {
@@ -211,6 +217,7 @@ namespace WebAPI.Controllers
             response.Data = _context.Users.SingleOrDefault(c => c.Id == Id);
 
             response.Success = true;
+            response.SuccessMessage = $"Hämtade användare med id {Id}";
             return response;
         }
         [HttpGet]
@@ -220,6 +227,7 @@ namespace WebAPI.Controllers
             APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
             response.Data = _context.Users.ToList();
             response.Success = true;
+            response.SuccessMessage = "Hämtade alla användare";
             return response;
         }
         LoginSession AddOrUpdateLoginSession(User user)
