@@ -31,35 +31,27 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                return RedirectToAction("Index", "Home"); 
+                return RedirectToAction("Index", "Home");
             }
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            try
+            if (!(userVM.Password == userVM.RePassword))
             {
-                if (!(userVM.Password == userVM.RePassword))
-                {
-                    userVM.Password = "";
-                    userVM.RePassword = "";
-                    TempData["ErrorMessage"] = $"Lösenordet matchade inte, försök igen.";
-                    return View(userVM);
-                }
-                var response = await APIRegister(userVM);
-                if (response.Data != null)
-                {
-                    Response.Cookies.Append("LoginToken", response.Data.Token);
-                    TempData["SuccessMessage"] = $"Användare tillagd.";
-                    return RedirectToAction("Index", "Home");
-                }
+                userVM.Password = "";
+                userVM.RePassword = "";
+                SetFailureMessage($"Lösenordet matchade inte, försök igen.");
+                return View(userVM);
             }
-            catch
+            var response = await APIRegister(userVM);
+            SetResponseMessage(response);
+            if (response.Data != null)
             {
-                TempData["ErrorMessage"] = $"Error!";
-                //send to error?
+                Response.Cookies.Append("LoginToken", response.Data.Token);
+                return RedirectToAction("Index", "Home");
             }
-            
+
             return View();
         }
     }
