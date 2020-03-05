@@ -30,39 +30,31 @@ namespace WebApp.Controllers
         [Route("[controller]")]
         public async Task<IActionResult> LoginPage(LoginViewModel loginVM)
         {
+            string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View(new LoginViewModel());
             }
-            string message = await GetUser();
             if (User != null)
             {
                 return RedirectToAction("Index", "Home");
             }
-            try
+            if (loginVM != null)
             {
-                if (loginVM != null)
+                APIResponse<LoginSession> response = await APILogin(loginVM);
+                if (response.Success)
                 {
-                    APIResponse<LoginSession> response = await APILogin(loginVM);
-                    if (response.Success)
+                    if (response.Data != null)
                     {
-                        if (response.Data != null)
-                        {
-                            Response.Cookies.Append("LoginToken", response.Data.Token);
-                            return RedirectToAction("Index", "Home");
-                        }
-                    }
-                    else
-                    {
-                        //forward error messages in response to view
-                        TempData["ErrorMessage"] = $"Försök igen.";
-                        return View();
+                        Response.Cookies.Append("LoginToken", response.Data.Token);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
-            }
-            catch
-            {
-
+                else
+                {
+                    SetFailureMessage(response.FailureMessage);
+                    return View();
+                }
             }
 
             return View();
