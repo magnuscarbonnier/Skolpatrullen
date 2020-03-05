@@ -73,7 +73,14 @@ namespace WebApp.Controllers
             var userSchoolResponse = await APIGetAllUserSchools();
             if(userSchoolResponse !=null)
             {
-                model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
+                //if (User.IsSuperUser == true)
+                //{
+                //    model.UserSchoolList = userSchoolResponse.Data;
+                //}
+                //else
+                //{
+                    model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
+                //}
             }
             
                 var courseResponse = await APIGetAllCourses();
