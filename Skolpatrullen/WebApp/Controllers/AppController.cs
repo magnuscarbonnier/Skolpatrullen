@@ -156,10 +156,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/Course/Add", course);
             return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
         }
-        public async Task<APIResponse<bool>> APIRemoveCourse(int id)
+        public async Task<APIResponse> APIRemoveCourse(int id)
         {
             HttpResponseMessage response = await APIGet("/Course/RemoveCourse/"+id);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<User>> APIUpdateUser(User user)
         {
