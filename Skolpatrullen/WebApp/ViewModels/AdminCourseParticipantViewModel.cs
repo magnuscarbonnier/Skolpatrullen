@@ -18,6 +18,7 @@ namespace WebApp.ViewModels
         public IEnumerable<CourseParticipant> CourseParticipantList { get; set; }
         public IEnumerable<User> UserList { get; set; }
         public IEnumerable<School> SchoolList { get; set; }
+        public IEnumerable<UserSchool> UserSchoolList { get; set; }
         public CourseParticipant ToCourseParticipant()
         {
             return new CourseParticipant

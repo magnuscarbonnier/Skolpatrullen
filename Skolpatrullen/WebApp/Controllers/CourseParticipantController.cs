@@ -65,29 +65,34 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
+            if (User.IsSuperUser != true)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var model = new AdminCourseParticipantViewModel();
-            var userSchoolResponse = await apigetallu();
-            if (userSchoolResponse.Data != null)
+            var userSchoolResponse = await APIGetAllUserSchools();
+            if(userSchoolResponse !=null)
             {
-                model.CourseList = courseResponse.Data;
+                model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
             }
-            var courseResponse = await APIGetAllCourses();
-            if (courseResponse.Data != null)
-            {
-                model.CourseList = courseResponse.Data;
-            }
+            
+                var courseResponse = await APIGetAllCourses();
+                if (courseResponse.Data != null)
+                {
+                    model.CourseList = courseResponse.Data;
+                }
 
-            var cpResponse = await APIGetAllCourseParticipants();
-            if (cpResponse != null)
-            {
-                model.CourseParticipantList = cpResponse.Data;
-            }
-            var userResponse = await APIGetAllUsers();
-            if (userResponse != null)
-            {
-                model.UserList = userResponse.Data;
-            }
-            var schoolResponse = await APIGetAllSchools();
+                var cpResponse = await APIGetAllCourseParticipants();
+                if (cpResponse != null)
+                {
+                    model.CourseParticipantList = cpResponse.Data;
+                }
+                var userResponse = await APIGetAllUsers();
+                if (userResponse != null)
+                {
+                    model.UserList = userResponse.Data;
+                }
+                var schoolResponse = await APIGetAllSchools();
             if (schoolResponse != null)
             {
                 model.SchoolList = schoolResponse.Data;

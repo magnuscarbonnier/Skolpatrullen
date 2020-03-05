@@ -8,39 +8,35 @@
 
 <hr />
 
-  @foreach (var cp in Model.CourseParticipantList.Where(c => c.Status == Database.Models.Status.Applied).OrderBy(c => c.Id))
+@foreach (var userschool in Model.UserSchoolList)
+{
+    foreach (var course in Model.CourseList.Where(course => course.SchoolId == userschool.SchoolId))
     {
-
-<div class="list-group-item bg-light border-dark">
-    <form asp-action="Update">
-        @Html.HiddenFor(c => cp.Id)
-        @foreach (var user in Model.UserList.Where(e => e.Id == cp.UserId))
+    @foreach (var cp in Model.CourseParticipantList.Where(cp => cp.CourseId == course.Id))
+    {
+        @if (cp.Status == Database.Models.Status.Applied)
         {
-            <div>@user.FirstName @user.LastNames, @user.SocialSecurityNr</div>
-        }
-        @foreach (var course in Model.CourseList.Where(d => d.Id == cp.CourseId))
-        {
-            foreach (var school in Model.SchoolList.Where(f => f.Id == course.SchoolId))
-            {
-                <div>Skola: @Html.DisplayFor(f => school.Name) Kurs: @Html.DisplayFor(d => course.Name)</div>
-            }
-        }
-        <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
+         <div class="list-group-item bg-light border-dark">
+            <form asp-action="Update">
+                @Html.HiddenFor(c => cp.Id)
+                
+                <div>@Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().FirstName @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().LastNames, @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().SocialSecurityNr</div>
+                    <div>Skola: @Model.SchoolList.Where(school=>school.Id==course.SchoolId).SingleOrDefault().Name</div>
+                        <div>Kurs: @course.Name</div>
+                            <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
 
-        <div class="form-group">
-            <input type="submit" name="answer" value="Godkänn ansökan" asp-route-Id="@cp.Id" class="btn btn-success" />
-            <input type="submit" name="answer" value="Avslå ansökan" asp-route-Id="@cp.Id" class="btn btn-danger" />
-            <input type="submit" name="answer" value="Registrera som lärare" asp-route-Id="@cp.Id" class="btn btn-outline-warning" />
+                <div class="form-group">
+                    <input type="submit" name="answer" value="Godkänn ansökan" asp-route-Id="@cp.Id" class="btn btn-success" />
+                    <input type="submit" name="answer" value="Avslå ansökan" asp-route-Id="@cp.Id" class="btn btn-danger" />
+                    <input type="submit" name="answer" value="Registrera som lärare" asp-route-Id="@cp.Id" class="btn btn-outline-warning" />
+                </div>
+            </form>
+
         </div>
-    </form>
-    
-</div>
-
-        
+        }
     }
-
-
-
+    }
+}
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
