@@ -14,15 +14,12 @@ using WebApp.ViewModels;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<UserController> _logger;
-        public UserController(Context context, ILogger<UserController> logger)
+        public UserController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpPost]
         [Route("[controller]/Register")]
         public APIResponse<LoginSession> Register(User user)
