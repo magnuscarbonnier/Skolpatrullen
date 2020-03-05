@@ -37,16 +37,8 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
-            {
-                var response = await APIAddRoom(roomVM.ToRoom());
-                TempData["SuccessMessage"] = $"Rum tillagt.";
-                return RedirectToAction("AddRoomPage", "Room");
-            }
-            catch
-            {
-                //send to error?
-            }
+            var response = await APIAddRoom(roomVM.ToRoom());
+            SetResponseMessage(response);
             return RedirectToAction("AddRoomPage", "Room");
         }
     }
