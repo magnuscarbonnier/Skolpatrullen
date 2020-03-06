@@ -9,6 +9,7 @@ namespace WebApp.ViewModels
 {
     public class CourseViewModel
     {
+        public int Id { get; set; }
         public int SchoolId { get; set; }
         [Required(ErrorMessage = "Du måste skriva in ett namn för kursen.")]
         public string Name { get; set; }
