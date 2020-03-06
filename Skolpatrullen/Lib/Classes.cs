@@ -19,6 +19,11 @@ namespace Lib
         public string CurrentPassword { get; set; }
         public string NewPassword { get; set; }
     }
+    public class ChangeProfilePictureBody
+    {
+        public int UserId { get; set; }
+        public byte[] ProfilePicture { get; set; }
+    }
     public class AsId
     {
         public int Id { get; set; }
