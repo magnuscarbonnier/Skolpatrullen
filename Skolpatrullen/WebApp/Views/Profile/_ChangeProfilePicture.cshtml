@@ -20,8 +20,16 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form asp-action="ChangePassword">
 
+            <form enctype="multipart/form-data" asp-action="ChangeProfilePicture">
+                <div class=" modal-body">
+                    <input type="file" asp-for="file" id="file" style="width: 100%;" />
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                    <input type="submit" asp-action="ChangeProfilePicture" value="Spara" class="btn btn-primary" />
+                </div>
             </form>
         </div>
     </div>

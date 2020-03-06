@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.ViewModels
 {
@@ -49,8 +50,7 @@ namespace WebApp.ViewModels
 
     public class ChangeProfilePictureViewModel
     {
-        public byte[] ProfilePicture { get; set; }
-        public User User { get; set; }
+        public IFormFile file { get; set; }
 
     }
 }
