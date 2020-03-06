@@ -1,0 +1,24 @@
+﻿@model WebApp.ViewModels.SchoolViewModel
+
+<div>
+    <a asp-action="RemoveSchoolModal" data-toggle="modal" data-target="#removeschoolModal">Ta bort skola</a>
+</div>
+
+<div class="modal fade" id="removeschoolModal" tabindex="-1" role="dialog" aria-labelledby="Ta bort skola" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Ta bort skola</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form asp-action="RemoveSchoolPage">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                    @Html.ActionLink("Ta bort", "RemoveSchoolPage", new { id = Model.Id })
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
