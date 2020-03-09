@@ -18,10 +18,6 @@ namespace WebApp.Controllers
         public new User User = null;
         public AppController()
         {
-            //det här behövs för att Issas dator är fucked
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
             HttpClient = new HttpClient(clientHandler);
         }
 
