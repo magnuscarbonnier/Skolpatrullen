@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/GetAllLessons")]
+        [Route("[controller]/Lessons")]
         public APIResponse<IEnumerable<LessonViewModel>> GetAllLessons()
         {
             APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
@@ -30,23 +30,71 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/GetLessonByCourseId/{id}")]
-        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByCourseId(int id)
+        [Route("[controller]/Lessons/{id}")]
+        public APIResponse<LessonViewModel> GetLessonById(int id)
         {
-            APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
-            response.Data = _context.Lessons.ToList().Where(lesson => lesson.Course.Id == id).Select(lesson => (LessonViewModel)lesson);
+            APIResponse<LessonViewModel> response = new APIResponse<LessonViewModel>();
+            response.Data = (LessonViewModel)_context.Lessons.Find(id);
 
             response.Success = true;
             response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
             return response;
         }
 
-        [HttpGet]
-        [Route("[controller]/GetLessonById/{id}")]
-        public APIResponse<LessonViewModel> GetLessonById(int id)
+        [HttpPost]
+        [Route("[controller]/Lessons")]
+        public ObjectResult Post([FromForm] LessonViewModel lessonVM)
         {
-            APIResponse<LessonViewModel> response = new APIResponse<LessonViewModel>();
-            response.Data = (LessonViewModel)_context.Lessons.Find(id);
+            var newLesson = (Lesson)lessonVM;
+            _context.Lessons.Add(newLesson);
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                action = "Lektion tillagd"
+            });
+        }
+
+        [HttpPut]
+        [Route("[controller]/Lessons/{id}")]
+        public ObjectResult Put(int id, [FromForm] LessonViewModel lessonVM)
+        {
+            var updatedLesson = (Lesson)lessonVM;
+            var dbLesson = _context.Lessons.Find(id);
+            dbLesson.Name = updatedLesson.Name;
+            dbLesson.StartDate = updatedLesson.StartDate;
+            dbLesson.EndDate = updatedLesson.EndDate;
+            _context.SaveChanges();
+
+            return Ok(new
+            {
+                action = "Lektion uppdaterad"
+            });
+        }
+
+        [HttpDelete("{id}")]
+        [Route("[controller]/Lessons/{id}")]
+        public ObjectResult DeleteEvent(int id)
+        {
+            var lesson = _context.Lessons.Find(id);
+            if (lesson != null)
+            {
+                _context.Lessons.Remove(lesson);
+                _context.SaveChanges();
+            }
+
+            return Ok(new
+            {
+                action = "Lektion borttagen"
+            });
+        }
+
+        [HttpGet]
+        [Route("[controller]/GetLessonByCourseId/{id}")]
+        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByCourseId(int id)
+        {
+            APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
+            response.Data = _context.Lessons.ToList().Where(lesson => lesson.Course.Id == id).Select(lesson => (LessonViewModel)lesson);
 
             response.Success = true;
             response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
