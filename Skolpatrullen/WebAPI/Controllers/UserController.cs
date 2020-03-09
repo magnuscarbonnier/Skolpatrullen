@@ -14,15 +14,12 @@ using WebApp.ViewModels;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<UserController> _logger;
-        public UserController(Context context, ILogger<UserController> logger)
+        public UserController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpPost]
         [Route("[controller]/Register")]
         public APIResponse<LoginSession> Register(User user)
@@ -35,10 +32,11 @@ namespace WebAPI.Controllers
                 _context.SaveChanges();
                 response.Data = AddLoginSession(user);
                 response.Success = true;
+                response.SuccessMessage = $"Användare med mejladdress {user.Email} är nu registrerad";
             }
             else
             {
-                response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                response.FailureMessage = $"Det finns redan en användare med mejladressen {user.Email}";
                 response.Success = false;
             }
             return response;
@@ -51,17 +49,18 @@ namespace WebAPI.Controllers
             User user = _context.Users.SingleOrDefault(u => u.Email == login.Email);
             if (user == null)
             {
-                response.ErrorMessages.Add($"Det finns ingen användare med mejladressen {login.Email}");
+                response.FailureMessage = $"Det finns ingen användare med mejladressen {login.Email}";
                 response.Success = false;
             }
             else if (user.Password == ComputeSha256Hash(login.Password))
             {
                 response.Data = AddOrUpdateLoginSession(user);
                 response.Success = true;
+                response.SuccessMessage = $"Användare med mejladdress {user.Email} är nu inloggad";
             }
             else
             {
-                response.ErrorMessages.Add("Fel lösenord");
+                response.FailureMessage = $"Fel lösenord";
                 response.Success = false;
             }
             return response;
@@ -74,12 +73,12 @@ namespace WebAPI.Controllers
             LoginSession session = _context.LoginSessions.Include(ls => ls.User).SingleOrDefault(ls => ls.Token == token.token);
             if (session == null)
             {
-                response.ErrorMessages.Add($"Hittade ingen LoginSession med token: {token}");
+                response.FailureMessage = $"Hittade ingen LoginSession med token: {token}";
                 response.Success = false;
             }
             else if (session.Expires < DateTime.Now.ToUniversalTime())
             {
-                response.ErrorMessages.Add($"LoginSession har gått ut");
+                response.FailureMessage = $"LoginSession har gått ut";
                 response.Success = false;
             }
             else
@@ -87,6 +86,7 @@ namespace WebAPI.Controllers
                 UpdateLoginSession(session);
                 response.Data = session;
                 response.Success = true;
+                response.SuccessMessage = "LoginSession är fortfaraned giltig";
             }
             return response;
         }
@@ -112,10 +112,11 @@ namespace WebAPI.Controllers
                     _context.SaveChanges();
                     response.Data = user;
                     response.Success = true;
+                    response.SuccessMessage = $"Updaterade användare med mejladdress {result.Email}";
                 }
                 else
                 {
-                    response.ErrorMessages.Add($"Det finns redan en användare med mejladressen {user.Email}");
+                    response.FailureMessage = $"Det finns redan en användare med mejladressen {user.Email}";
                     response.Success = false;
                 }
             }
@@ -132,6 +133,7 @@ namespace WebAPI.Controllers
                 _context.SaveChanges();
                 response.Data = user;
                 response.Success = true;
+                response.SuccessMessage = $"Updaterade användare med mejladdress {result.Email}";
             }
 
             return response;
@@ -149,35 +151,36 @@ namespace WebAPI.Controllers
             _context.SaveChanges();
             response.Data = user;
             response.Success = true;
+            response.SuccessMessage = $"Updaterade namn på användare med mejladdress {result.Email}";
 
             return response;
         }
         [HttpPost]
         [Route("[controller]/Logout")]
-        public APIResponse<bool> Logout(User user)
+        public APIResponse Logout(User user)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
             LoginSession session = _context.LoginSessions.SingleOrDefault(ls => ls.UserId == user.Id);
             if (session == null)
             {
                 // finns ingen session är användaren redan utloggad
-                response.Data = true;
                 response.Success = true;
+                response.SuccessMessage = "Du är redan utloggad";
             }
             else
             {
                 _context.LoginSessions.Remove(session);
                 _context.SaveChanges();
-                response.Data = true;
                 response.Success = true;
+                response.SuccessMessage = "Du är nu utloggad";
             }
             return response;
         }
         [HttpPost]
         [Route("[controller]/ChangePassword")]
-        public APIResponse<bool> ChangePassword(ChangePasswordBody body)
+        public APIResponse ChangePassword(ChangePasswordBody body)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
 
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
@@ -189,17 +192,17 @@ namespace WebAPI.Controllers
                     _context.SaveChanges();
 
                     response.Success = true;
-                    response.Data = true;
+                    response.SuccessMessage = $"Ändrade lösenord för användare med mejladdress {user.Email}";
                 }
                 else
                 {
                     response.Success = false;
-                    response.ErrorMessages.Add("Lösenordet du skrev in stämmer inte överrens med ditt nuvarande");
+                    response.FailureMessage = $"Lösenordet du skrev in stämmer inte överrens med ditt nuvarande";
                 }
             }
             else
             {
-                response.ErrorMessages.Add("Hittar inte användare med Id: " + body.UserId);
+                response.FailureMessage = $"Hittar inte användare med Id: " + body.UserId;
                 response.Success = false;
             }
 
@@ -214,6 +217,7 @@ namespace WebAPI.Controllers
             response.Data = _context.Users.SingleOrDefault(c => c.Id == Id);
 
             response.Success = true;
+            response.SuccessMessage = $"Hämtade användare med id {Id}";
             return response;
         }
         [HttpGet]
@@ -223,13 +227,14 @@ namespace WebAPI.Controllers
             APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
             response.Data = _context.Users.ToList();
             response.Success = true;
+            response.SuccessMessage = "Hämtade alla användare";
             return response;
         }
         [HttpPost]
         [Route("[controller]/ChangeProfilePicture")]
-        public APIResponse<bool> ChangeProfilePicture(ChangeProfilePictureBody body)
+        public APIResponse ChangeProfilePicture(ChangeProfilePictureBody body)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
 
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
@@ -240,12 +245,10 @@ namespace WebAPI.Controllers
                 
                 _context.SaveChanges();
                 response.Success = true;
-                response.Data = true;
-
             }
             else
             {
-                response.ErrorMessages.Add("Hittar inte användare med Id: " + user.Id);
+                response.FailureMessage = "Hittar inte användare med Id: " + user.Id);
                 response.Success = false;
             }
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Database.Models;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace WebAPI
 {
@@ -49,6 +50,7 @@ namespace WebAPI
             {
                 endpoints.MapControllers();
             });
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
         }
     }
 }

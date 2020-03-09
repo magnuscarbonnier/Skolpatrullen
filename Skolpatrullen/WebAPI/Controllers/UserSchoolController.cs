@@ -11,14 +11,10 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class UserSchoolController : ControllerBase
+    public class UserSchoolController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<UserSchoolController> _logger;
-        public UserSchoolController(Context context, ILogger<UserSchoolController> logger)
+        public UserSchoolController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
         [HttpGet]
         [Route("[controller]/GetAllUserSchools")]
@@ -40,6 +36,7 @@ namespace WebAPI.Controllers
             APIResponse<UserSchool> response = new APIResponse<UserSchool>();
             response.Data = AddOrUpdateUserSchool(userSchool);
             response.Success = true;
+            response.SuccessMessage = "La till skoldeltagande";
             return response;
         }
         UserSchool AddOrUpdateUserSchool(UserSchool userSchool)
