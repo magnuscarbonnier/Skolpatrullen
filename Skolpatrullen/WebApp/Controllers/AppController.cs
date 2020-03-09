@@ -18,7 +18,7 @@ namespace WebApp.Controllers
         public new User User = null;
         public AppController()
         {
-            HttpClient = new HttpClient(clientHandler);
+            HttpClient = new HttpClient();
         }
 
         public async Task<string> GetUser()
