@@ -58,49 +58,19 @@ namespace WebApp.Controllers
             }
             if (course.StartDate > course.EndDate)
             {
-                TempData["ErrorMessage"] = "Startdatum kan inte vara senare än slutdatum";
+                SetFailureMessage("Startdatum kan inte vara senare än slutdatum");
+                return RedirectToAction("AddCoursePage", "Course");
             }
-            try
-            {
-                if (course.EndDate > course.StartDate)
-                {
-                    var response = await APIAddCourse(course.ToCourse());
-                    if (response.Success)
-                    {
-                        TempData["SuccessMessage"] = $"Kurs tillagd.";
-                        return RedirectToAction("CourseList", "Course");
-                    }
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = "Startdatum måste vara senare än slutdatum.";
-                    return RedirectToAction("AddCoursePage", "Course");
-                }
-            }
-            catch
-            {
-                //send to error?
-            }
-            return RedirectToAction("AddCoursePage", "Course");
+            var response = await APIAddCourse(course.ToCourse());
+            return SetResponseMessage(response, RedirectToAction("CourseList", "Course"), RedirectToAction("AddCoursePage", "Course"));
         }
 
         [HttpGet]
         [Route("[controller]/Remove/{id}")]
         public async Task<IActionResult> RemoveCourse(int id)
         {
-            try
-            {
-                var response = await APIRemoveCourse(id);
-                if (response.Success)
-                {
-                    TempData["SuccessMessage"] = $"Kurs borttagen";
-                    return RedirectToAction("CourseList", "Course");
-                }
-            }
-            catch
-            {
-                //send to error?
-            }
+            var response = await APIRemoveCourse(id);
+            SetResponseMessage(response);
             return RedirectToAction("CourseList", "Course");
         }
         [HttpPost]
@@ -117,7 +87,9 @@ namespace WebApp.Controllers
                     model.CourseList = courseResponse.Data.Where(s => s.Name.Contains(courseVM.Search));
                 }
                 else
+                {
                     model.CourseList = courseResponse.Data;
+                }
             }
             var schoolResponse = await APIGetAllSchools();
             if (schoolResponse.Data != null)

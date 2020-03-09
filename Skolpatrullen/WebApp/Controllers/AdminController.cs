@@ -37,18 +37,10 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
-            {
-                var admin = adminVM.ToUserSchool();
-                admin.IsAdmin = true;
-                var response = await APIAddOrUpdateUserSchool(admin);
-                TempData["SuccessMessage"] = $"Admin tillagd.";
-                return RedirectToAction("AddAdminPage", "Admin");
-            }
-            catch
-            {
-                //send to error?
-            }
+            var admin = adminVM.ToUserSchool();
+            admin.IsAdmin = true;
+            var response = await APIAddOrUpdateUserSchool(admin);
+            SetResponseMessage(response);
             return RedirectToAction("AddAdminPage", "Admin");
         }
     }

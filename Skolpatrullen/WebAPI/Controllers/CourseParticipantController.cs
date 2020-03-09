@@ -10,15 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class CourseParticipantController : ControllerBase
+    public class CourseParticipantController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<CourseParticipantController> _logger;
-        public CourseParticipantController(Context context, ILogger<CourseParticipantController> logger)
+        public CourseParticipantController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpGet]
         [Route("[controller]/GetAll")]
         public APIResponse<IEnumerable<CourseParticipant>> GetAll()
@@ -27,8 +24,9 @@ namespace WebAPI.Controllers
             var courseParticipants = _context.CourseParticipants.ToList();
             if (courseParticipants != null)
             {
-                response.Success = true;
                 response.Data = courseParticipants;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla kursdeltaganden";
             }
             return response;
         }
@@ -39,6 +37,7 @@ namespace WebAPI.Controllers
             APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
             response.Data = AddOrUpdateCourseParticipant(courseParticipant);
             response.Success = true;
+            response.SuccessMessage = "La till/updaterade kursdeltagande";
             return response;
         }
         [HttpGet]
@@ -49,6 +48,7 @@ namespace WebAPI.Controllers
             response.Data = _context.CourseParticipants.Where(u => u.UserId == Id).ToList();
 
             response.Success = true;
+            response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
             return response;
         }
         CourseParticipant AddOrUpdateCourseParticipant(CourseParticipant courseParticipant)
