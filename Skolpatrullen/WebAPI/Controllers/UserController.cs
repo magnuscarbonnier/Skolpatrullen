@@ -230,6 +230,32 @@ namespace WebAPI.Controllers
             response.SuccessMessage = "Hämtade alla användare";
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/ChangeProfilePicture")]
+        public APIResponse<bool> ChangeProfilePicture(ChangeProfilePictureBody body)
+        {
+            APIResponse<bool> response = new APIResponse<bool>();
+
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+
+            if (user != null)
+            {
+                user.ProfilePictureImage = body.ProfilePicture;
+                
+                _context.SaveChanges();
+                response.Success = true;
+                response.Data = true;
+
+            }
+            else
+            {
+                response.ErrorMessages.Add("Hittar inte användare med Id: " + user.Id);
+                response.Success = false;
+            }
+
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);

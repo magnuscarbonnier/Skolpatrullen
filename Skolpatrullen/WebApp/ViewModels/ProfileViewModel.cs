@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApp.ViewModels
 {
@@ -11,6 +12,7 @@ namespace WebApp.ViewModels
     {
         public ProfileViewModel PVM { get; set; } = new ProfileViewModel();
         public ChangePasswordViewModel CPVM { get; set; } = new ChangePasswordViewModel();
+        public ChangeProfilePictureViewModel CPPVM { get; set; } = new ChangeProfilePictureViewModel();
     }
     public class ProfileViewModel
     {
@@ -38,9 +40,14 @@ namespace WebApp.ViewModels
         [Required(ErrorMessage = "Fyll i fältet")]
         [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$", ErrorMessage = "Ditt lösenord måste innehålla minst 1 siffra, 1 liten bokstav och en stor bokstav")]
         [StringLength(30, MinimumLength = 8, ErrorMessage = "Ditt lösenord måste vara mellan 8 och 30 tecken långt")]
-
         public string NewPassword { get; set; }
         [Required(ErrorMessage = "Fyll i fältet")]
         public string ReNewPassword { get; set; }
+    }
+
+    public class ChangeProfilePictureViewModel
+    {
+        public IFormFile file { get; set; }
+
     }
 }
