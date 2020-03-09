@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Database.Models
 {
-    class Lesson
+    public class Lesson
     {
         public int Id { get; set; }
         [Required]
