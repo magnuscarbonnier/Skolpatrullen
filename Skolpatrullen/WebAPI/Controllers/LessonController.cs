@@ -43,7 +43,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("[controller]/Lessons")]
-        public ObjectResult Post([FromForm] LessonViewModel lessonVM)
+        public ObjectResult AddLesson([FromForm] LessonViewModel lessonVM)
         {
             var newLesson = (Lesson)lessonVM;
             _context.Lessons.Add(newLesson);
@@ -57,7 +57,7 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("[controller]/Lessons/{id}")]
-        public ObjectResult Put(int id, [FromForm] LessonViewModel lessonVM)
+        public ObjectResult UpdateLesson(int id, [FromForm] LessonViewModel lessonVM)
         {
             var updatedLesson = (Lesson)lessonVM;
             var dbLesson = _context.Lessons.Find(id);
@@ -74,7 +74,7 @@ namespace WebAPI.Controllers
 
         [HttpDelete("{id}")]
         [Route("[controller]/Lessons/{id}")]
-        public ObjectResult DeleteEvent(int id)
+        public ObjectResult DeleteLesson(int id)
         {
             var lesson = _context.Lessons.Find(id);
             if (lesson != null)
