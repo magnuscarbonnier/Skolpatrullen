@@ -6,6 +6,9 @@ using Lib;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System.Text;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -168,6 +171,46 @@ namespace WebApp.Controllers
                 //send to error?
             }
             return RedirectToAction("ProfilePage", "Profile");
+        }
+
+
+        [HttpPost]
+        [Route("[controller]/ChangeProfilePicture")]
+        public async Task<IActionResult> ChangeProfilePicture(ChangeProfilePictureViewModel vm)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            try
+            {
+                if(vm.file != null && vm.file.Length > 0)
+                {
+                    ChangeProfilePictureBody body = new ChangeProfilePictureBody();
+
+                    byte[] p1 = null;
+                    using (var fs1 = vm.file.OpenReadStream())
+                    using (var ms1 = new MemoryStream())
+                    {
+                        fs1.CopyTo(ms1);
+                        p1 = ms1.ToArray();
+                    }
+
+
+                    body.UserId = User.Id;
+                    body.ProfilePicture = p1;
+
+                    var response = await APIChangeProfilePicture(body);
+                }
+            }
+            catch
+            {
+                //send to error?
+            }
+            return RedirectToAction("ProfilePage", "Profile");
+
+
         }
     }
 }

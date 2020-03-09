@@ -47,7 +47,7 @@
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
-                @Html.ActionLink("Delete", "RemoveSchoolPage", new { id=item.Id })
+                @await Html.PartialAsync("_RemoveSchool", new WebApp.ViewModels.SchoolViewModel { Id = item.Id })
             </td>
         </tr>
 }
