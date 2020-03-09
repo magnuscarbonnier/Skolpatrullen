@@ -62,28 +62,28 @@ namespace WebApp.Controllers
             }
             var model = new AdminCourseParticipantViewModel();
             var userSchoolResponse = await APIGetAllUserSchools();
-            if(userSchoolResponse !=null)
+            if (userSchoolResponse != null)
             {
                 model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
             }
-            
-                var courseResponse = await APIGetAllCourses();
-                if (courseResponse.Data != null)
-                {
-                    model.CourseList = courseResponse.Data;
-                }
 
-                var cpResponse = await APIGetAllCourseParticipants();
-                if (cpResponse != null)
-                {
-                    model.CourseParticipantList = cpResponse.Data;
-                }
-                var userResponse = await APIGetAllUsers();
-                if (userResponse != null)
-                {
-                    model.UserList = userResponse.Data;
-                }
-                var schoolResponse = await APIGetAllSchools();
+            var courseResponse = await APIGetAllCourses();
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+
+            var cpResponse = await APIGetAllCourseParticipants();
+            if (cpResponse != null)
+            {
+                model.CourseParticipantList = cpResponse.Data;
+            }
+            var userResponse = await APIGetAllUsers();
+            if (userResponse != null)
+            {
+                model.UserList = userResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
             if (schoolResponse != null)
             {
                 model.SchoolList = schoolResponse.Data;
@@ -107,7 +107,7 @@ namespace WebApp.Controllers
                 adminCourseParticipantVM.CourseId = cpResponse.Data.CourseId;
                 adminCourseParticipantVM.Grade = cpResponse.Data.Grade;
                 adminCourseParticipantVM.UserId = cpResponse.Data.UserId;
-                
+
                 switch (answer)
                 {
                     case "Godkänn ansökan":
@@ -125,17 +125,8 @@ namespace WebApp.Controllers
                         break;
                 }
             }
-            try
-            {
-                var response = await APIAddOrUpdateCourseParticipant(adminCourseParticipantVM.ToCourseParticipant());
-                TempData["SuccessMessage"] = $"Ändringar sparade.";
-                return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
-            }
-            catch
-            {
-                //send to error?
-                TempData["ErrorMessage"] = $"Något gick fel..";
-            }
+            var response = await APIAddOrUpdateCourseParticipant(adminCourseParticipantVM.ToCourseParticipant());
+            SetResponseMessage(response);
             return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
         }
     }

@@ -56,9 +56,17 @@ namespace WebAPI.Controllers
         public APIResponse<CourseParticipant> GetCourseParticipantById(int Id)
         {
             APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
-            response.Data = _context.CourseParticipants.Where(u => u.Id == Id).SingleOrDefault();
-
-            response.Success = true;
+            response.Data = _context.CourseParticipants.SingleOrDefault(cp => cp.Id == Id);
+            if (response.Data != null)
+            {
+                response.Success = true;
+                response.SuccessMessage = "Hämtade kursdeltagande med id " + Id;
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Kunde inte hitta kursdeltagande med id " + Id;
+            }
             return response;
         }
         CourseParticipant AddOrUpdateCourseParticipant(CourseParticipant courseParticipant)
