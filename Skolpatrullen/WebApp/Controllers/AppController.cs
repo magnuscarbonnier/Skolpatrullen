@@ -182,10 +182,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/User/GetUserById/" + Id.ToString());
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
-        public async Task<APIResponse<bool>> APIChangeProfilePicture(ChangeProfilePictureBody body)
+        public async Task<APIResponse> APIChangeProfilePicture(ChangeProfilePictureBody body)
         {
             HttpResponseMessage response = await APIPost("/User/ChangeProfilePicture", body);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<Course>> APIGetCourseById(int Id)
         {

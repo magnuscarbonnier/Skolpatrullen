@@ -232,9 +232,9 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("[controller]/ChangeProfilePicture")]
-        public APIResponse<bool> ChangeProfilePicture(ChangeProfilePictureBody body)
+        public APIResponse ChangeProfilePicture(ChangeProfilePictureBody body)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
 
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
@@ -245,12 +245,10 @@ namespace WebAPI.Controllers
                 
                 _context.SaveChanges();
                 response.Success = true;
-                response.Data = true;
-
             }
             else
             {
-                response.ErrorMessages.Add("Hittar inte användare med Id: " + user.Id);
+                response.FailureMessage = "Hittar inte användare med Id: " + user.Id);
                 response.Success = false;
             }
 

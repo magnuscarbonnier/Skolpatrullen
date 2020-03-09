@@ -133,30 +133,23 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
+            if (vm.file != null && vm.file.Length > 0)
             {
-                if(vm.file != null && vm.file.Length > 0)
+                ChangeProfilePictureBody body = new ChangeProfilePictureBody();
+
+                byte[] p1 = null;
+                using (var fs1 = vm.file.OpenReadStream())
+                using (var ms1 = new MemoryStream())
                 {
-                    ChangeProfilePictureBody body = new ChangeProfilePictureBody();
-
-                    byte[] p1 = null;
-                    using (var fs1 = vm.file.OpenReadStream())
-                    using (var ms1 = new MemoryStream())
-                    {
-                        fs1.CopyTo(ms1);
-                        p1 = ms1.ToArray();
-                    }
-
-
-                    body.UserId = User.Id;
-                    body.ProfilePicture = p1;
-
-                    var response = await APIChangeProfilePicture(body);
+                    fs1.CopyTo(ms1);
+                    p1 = ms1.ToArray();
                 }
-            }
-            catch
-            {
-                //send to error?
+
+
+                body.UserId = User.Id;
+                body.ProfilePicture = p1;
+
+                var response = await APIChangeProfilePicture(body);
             }
             return RedirectToAction("ProfilePage", "Profile");
 
