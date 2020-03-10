@@ -236,11 +236,20 @@ namespace WebAPI.Controllers
 
             if (user != null)
             {
-                //user.ProfilePicture.Binary = body.ProfilePicture;
-                
-                //_context.SaveChanges();
-                //response.Success = true;
-                //response.Data = true;
+                File file = new File();
+
+                file.Binary = body.ProfilePicture;
+                file.UploadDate = body.UploadDate;
+                file.FileExtension = body.FileExtension;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                user.ProfilePictureId = file.Id;
+                _context.SaveChanges();
+
+                response.Success = true;    
+                response.Data = true;
 
             }
             else

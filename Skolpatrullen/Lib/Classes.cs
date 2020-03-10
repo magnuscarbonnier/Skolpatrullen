@@ -23,6 +23,8 @@ namespace Lib
     {
         public int UserId { get; set; }
         public byte[] ProfilePicture { get; set; }
+        public DateTime UploadDate { get; set; }
+        public string FileExtension { get; set; }
     }
     public class AsId
     {

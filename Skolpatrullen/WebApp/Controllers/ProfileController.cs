@@ -200,6 +200,8 @@ namespace WebApp.Controllers
 
                     body.UserId = User.Id;
                     body.ProfilePicture = p1;
+                    body.UploadDate = DateTime.Now;
+                    body.FileExtension = "test";
 
                     var response = await APIChangeProfilePicture(body);
                 }
