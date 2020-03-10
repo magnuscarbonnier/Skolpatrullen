@@ -27,9 +27,9 @@
     scheduler.init('scheduler_here', new Date(2020, 2, 07), "week");
 
     //load data from backend
-    scheduler.load("api/events", "json");
+    scheduler.load("https://localhost:44367/lesson", "json");
     //connect backend to scheduler
-    var dp = new dataProcessor("/api/events");
+    var dp = new dataProcessor("https://localhost:44367/lesson");
     dp.init(scheduler);
 
     //set data exchange mode

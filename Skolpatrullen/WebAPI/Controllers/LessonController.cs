@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
 using Lib;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -11,9 +12,11 @@ using WebApp.ViewModels;
 
 namespace WebAPI.Controllers
 {
+    [EnableCors("_myAllowSpecificOrigins")]
     [ApiController]
     public class LessonController : APIController
     {
+
         public LessonController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
         }
@@ -89,16 +92,16 @@ namespace WebAPI.Controllers
             });
         }
 
-        [HttpGet]
-        [Route("[controller]/GetLessonByCourseId/{id}")]
-        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByCourseId(int id)
-        {
-            APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
-            response.Data = _context.Lessons.ToList().Where(lesson => lesson.Course.Id == id).Select(lesson => (LessonViewModel)lesson);
+        //[HttpGet]
+        //[Route("[controller]/GetLessonByCourseId/{id}")]
+        //public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByCourseId(int id)
+        //{
+        //    APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
+        //    response.Data = _context.Lessons.ToList().Where(lesson => lesson.Course.Id == id).Select(lesson => (LessonViewModel)lesson);
 
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
-            return response;
-        }
+        //    response.Success = true;
+        //    response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
+        //    return response;
+        //}
     }
 }

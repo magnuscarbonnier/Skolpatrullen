@@ -192,5 +192,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/Course/GetCourseById/" + Id.ToString());
             return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
         }
+        public async Task<APIResponse<IEnumerable<LessonViewModel>>> APIGetAllLessons()
+        {
+            HttpResponseMessage response = await (APIGet("/Lesson/"));
+            return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
+        }
     }
 }
