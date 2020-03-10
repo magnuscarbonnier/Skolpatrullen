@@ -241,6 +241,7 @@ namespace WebAPI.Controllers
 
             if (user != null)
             {
+
                 File file = new File();
 
                 file.Binary = body.ProfilePicture;
@@ -248,8 +249,17 @@ namespace WebAPI.Controllers
                 file.FileExtension = body.FileExtension;
 
                 _context.Files.Add(file);
-                _context.SaveChanges();
 
+                if(user.ProfilePictureId != null)
+                {
+                    var currentPic = _context.Files.SingleOrDefault(c => c.Id == user.ProfilePictureId);
+
+                    if (currentPic != null)
+                    {
+                        _context.Remove(currentPic);
+                    }
+                }
+                _context.SaveChanges();
                 user.ProfilePictureId = file.Id;
                 _context.SaveChanges();
 

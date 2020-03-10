@@ -30,5 +30,30 @@ namespace WebAPI.Controllers
             response.SuccessMessage = $"Hämtade fil med id {Id}";
             return response;
         }
+
+        [HttpGet]
+        [Route("[controller]/DeleteFileById/{Id}")]
+        public APIResponse<File> DeleteFileById(int Id)
+        {
+            APIResponse<File> response = new APIResponse<File>();
+            response.Data = _context.Files.SingleOrDefault(c => c.Id == Id);
+
+            if (response.Data != null)
+            {
+                _context.Remove(response.Data);
+                _context.SaveChanges();
+                response.SuccessMessage = $"Tog bort fil med id {Id}";
+            }
+            else
+            {
+                response.SuccessMessage = $"Det fanns ingen fil med id {Id}";
+            }
+            response.Success = true;
+
+
+            return response;
+
+        }
+
     }
 }
