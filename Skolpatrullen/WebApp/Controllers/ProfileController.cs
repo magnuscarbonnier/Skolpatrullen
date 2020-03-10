@@ -6,6 +6,9 @@ using Lib;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
+using Microsoft.AspNetCore.Http;
+using System.Text;
+using System.IO;
 
 namespace WebApp.Controllers
 {
@@ -34,33 +37,17 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]/Profile")]
-        public async Task<IActionResult> ProfilePage(ProfileViewModel ProfileVM)
+        [Route("[controller]/ChangeProfile")]
+        public async Task<IActionResult> ChangeProfile(ProfileViewModel ProfileVM)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            try
-            {
-                User.Phone = ProfileVM.Phone;
-                User.Email = ProfileVM.Email;
-                User.Address = ProfileVM.Address;
-                User.City = ProfileVM.City;
-                User.PostalCode = ProfileVM.PostalCode;
-                var response = await APIUpdateUser(User);
-                if (response.Success)
-                {
-
-                    TempData["SuccessMessage"] = $"Ändringar sparade.";
-                    return RedirectToAction("ProfilePage", "Profile");
-                }
-            }
-            catch
-            {
-                //send to error?
-            }
+            User = ProfileVM.UpdateUser(User);
+            var response = await APIUpdateUser(User);
+            SetResponseMessage(response);
             return RedirectToAction("ProfilePage", "User");
         }
         [HttpGet]
@@ -69,56 +56,35 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new AdminChangeProfileViewModel();
-            var userResponse = await APIGetUserById(Id);
-            if (userResponse.Data != null)
+            var response = await APIGetUserById(Id);
+            if (response.Data != null)
             {
-                model.User = userResponse.Data;
-                model.IsSuperUser = userResponse.Data.IsSuperUser;
+                model.User = response.Data;
+                model.IsSuperUser = response.Data.IsSuperUser;
             }
             model.UserId = Id;
+            SetFailureMessage(response.FailureMessage);
             return View(model);
         }
         [HttpPost]
         [Route("[controller]/AdminChangeProfile")]
         public async Task<IActionResult> AdminChangeProfile(AdminChangeProfileViewModel changeProfile)
         {
-
             string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            try
+            var userResponse = await APIGetUserById(changeProfile.UserId);
+            if (userResponse.Success)
             {
-                var userResponse = await APIGetUserById(changeProfile.UserId);
-                if (userResponse.Success)
-                {
-                    var user = userResponse.Data;
-                    user.Id = changeProfile.UserId;
-                    user.FirstName = changeProfile.FirstName;
-                    user.LastNames = changeProfile.LastNames;
-                    user.SocialSecurityNr = changeProfile.SocialSecurityNr;
-                    user.IsSuperUser = changeProfile.IsSuperUser;
-                    var response = await APIUpdateUser(user);
-                    if (response.Success)
-                    {
-
-                        TempData["SuccessMessage"] = $"Ändringar sparade för {user.FirstName} {user.LastNames}, {user.SocialSecurityNr}.";
-                        return RedirectToAction("UserListPage", "Profile");
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = response.ErrorMessages[0];
-                    }
-                }
-                else
-                {
-                    TempData["ErrorMessage"] = userResponse.ErrorMessages[0];
-                }
+                var user = changeProfile.UpdateUser(userResponse.Data);
+                var response = await APIUpdateUser(user);
+                SetResponseMessage(response);
             }
-            catch
+            else
             {
-                //send to error?
+                SetFailureMessage(userResponse.FailureMessage);
             }
             return RedirectToAction("UserListPage", "Profile");
         }
@@ -129,11 +95,12 @@ namespace WebApp.Controllers
 
             string message = await GetUser();
             var model = new List<User>();
-            var userResponse = await APIGetAllUsers();
-            if (userResponse.Data != null)
+            var response = await APIGetAllUsers();
+            if (response.Data != null)
             {
-                model = userResponse.Data.ToList();
+                model = response.Data.ToList();
             }
+            SetFailureMessage(response.FailureMessage);
             return View(model);
 
         }
@@ -146,38 +113,57 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
+            if (!(ChangePasswordVM.NewPassword == ChangePasswordVM.ReNewPassword))
             {
-                if (!(ChangePasswordVM.NewPassword == ChangePasswordVM.ReNewPassword))
-                {
-                    ChangePasswordVM.NewPassword = "";
-                    ChangePasswordVM.ReNewPassword = "";
-                    TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
-                }
-                else
-                {
-                    ChangePasswordBody body = new ChangePasswordBody();
-                    body.UserId = User.Id;
-                    body.CurrentPassword = ChangePasswordVM.Password;
-                    body.NewPassword = ChangePasswordVM.NewPassword;
-
-                    var response = await APIChangePassword(body);
-
-                    if (response.Success)
-                    {
-                        TempData["SuccessMessage"] = "Ditt lösenord är nu ändrat!";
-                    }
-                    else
-                    {
-                        TempData["ErrorMessage"] = response.ErrorMessages[0];
-                    }
-                }
+                ChangePasswordVM.NewPassword = "";
+                ChangePasswordVM.ReNewPassword = "";
+                TempData["ErrorMessage"] = $"Lösenorden matchade inte, försök igen.";
             }
-            catch
+            else
             {
-                //send to error?
+                ChangePasswordBody body = new ChangePasswordBody();
+                body.UserId = User.Id;
+                body.CurrentPassword = ChangePasswordVM.Password;
+                body.NewPassword = ChangePasswordVM.NewPassword;
+
+                var response = await APIChangePassword(body);
+                SetResponseMessage(response);
+            }
+
+            return RedirectToAction("ProfilePage", "Profile");
+        }
+
+
+        [HttpPost]
+        [Route("[controller]/ChangeProfilePicture")]
+        public async Task<IActionResult> ChangeProfilePicture(ChangeProfilePictureViewModel vm)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if (vm.file != null && vm.file.Length > 0)
+            {
+                ChangeProfilePictureBody body = new ChangeProfilePictureBody();
+
+                byte[] p1 = null;
+                using (var fs1 = vm.file.OpenReadStream())
+                using (var ms1 = new MemoryStream())
+                {
+                    fs1.CopyTo(ms1);
+                    p1 = ms1.ToArray();
+                }
+
+
+                body.UserId = User.Id;
+                body.ProfilePicture = p1;
+
+                var response = await APIChangeProfilePicture(body);
             }
             return RedirectToAction("ProfilePage", "Profile");
+
+
         }
     }
 }

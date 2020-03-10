@@ -16,7 +16,7 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new CourseParticipantViewModel();
-            model.UserId= User.Id;
+            model.UserId = User.Id;
 
             var courseResponse = await APIGetCourseById(Id);
             if (courseResponse.Data != null)
@@ -46,18 +46,9 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            try
-            {
-                courseParticipantVM.User = User;
-                var response = await APIAddOrUpdateCourseParticipant(courseParticipantVM.ToCourseParticipant());
-                TempData["SuccessMessage"] = $"Du har ansökt till kursen.";
-                return RedirectToAction("CourseList", "Course");
-            }
-            catch
-            {
-                //send to error?
-                TempData["ErrorMessage"] = $"Något gick fel..";
-            }
+            courseParticipantVM.User = User;
+            var response = await APIAddOrUpdateCourseParticipant(courseParticipantVM.ToCourseParticipant());
+            SetResponseMessage(response);
             return RedirectToAction("CourseList", "Course");
         }
         [HttpGet]
@@ -71,7 +62,7 @@ namespace WebApp.Controllers
             }
             var model = new AdminCourseParticipantViewModel();
             var userSchoolResponse = await APIGetAllUserSchools();
-            if(userSchoolResponse !=null)
+            if (userSchoolResponse != null)
             {
                 //if (User.IsSuperUser == true)
                 //{
@@ -82,24 +73,24 @@ namespace WebApp.Controllers
                     model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
                 //}
             }
-            
-                var courseResponse = await APIGetAllCourses();
-                if (courseResponse.Data != null)
-                {
-                    model.CourseList = courseResponse.Data;
-                }
 
-                var cpResponse = await APIGetAllCourseParticipants();
-                if (cpResponse != null)
-                {
-                    model.CourseParticipantList = cpResponse.Data;
-                }
-                var userResponse = await APIGetAllUsers();
-                if (userResponse != null)
-                {
-                    model.UserList = userResponse.Data;
-                }
-                var schoolResponse = await APIGetAllSchools();
+            var courseResponse = await APIGetAllCourses();
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+
+            var cpResponse = await APIGetAllCourseParticipants();
+            if (cpResponse != null)
+            {
+                model.CourseParticipantList = cpResponse.Data;
+            }
+            var userResponse = await APIGetAllUsers();
+            if (userResponse != null)
+            {
+                model.UserList = userResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
             if (schoolResponse != null)
             {
                 model.SchoolList = schoolResponse.Data;
@@ -123,7 +114,7 @@ namespace WebApp.Controllers
                 adminCourseParticipantVM.CourseId = cpResponse.Data.CourseId;
                 adminCourseParticipantVM.Grade = cpResponse.Data.Grade;
                 adminCourseParticipantVM.UserId = cpResponse.Data.UserId;
-                
+
                 switch (answer)
                 {
                     case "Godkänn ansökan":
@@ -141,17 +132,8 @@ namespace WebApp.Controllers
                         break;
                 }
             }
-            try
-            {
-                var response = await APIAddOrUpdateCourseParticipant(adminCourseParticipantVM.ToCourseParticipant());
-                TempData["SuccessMessage"] = $"Ändringar sparade.";
-                return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
-            }
-            catch
-            {
-                //send to error?
-                TempData["ErrorMessage"] = $"Något gick fel..";
-            }
+            var response = await APIAddOrUpdateCourseParticipant(adminCourseParticipantVM.ToCourseParticipant());
+            SetResponseMessage(response);
             return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
         }
     }

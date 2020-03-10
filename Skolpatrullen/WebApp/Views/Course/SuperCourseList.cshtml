@@ -34,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.EndDate)
             </td>
             <td>
-                @Html.ActionLink("Delete", "RemoveCourse", new { id=item.Id })
+                @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
             </td>
         </tr>
 }

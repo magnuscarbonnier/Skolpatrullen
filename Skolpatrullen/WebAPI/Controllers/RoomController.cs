@@ -10,15 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class RoomController : ControllerBase
+    public class RoomController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<RoomController> _logger;
-        public RoomController(Context context, ILogger<RoomController> logger)
+        public RoomController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpPost]
         [Route("[controller]/Add")]
         public APIResponse<Room> Add(Room room)
@@ -28,8 +25,9 @@ namespace WebAPI.Controllers
             {
                 _context.Rooms.Add(room);
                 _context.SaveChanges();
-                response.Success = true;
                 response.Data = room;
+                response.Success = true;
+                response.SuccessMessage = $"La till rum med namn {room.Name}";
             }
             return response;
         }

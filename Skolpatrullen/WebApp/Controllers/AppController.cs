@@ -18,17 +18,13 @@ namespace WebApp.Controllers
         public new User User = null;
         public AppController()
         {
-            //det här behövs för att Issas dator är fucked
-            HttpClientHandler clientHandler = new HttpClientHandler();
-            clientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => { return true; };
-
-            HttpClient = new HttpClient(clientHandler);
+            HttpClient = new HttpClient();
         }
 
         public async Task<string> GetUser()
         {
             ViewBag.User = null;
-            KeyValuePair<string,string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
+            KeyValuePair<string, string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
             if (cookie.Value.Value == null)
             {
                 return "Inte inloggad";
@@ -41,34 +37,67 @@ namespace WebApp.Controllers
             }
             else
             {
-                string errorMessage = "";
-                foreach (string em in response.ErrorMessages)
-                {
-                    errorMessage += em + "\n";
-                }
-                return errorMessage;
+                return response.FailureMessage;
             }
             return "Något gick fel ¯\\_(ツ)_/¯";
         }
-
+        public void SetFailureMessage(string message)
+        {
+            if (string.IsNullOrEmpty(message))
+            {
+                TempData["ErrorMessage"] = "Något gick fel";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = message;
+            }
+        }
+        public void SetSuccessMessage(string message)
+        {
+            TempData["SuccessMessage"] = message;
+        }
+        public void SetResponseMessage(APIResponse response)
+        {
+            if (response.Success)
+            {
+                SetSuccessMessage(response.SuccessMessage);
+            }
+            else
+            {
+                SetFailureMessage(response.FailureMessage);
+            }
+        }
+        public IActionResult SetResponseMessage(APIResponse response, IActionResult successView, IActionResult failureView)
+        {
+            if (response.Success)
+            {
+                SetSuccessMessage(response.SuccessMessage);
+                return successView;
+            }
+            else
+            {
+                SetFailureMessage(response.FailureMessage);
+                return failureView;
+            }
+        }
         public async Task<HttpResponseMessage> APIPost<T>(string route, T body)
         {
             var json = JsonConvert.SerializeObject(body);
             using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
             {
-                HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44367"+route, stringContent);
+                HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44367" + route, stringContent);
                 return response;
             }
         }
         public async Task<HttpResponseMessage> APIGet(string route)
         {
-                HttpResponseMessage response = await HttpClient.GetAsync("https://localhost:44367" + route);
-                return response;
+            HttpResponseMessage response = await HttpClient.GetAsync("https://localhost:44367" + route);
+            return response;
         }
         public async Task<APIResponse<LoginSession>> APILogin(LoginViewModel loginVM)
         {
             HttpResponseMessage response = await APIPost("/User/Login", loginVM);
-            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),typeof(APIResponse<LoginSession>));
+            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
         public async Task<APIResponse<LoginSession>> APIGetLoginSession(string token)
         {
@@ -80,10 +109,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/Register", UserVM);
             return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
-        public async Task<APIResponse<bool>> APILogout(User user)
+        public async Task<APIResponse> APILogout(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Logout", user);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<IEnumerable<CourseParticipant>>> APIGetAllCourseParticipants()
         {
@@ -140,35 +169,40 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/Course/Add", course);
             return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
         }
-        public async Task<APIResponse<bool>> APIRemoveCourse(int id)
+        public async Task<APIResponse> APIRemoveCourse(int id)
         {
-            HttpResponseMessage response = await APIGet("/Course/RemoveCourse/"+id);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            HttpResponseMessage response = await APIGet("/Course/RemoveCourse/" + id);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<User>> APIUpdateUser(User user)
         {
             HttpResponseMessage response = await APIPost("/User/Update", user);
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
         }
-        public async Task<APIResponse<bool>> APIChangePassword(ChangePasswordBody body)
+        public async Task<APIResponse> APIChangePassword(ChangePasswordBody body)
         {
             HttpResponseMessage response = await APIPost("/User/ChangePassword", body);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<School>> APIAddSchool(School school)
         {
             HttpResponseMessage response = await APIPost("/School/AddSchool", school);
             return (APIResponse<School>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<School>));
         }
-        public async Task<APIResponse<bool>> APIRemoveSchool(int id)
+        public async Task<APIResponse> APIRemoveSchool(int id)
         {
-            HttpResponseMessage response = await APIGet("/School/RemoveSchool/"+id);
-            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+            HttpResponseMessage response = await APIGet("/School/RemoveSchool/" + id);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<User>> APIGetUserById(int Id)
         {
             HttpResponseMessage response = await APIGet("/User/GetUserById/" + Id.ToString());
             return (APIResponse<User>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<User>));
+        }
+        public async Task<APIResponse> APIChangeProfilePicture(ChangeProfilePictureBody body)
+        {
+            HttpResponseMessage response = await APIPost("/User/ChangeProfilePicture", body);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<Course>> APIGetCourseById(int Id)
         {
