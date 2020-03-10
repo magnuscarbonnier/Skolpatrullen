@@ -51,6 +51,12 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new AdminChangeProfileViewModel();
             var response = await APIGetUserById(Id);
+
+            if (User.ProfilePictureId != null)
+            {
+                model.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
+            }
+
             if (response.Data != null)
             {
                 model.User = response.Data;
