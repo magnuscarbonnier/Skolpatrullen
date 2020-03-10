@@ -21,8 +21,7 @@ namespace WebApp.ViewModels
                 id = lesson.Id,
                 text = lesson.Name,
                 start_date = lesson.StartDate.ToString("yyyy-MM-dd HH:mm"),
-                end_date = lesson.EndDate.ToString("yyyy-MM-dd HH:mm"),
-                course = lesson.Course.Name
+                end_date = lesson.EndDate.ToString("yyyy-MM-dd HH:mm")
             };
         }
 
