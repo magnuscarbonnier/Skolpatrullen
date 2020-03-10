@@ -31,10 +31,9 @@ namespace WebAPI
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://localhost:44382"); });
+                options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://localhost:44382").AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod(); });
             });
             services.AddDbContext<Context>(opt => opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Skolpatrullen;Trusted_Connection=True;"));
-            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddControllers();
         }
 
@@ -45,13 +44,12 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors(MyAllowSpecificOrigins);
+    
             app.UseAuthorization();
-            app.UseMvc();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
