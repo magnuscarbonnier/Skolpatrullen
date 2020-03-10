@@ -3,6 +3,12 @@ using System.Collections.Generic;
 
 namespace Lib
 {
+    public static class Constants
+    {
+        public const string AcceptCP = "Godkänn ansökan";
+        public const string DenyCP = "Avslå ansökan";
+        public const string AcceptAsTeacherCP = "Registrera som lärare";
+    }
     public class TokenBody
     {
         public string token { get; set; }
