@@ -27,9 +27,9 @@ namespace WebApp.Controllers
                 model.PVM.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
             }
             var courseParticipantsResponse = APIGetAllCourseParticipants();
-            if(courseParticipantsResponse != null)
+            if (courseParticipantsResponse != null)
             {
-                model.PVM.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c=>c.UserId==User.Id).ToList();
+                model.PVM.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == User.Id).ToList();
             }
             var courseResponse = APIGetAllCourses();
             if (courseResponse != null)
@@ -37,7 +37,7 @@ namespace WebApp.Controllers
                 model.PVM.CourseList = courseResponse.Result.Data.ToList();
             }
 
-                return View(model);
+            return View(model);
         }
 
         [HttpPost]
@@ -73,7 +73,10 @@ namespace WebApp.Controllers
                 model.IsSuperUser = response.Data.IsSuperUser;
             }
             model.UserId = Id;
-            SetFailureMessage(response.FailureMessage);
+            if (!string.IsNullOrEmpty(response.FailureMessage))
+            {
+                SetFailureMessage(response.FailureMessage);
+            }
             return View(model);
         }
         [HttpPost]
@@ -110,7 +113,10 @@ namespace WebApp.Controllers
             {
                 model = response.Data.ToList();
             }
-            SetFailureMessage(response.FailureMessage);
+            if (!string.IsNullOrEmpty(response.FailureMessage))
+            {
+                SetFailureMessage(response.FailureMessage);
+            }
             return View(model);
 
         }
