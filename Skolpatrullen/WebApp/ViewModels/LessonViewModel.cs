@@ -34,7 +34,7 @@ namespace WebApp.ViewModels
                 Name = lessonVM.text,
                 StartDate = DateTime.Parse(lessonVM.start_date, System.Globalization.CultureInfo.InvariantCulture),
                 EndDate = DateTime.Parse(lessonVM.end_date, System.Globalization.CultureInfo.InvariantCulture),
-                Course = lessonVM.course,
+                Course = lessonVM.course
             };
         }
     }
