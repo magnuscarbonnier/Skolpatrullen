@@ -24,7 +24,7 @@ namespace WebApp.Controllers
         public async Task<string> GetUser()
         {
             ViewBag.User = null;
-            KeyValuePair<string,string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
+            KeyValuePair<string, string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
             if (cookie.Value.Value == null)
             {
                 return "Inte inloggad";
@@ -34,6 +34,7 @@ namespace WebApp.Controllers
             {
                 User = response.Data.User;
                 ViewBag.User = User;
+                return response.SuccessMessage;
             }
             else
             {
@@ -43,7 +44,14 @@ namespace WebApp.Controllers
         }
         public void SetFailureMessage(string message)
         {
-            TempData["ErrorMessage"] = message;
+            if (string.IsNullOrEmpty(message))
+            {
+                TempData["ErrorMessage"] = "Något gick fel";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = message;
+            }
         }
         public void SetSuccessMessage(string message)
         {
@@ -64,12 +72,12 @@ namespace WebApp.Controllers
         {
             if (response.Success)
             {
-                TempData["SuccessMessage"] = response.SuccessMessage;
+                SetSuccessMessage(response.SuccessMessage);
                 return successView;
             }
             else
             {
-                TempData["ErrorMessage"] = response.FailureMessage;
+                SetFailureMessage(response.FailureMessage);
                 return failureView;
             }
         }
@@ -78,19 +86,19 @@ namespace WebApp.Controllers
             var json = JsonConvert.SerializeObject(body);
             using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
             {
-                HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44367"+route, stringContent);
+                HttpResponseMessage response = await HttpClient.PostAsync("https://localhost:44367" + route, stringContent);
                 return response;
             }
         }
         public async Task<HttpResponseMessage> APIGet(string route)
         {
-                HttpResponseMessage response = await HttpClient.GetAsync("https://localhost:44367" + route);
-                return response;
+            HttpResponseMessage response = await HttpClient.GetAsync("https://localhost:44367" + route);
+            return response;
         }
         public async Task<APIResponse<LoginSession>> APILogin(LoginViewModel loginVM)
         {
             HttpResponseMessage response = await APIPost("/User/Login", loginVM);
-            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(),typeof(APIResponse<LoginSession>));
+            return (APIResponse<LoginSession>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<LoginSession>));
         }
         public async Task<APIResponse<LoginSession>> APIGetLoginSession(string token)
         {
@@ -122,6 +130,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/School/GetAllSchools");
             return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
         }
+        public async Task<APIResponse<IEnumerable<UserSchool>>> APIGetAllUserSchools()
+        {
+            HttpResponseMessage response = await APIGet("/UserSchool/GetAllUserSchools");
+            return (APIResponse<IEnumerable<UserSchool>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<UserSchool>>));
+        }
         public async Task<APIResponse<IEnumerable<User>>> APIGetAllUsers()
         {
             HttpResponseMessage response = await APIGet("/User/GetAllUsers");
@@ -147,6 +160,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/CourseParticipant/GetCourseParticipantsByUserId/" + Id);
             return (APIResponse<IEnumerable<CourseParticipant>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<CourseParticipant>>));
         }
+        public async Task<APIResponse<CourseParticipant>> APIGetCourseParticipantById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/CourseParticipant/GetCourseParticipantById/" + Id);
+            return (APIResponse<CourseParticipant>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<CourseParticipant>));
+        }
         public async Task<APIResponse<Course>> APIAddCourse(Course course)
         {
             HttpResponseMessage response = await APIPost("/Course/Add", course);
@@ -154,7 +172,7 @@ namespace WebApp.Controllers
         }
         public async Task<APIResponse> APIRemoveCourse(int id)
         {
-            HttpResponseMessage response = await APIGet("/Course/RemoveCourse/"+id);
+            HttpResponseMessage response = await APIGet("/Course/RemoveCourse/" + id);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<User>> APIUpdateUser(User user)
@@ -174,7 +192,7 @@ namespace WebApp.Controllers
         }
         public async Task<APIResponse> APIRemoveSchool(int id)
         {
-            HttpResponseMessage response = await APIGet("/School/RemoveSchool/"+id);
+            HttpResponseMessage response = await APIGet("/School/RemoveSchool/" + id);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
         public async Task<APIResponse<User>> APIGetUserById(int Id)

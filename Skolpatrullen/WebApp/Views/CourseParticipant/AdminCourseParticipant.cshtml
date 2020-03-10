@@ -1,0 +1,39 @@
+﻿@model WebApp.ViewModels.AdminCourseParticipantViewModel
+
+@{
+    ViewData["Title"] = "AdminCourseParticipant";
+}
+
+<h1>Inkomna ansökningar</h1>
+
+<hr />
+
+@foreach (var userschool in Model.UserSchoolList)
+{
+    foreach (var course in Model.CourseList.Where(course => course.SchoolId == userschool.SchoolId))
+    {
+    @foreach (var cp in Model.CourseParticipantList.Where(cp => cp.CourseId == course.Id))
+    {
+        @if (cp.Status == Database.Models.Status.Applied)
+        {
+         <div class="list-group-item bg-light border-dark">
+            <form asp-action="Update">
+                @Html.HiddenFor(c => cp.Id)
+                
+                <div>@Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().FirstName @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().LastNames, @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().SocialSecurityNr</div>
+                    <div>Skola: @Model.SchoolList.Where(school => school.Id == course.SchoolId).SingleOrDefault().Name</div>
+                        <div>Kurs: @course.Name</div>
+                            <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
+
+                <div class="form-group">
+                    <input type="submit" name="answer" value="@Lib.Constants.AcceptCP" asp-route-Id="@cp.Id" class="btn btn-success" />
+                    <input type="submit" name="answer" value="@Lib.Constants.DenyCP" asp-route-Id="@cp.Id" class="btn btn-danger" />
+                    <input type="submit" name="answer" value="@Lib.Constants.AcceptAsTeacherCP" asp-route-Id="@cp.Id" class="btn btn-outline-warning" />
+                </div>
+            </form>
+
+        </div>
+        }
+    }
+    }
+}
