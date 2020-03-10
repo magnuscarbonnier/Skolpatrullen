@@ -236,11 +236,11 @@ namespace WebAPI.Controllers
 
             if (user != null)
             {
-                user.ProfilePictureImage = body.ProfilePicture;
+                //user.ProfilePicture.Binary = body.ProfilePicture;
                 
-                _context.SaveChanges();
-                response.Success = true;
-                response.Data = true;
+                //_context.SaveChanges();
+                //response.Success = true;
+                //response.Data = true;
 
             }
             else
