@@ -39,4 +39,25 @@
             </div>
         </form>
     </div>
+    <div class="col-md-4">
+        
+        Kurser:
+        @foreach (var courseParticipant in Model.CourseParticipantList)
+        {
+            <div class="bg-light">
+            @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
+            { 
+                    <div>
+                        @course.Name
+                    </div>
+            }
+            
+            <div>
+                @courseParticipant.Status
+            </div>
+            </div>
+            <br />
+        }
+
+    </div>
 </div>
