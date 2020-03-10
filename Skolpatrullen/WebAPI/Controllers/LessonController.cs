@@ -91,17 +91,5 @@ namespace WebAPI.Controllers
                 action = "Lektion borttagen"
             });
         }
-
-        //[HttpGet]
-        //[Route("[controller]/GetLessonByCourseId/{id}")]
-        //public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByCourseId(int id)
-        //{
-        //    APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
-        //    response.Data = _context.Lessons.ToList().Where(lesson => lesson.Course.Id == id).Select(lesson => (LessonViewModel)lesson);
-
-        //    response.Success = true;
-        //    response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
-        //    return response;
-        //}
     }
 }
