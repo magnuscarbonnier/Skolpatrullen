@@ -52,9 +52,9 @@ namespace WebApp.Controllers
             var model = new AdminChangeProfileViewModel();
             var response = await APIGetUserById(Id);
 
-            if (User.ProfilePictureId != null)
+            if (response.Data.ProfilePictureId != null)
             {
-                model.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
+                response.Data.ProfilePicture = (await APIGetFileById((int)response.Data.ProfilePictureId)).Data;
             }
 
             if (response.Data != null)
