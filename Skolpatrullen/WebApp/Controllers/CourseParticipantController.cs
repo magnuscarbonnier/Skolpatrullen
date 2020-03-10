@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -117,13 +118,13 @@ namespace WebApp.Controllers
 
                 switch (answer)
                 {
-                    case "Godkänn ansökan":
+                    case Constants.AcceptCP:
                         adminCourseParticipantVM.Status = Status.Accepted;
                         break;
-                    case "Avslå ansökan":
+                    case Constants.DenyCP:
                         adminCourseParticipantVM.Status = Status.NotApplied;
                         break;
-                    case "Registrera som lärare":
+                    case Constants.AcceptAsTeacherCP:
                         adminCourseParticipantVM.Role = Roles.Teacher;
                         adminCourseParticipantVM.Status = Status.Accepted;
                         break;
