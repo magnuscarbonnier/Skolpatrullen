@@ -34,6 +34,7 @@ namespace WebApp.Controllers
             {
                 User = response.Data.User;
                 ViewBag.User = User;
+                return response.SuccessMessage;
             }
             else
             {
