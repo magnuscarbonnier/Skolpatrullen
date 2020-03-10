@@ -258,7 +258,7 @@ namespace WebAPI.Controllers
             }
             else
             {
-                response.FailureMessage = "Hittar inte användare med Id: " + user.Id);
+                response.FailureMessage = "Hittar inte användare med Id: " + user.Id;
                 response.Success = false;
             }
 

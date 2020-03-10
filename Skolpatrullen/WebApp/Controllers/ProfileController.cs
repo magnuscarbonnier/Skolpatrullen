@@ -22,6 +22,10 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new ProfileCombinedViewModel();
             model.PVM.User = User;
+            if (User.ProfilePictureId != null)
+            {
+                model.PVM.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
+            }
 
             return View(model);
         }
