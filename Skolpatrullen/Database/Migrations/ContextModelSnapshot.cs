@@ -318,7 +318,7 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Models.Lesson", b =>
                 {
                     b.HasOne("Database.Models.Course", "Course")
-                        .WithMany("LessonList")
+                        .WithMany("CourseLessons")
                         .HasForeignKey("CourseId");
                 });
 

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200309211101_Lesson")]
-    partial class Lesson
+    [Migration("20200310222333_lessons")]
+    partial class lessons
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -320,7 +320,7 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Models.Lesson", b =>
                 {
                     b.HasOne("Database.Models.Course", "Course")
-                        .WithMany()
+                        .WithMany("CourseLessons")
                         .HasForeignKey("CourseId");
                 });
 
