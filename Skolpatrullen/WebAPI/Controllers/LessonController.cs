@@ -19,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/Lessons")]
+        [Route("[controller]")]
         public APIResponse<IEnumerable<LessonViewModel>> GetAllLessons()
         {
             APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
@@ -30,7 +30,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/Lessons/{id}")]
+        [Route("[controller]/{id}")]
         public APIResponse<LessonViewModel> GetLessonById(int id)
         {
             APIResponse<LessonViewModel> response = new APIResponse<LessonViewModel>();
@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]/Lessons")]
+        [Route("[controller]")]
         public ObjectResult AddLesson([FromForm] LessonViewModel lessonVM)
         {
             var newLesson = (Lesson)lessonVM;
@@ -56,7 +56,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut]
-        [Route("[controller]/Lessons/{id}")]
+        [Route("[controller]/{id}")]
         public ObjectResult UpdateLesson(int id, [FromForm] LessonViewModel lessonVM)
         {
             var updatedLesson = (Lesson)lessonVM;
@@ -73,7 +73,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Route("[controller]/Lessons/{id}")]
+        [Route("[controller]/{id}")]
         public ObjectResult DeleteLesson(int id)
         {
             var lesson = _context.Lessons.Find(id);
