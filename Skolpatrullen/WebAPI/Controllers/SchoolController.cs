@@ -11,14 +11,10 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class SchoolController : ControllerBase
+    public class SchoolController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<SchoolController> _logger;
-        public SchoolController(Context context, ILogger<SchoolController> logger)
+        public SchoolController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -29,8 +25,9 @@ namespace WebAPI.Controllers
             var schoollist = _context.Schools.OrderBy(s => s.Name).ToList();
             if (schoollist != null)
             {
-                response.Success = true;
                 response.Data = schoollist;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla skolor";
             }
             return response;
         }
@@ -43,31 +40,33 @@ namespace WebAPI.Controllers
             {
                 _context.Schools.Add(school);
                 _context.SaveChanges();
-                response.Success = true;
                 response.Data = school;
+                response.Success = true;
+                response.SuccessMessage = $"La till skola med namn {school.Name}";
             }
             else
             {
-                response.ErrorMessages.Add($"Det finns redan en skola med det namnet");
+                response.FailureMessage = $"Det finns redan en skola med det namnet";
                 response.Success = false;
             }
             return response;
         }
         [HttpGet]
         [Route("[controller]/RemoveSchool/{id}")]
-        public APIResponse<bool> Remove(int id)
+        public APIResponse Remove(int id)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
             var removeschool = _context.Schools.SingleOrDefault(s => s.Id == id);
             if (removeschool != null)
             {
                 _context.Remove(removeschool);
                 _context.SaveChanges();
                 response.Success = true;
+                response.SuccessMessage = $"Tog bort skola med id {id}";
             }
             else
             {
-                response.ErrorMessages.Add($"Skolan fanns inte");
+                response.FailureMessage = $"Skolan finns inte";
                 response.Success = false;
             }
             return response;

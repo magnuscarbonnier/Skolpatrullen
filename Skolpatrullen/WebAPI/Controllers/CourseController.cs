@@ -10,15 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class CourseController : ControllerBase
+    public class CourseController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<CourseController> _logger;
-        public CourseController(Context context, ILogger<CourseController> logger)
+        public CourseController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpGet]
         [Route("[controller]/GetAll")]
         public APIResponse<IEnumerable<Course>> GetAll()
@@ -27,8 +24,9 @@ namespace WebAPI.Controllers
             var courselist = _context.Courses.OrderBy(s => s.Name).ToList();
             if (courselist != null)
             {
-                response.Success = true;
                 response.Data = courselist;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla kurser";
             }
             return response;
         }
@@ -41,34 +39,36 @@ namespace WebAPI.Controllers
             {
                 if (course.StartDate > course.EndDate)
                 {
-                    response.ErrorMessages[0] = "Startdatum kan inte vara senare än slutdatum";
+                    response.FailureMessage = $"Startdatum kan inte vara senare än slutdatum";
                     response.Success = false;
                 }
                 else
                 {
                     _context.Courses.Add(course);
                     _context.SaveChanges();
-                    response.Success = true;
                     response.Data = course;
+                    response.Success = true;
+                    response.SuccessMessage = $"La till kurs med namn {course.Name}";
                 }
             }
             return response;
         }
         [HttpGet]
         [Route("[controller]/RemoveCourse/{id}")]
-        public APIResponse<bool> Remove(int id)
+        public APIResponse Remove(int id)
         {
-            APIResponse<bool> response = new APIResponse<bool>();
+            APIResponse response = new APIResponse();
             var removecourse = _context.Courses.SingleOrDefault(s => s.Id == id);
             if (removecourse != null)
             {
                 _context.Remove(removecourse);
                 _context.SaveChanges();
                 response.Success = true;
+                response.SuccessMessage = $"Tog bort kurs med id {id} och namn {removecourse.Name}";
             }
             else
             {
-                response.ErrorMessages.Add($"Kursen fanns inte");
+                response.FailureMessage = $"Kursen fanns inte";
                 response.Success = false;
             }
             return response;
@@ -81,6 +81,7 @@ namespace WebAPI.Controllers
             response.Data = _context.Courses.SingleOrDefault(c => c.Id == Id);
 
             response.Success = true;
+            response.SuccessMessage = $"Hämtadde kurs med id {Id}";
             return response;
         }
     }

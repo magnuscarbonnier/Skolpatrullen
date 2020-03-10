@@ -10,15 +10,12 @@ using Microsoft.Extensions.Logging;
 namespace WebAPI.Controllers
 {
     [ApiController]
-    public class AdminController : ControllerBase
+    public class AdminController : APIController
     {
-        private readonly Context _context;
-        private readonly ILogger<AdminController> _logger;
-        public AdminController(Context context, ILogger<AdminController> logger)
+        public AdminController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
-            _context = context;
-            _logger = logger;
         }
+
         [HttpPost]
         [Route("[controller]/Add")]
         public APIResponse<UserSchool> Add(UserSchool userSchool)
@@ -29,6 +26,7 @@ namespace WebAPI.Controllers
                 _context.UserSchools.Add(userSchool);
                 _context.SaveChanges();
                 response.Success = true;
+                response.SuccessMessage = $"La till användare till skola";
                 response.Data = userSchool;
             }
             return response;
