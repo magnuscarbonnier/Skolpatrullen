@@ -13,10 +13,10 @@
                 Kursnamn
             </th>
             <th>
-                Start datum
+                Startdatum
             </th>
             <th>
-                Slut datum
+                Slutdatum
             </th>
             <th></th>
         </tr>
@@ -28,10 +28,10 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.StartDate))
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
             </td>
             <td>
                 @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
