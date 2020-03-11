@@ -11,19 +11,13 @@ namespace WebApp.Controllers
     {
         [HttpGet]
         [Route("[controller]/Calendar")]
-        public async Task<IActionResult> LessonCalendar()
+        public async Task<IActionResult> LessonCalendar(int id)
         {
             string message = await GetUser();
             if (User != null)
             {
-                var model = new LessonViewModel();
-                IEnumerable<LessonViewModel> lessonList = new List<LessonViewModel>();
-                var response = await APIGetAllLessons();
-                if (response.Data != null)
-                {
-                    lessonList = response.Data;
-                }
-                return View("LessonList", lessonList);
+                var course = (await APIGetCourseById(id)).Data;
+                return View("LessonList", course);
 
             }
             return RedirectToAction("Index", "Home");

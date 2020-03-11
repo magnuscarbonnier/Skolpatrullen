@@ -13,6 +13,7 @@ namespace WebApp.ViewModels
         public string start_date { get; set; }
         public string end_date { get; set; }
         public string course { get; set; }
+        public int courseId { get; set; }
 
         public static explicit operator LessonViewModel(Lesson lesson)
         {
@@ -21,7 +22,8 @@ namespace WebApp.ViewModels
                 id = lesson.Id,
                 text = lesson.Name,
                 start_date = lesson.StartDate.ToString("yyyy-MM-dd HH:mm"),
-                end_date = lesson.EndDate.ToString("yyyy-MM-dd HH:mm")
+                end_date = lesson.EndDate.ToString("yyyy-MM-dd HH:mm"),
+                course = lesson.Course?.Name
             };
         }
 
@@ -32,7 +34,8 @@ namespace WebApp.ViewModels
                 Id = lessonVM.id,
                 Name = lessonVM.text,
                 StartDate = DateTime.Parse(lessonVM.start_date, System.Globalization.CultureInfo.InvariantCulture),
-                EndDate = DateTime.Parse(lessonVM.end_date, System.Globalization.CultureInfo.InvariantCulture)
+                EndDate = DateTime.Parse(lessonVM.end_date, System.Globalization.CultureInfo.InvariantCulture),
+                CourseId = lessonVM.courseId
             };
         }
     }

@@ -1,7 +1,9 @@
-﻿@{
+﻿@model Database.Models.Course
+@{
     ViewData["Title"] = "Home Page";
 }
 
+@Html.HiddenFor(c => c.Id, new { Id = "CourseId" })
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100vh;'>
     <div class="dhx_cal_navline">
         <div class="dhx_cal_prev_button">&nbsp;</div>
@@ -10,7 +12,7 @@
         <div class="dhx_cal_date"></div>
         <div class="dhx_cal_tab" name="day_tab"></div>
         <div class="dhx_cal_tab" name="week_tab"></div>
-        <div class="dhx_cal_tab" name="month_tab"></div>
+        <div class="dhx_cal_tab" name="month_tab">Månad</div>
     </div>
     <div class="dhx_cal_header"></div>
     <div class="dhx_cal_data"></div>
@@ -23,6 +25,12 @@
         scheduler.templates.event_text = function (start, end, event) {
             return "<b>" + event.text + "</br><br><i>" + event.course + "</i>";
         }
+    });
+    scheduler.attachEvent("onEventCreated", function (id, e) {
+        let event = scheduler.getEvent(id);
+        let courseId = document.getElementById("CourseId").value;
+        event.courseId = parseInt(courseId);
+        return true;
     });
     scheduler.init('scheduler_here', new Date(2020, 2, 07), "week");
 

@@ -1,4 +1,4 @@
-﻿
+﻿@model Database.Models.Course
 @{
     ViewData["Title"] = "Lektioner";
 }
@@ -6,5 +6,5 @@
 <h1>Lektioner</h1>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_Calendar");}
+    @{await Html.RenderPartialAsync("_Calendar", Model);}
 }

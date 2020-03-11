@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebAPI.Controllers
 {
@@ -26,7 +27,7 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<LessonViewModel>> GetAllLessons()
         {
             APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
-            response.Data = _context.Lessons.ToList().Select(lesson => (LessonViewModel)lesson);
+            response.Data = _context.Lessons.Include(l => l.Course).Select(lesson => (LessonViewModel)lesson).ToList();
             response.Success = true;
             response.SuccessMessage = "Hämtade alla lektioner";
             return response;
