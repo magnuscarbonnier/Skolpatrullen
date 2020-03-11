@@ -178,6 +178,11 @@ namespace WebApp.Controllers
 
                 var response = await APIChangeProfilePicture(body);
             }
+            else if(vm.file == null)
+            {
+                var fileResponse = await APIGetFileById(Convert.ToInt32(User.ProfilePictureId));
+                var response = await APIDeleteFileById(fileResponse.Data.Id);
+            }
             return RedirectToAction("ProfilePage", "Profile");
 
 
