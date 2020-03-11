@@ -37,13 +37,13 @@ namespace WebAPI.Controllers
         {
             APIResponse<File> response = new APIResponse<File>();
             response.Data = _context.Files.SingleOrDefault(c => c.Id == Id);
-            APIResponse<User> userResponse = new APIResponse<User>();
-            userResponse.Data = _context.Users.SingleOrDefault(c => c.ProfilePictureId == Id);
+            //APIResponse<User> userResponse = new APIResponse<User>();
+            //userResponse.Data = _context.Users.SingleOrDefault(c => c.ProfilePictureId == Id);
 
-            if (response.Data != null && userResponse.Data != null)
+            if (response.Data != null)
             {
-                userResponse.Data.ProfilePictureId = null;
-                _context.SaveChanges();
+                //userResponse.Data.ProfilePictureId = null;
+                //_context.SaveChanges();
 
                 _context.Remove(response.Data);
                 _context.SaveChanges();

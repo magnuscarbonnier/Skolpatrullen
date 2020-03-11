@@ -23,6 +23,9 @@ namespace Database.Models
             builder.Entity<CourseRoom>().HasKey(cr => new { cr.CourseId, cr.RoomId });
 
             builder.Entity<User>().Property(u => u.IsSuperUser).HasDefaultValue(false);
+
+            builder.Entity<User>().Property(u => u.ProfilePictureId).HasDefaultValue(null);
+            builder.Entity<User>().HasOne(u => u.ProfilePicture).WithMany(pp => pp.Users).OnDelete(DeleteBehavior.SetNull);
         }
 
         public Context(DbContextOptions<Context> options) : base(options)
