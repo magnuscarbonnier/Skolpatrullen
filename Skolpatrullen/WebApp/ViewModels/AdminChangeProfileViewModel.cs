@@ -1,4 +1,5 @@
 ﻿using Database.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,6 @@ namespace WebApp.ViewModels
         [RegularExpression(@"^\d{8}-\d{4}", ErrorMessage = "Skriv hela personnumret, 12 siffror, 13 tecken med bindestreck")]
         public string SocialSecurityNr { get; set; }
         public bool IsSuperUser { get; set; }
-        public byte[] ProfilePicture { get; set; }
         public User User { get; set; }
         public User UpdateUser(User user)
         {

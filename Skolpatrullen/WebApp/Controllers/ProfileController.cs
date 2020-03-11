@@ -52,7 +52,7 @@ namespace WebApp.Controllers
             User = ProfileVM.UpdateUser(User);
             var response = await APIUpdateUser(User);
             SetResponseMessage(response);
-            return RedirectToAction("ProfilePage", "User");
+            return RedirectToAction("ProfilePage", "Profile");
         }
         [HttpGet]
         [Route("[controller]/AdminChangeProfile")]
@@ -171,7 +171,6 @@ namespace WebApp.Controllers
                     p1 = ms1.ToArray();
                 }
 
-
                 body.UserId = User.Id;
                 body.ProfilePicture = p1;
                 body.UploadDate = DateTime.Now;
@@ -180,6 +179,23 @@ namespace WebApp.Controllers
                 var response = await APIChangeProfilePicture(body);
             }
             return RedirectToAction("ProfilePage", "Profile");
+
+
+        }
+
+        [HttpPost]
+        [Route("[controller]/AdminRemoveProfilePicture")]
+        public async Task<IActionResult> AdminRemoveProfilePicture(RemoveProfilePicture vm)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var userResponse = await APIGetUserById(vm.UserId);
+            var response = await APIDeleteFileById(Convert.ToInt32(userResponse.Data.ProfilePictureId));
+
+            return RedirectToAction("UserListPage", "Profile");
 
 
         }
