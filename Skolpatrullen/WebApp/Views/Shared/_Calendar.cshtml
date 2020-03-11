@@ -18,8 +18,55 @@
     <div class="dhx_cal_data"></div>
 </div>
 <script>
-    //uncomment this to make scheduler readonly
-    //scheduler.config.readonly = true;
+        //uncomment this to make scheduler readonly
+        //scheduler.config.readonly = true;
+        const compactHeader = {
+        rows: [
+            { 
+                cols: [
+                    "prev",
+                    "date",
+                    "next",
+                ]
+            },
+            { 
+                cols: [
+                    "day",
+                    "week",
+                    "month",
+                    "spacer",
+                    "today"
+                ]
+            }
+        ]
+    };
+ 
+    const fullHeader = [
+        "day",
+        "week",
+        "month",
+        "date",
+        "prev",
+        "today",
+        "next"
+    ];
+    // add a switch to select an appropriate config for a current screen size
+    function resetConfig(){
+        let header;
+        if (window.innerWidth < 1000) {
+            header = compactHeader;
+        } else {
+            header = fullHeader;
+ 
+        }
+        scheduler.config.header = header;
+        return true;
+    }
+    resetConfig();
+    scheduler.attachEvent("onBeforeViewChange", resetConfig);
+    scheduler.attachEvent("onSchedulerResize", resetConfig);
+ 
+    scheduler.config.responsive_lightbox = true; // responsive lightbox
     scheduler.config.xml_date = "%Y-%m-%d %H:%i";
     scheduler.attachEvent("onTemplatesReady", function () {
         scheduler.templates.event_text = function (start, end, event) {
