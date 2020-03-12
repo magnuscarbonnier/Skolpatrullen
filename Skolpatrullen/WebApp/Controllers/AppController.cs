@@ -185,6 +185,11 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/User/ChangePassword", body);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
+        public async Task<APIResponse> APIForceChangePassword(ChangePasswordBody body)
+        {
+            HttpResponseMessage response = await APIPost("/User/ForceChangePassword", body);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
         public async Task<APIResponse<School>> APIAddSchool(School school)
         {
             HttpResponseMessage response = await APIPost("/School/AddSchool", school);
@@ -212,7 +217,17 @@ namespace WebApp.Controllers
         }
         public async Task<APIResponse<PasswordRecovery>> APIRecoverPasswordWithEmail(string email)
         {
-            HttpResponseMessage response = await APIGet("PasswordRecovery/ByEmail/" + email);
+            HttpResponseMessage response = await APIGet("/PasswordRecovery/ByEmail/" + email);
+            return (APIResponse<PasswordRecovery>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<PasswordRecovery>));
+        }
+        public async Task<APIResponse<PasswordRecovery>> APIGetPasswordRecoveryByToken(string token)
+        {
+            HttpResponseMessage response = await APIGet("/PasswordRecovery/GetByToken/" + token);
+            return (APIResponse<PasswordRecovery>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<PasswordRecovery>));
+        }
+        public async Task<APIResponse<PasswordRecovery>> APIDeletePasswordRecoveryByToken(string token)
+        {
+            HttpResponseMessage response = await APIGet("/PasswordRecovery/DeleteByToken/" + token);
             return (APIResponse<PasswordRecovery>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<PasswordRecovery>));
         }
         public async Task<APIResponse<IEnumerable<LessonViewModel>>> APIGetAllLessons()

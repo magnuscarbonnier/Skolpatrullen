@@ -5,18 +5,22 @@
 <div class="container">
     <div class="row">
         <div class="col"></div>
-        <div class="col"><a class="btn btn-outline-dark" asp-area="" asp-controller="Register" asp-action="RegisterPage">Registrera dig</a><hr /></div>
+        <div class="col">
+            <a class="btn btn-outline-dark" asp-area="" asp-controller="Register" asp-action="RegisterPage">Registrera dig</a>
+            <a class="btn btn-outline-dark" asp-area="" asp-controller="PasswordRecovery" asp-action="RecoverPassword">Glömt lösenord?</a>
+            <hr />
+        </div>
         <div class="col"></div>
     </div>
 </div>
 
-    
+
 <div class="container">
     <div class="row">
         <div class="col">
         </div>
         <div class="col">
-            
+
             <form method="post" asp-action="LoginPage">
                 <div class="form-group">
                     <label asp-for="Email">Epostadress</label>
