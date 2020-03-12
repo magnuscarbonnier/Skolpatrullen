@@ -4,14 +4,16 @@ using Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20200309130246_Add_FileTable")]
+    partial class Add_FileTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,9 +241,7 @@ namespace Database.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProfilePictureId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(null);
+                        .HasColumnType("int");
 
                     b.Property<string>("SocialSecurityNr")
                         .IsRequired()
@@ -340,8 +340,7 @@ namespace Database.Migrations
                 {
                     b.HasOne("Database.Models.File", "ProfilePicture")
                         .WithMany("Users")
-                        .HasForeignKey("ProfilePictureId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("ProfilePictureId");
                 });
 
             modelBuilder.Entity("Database.Models.UserSchool", b =>
