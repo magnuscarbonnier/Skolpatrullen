@@ -116,18 +116,5 @@ namespace WebApp.Controllers
             }
             return View(model);
         }
-        [HttpGet]
-        [Route("[controller]/{id}")]
-        public async Task<IActionResult> GetCourseById(int id)
-        {
-            string message = await GetUser();
-            var model = new Course();
-            var courseResponse = await APIGetCourseById(id);
-            if (courseResponse.Data != null)
-            {
-                model = courseResponse.Data;
-            }
-            return View("CourseDetails", model);
-        }
     }
 }

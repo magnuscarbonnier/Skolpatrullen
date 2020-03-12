@@ -241,30 +241,10 @@ namespace WebAPI.Controllers
 
             if (user != null)
             {
-
-                File file = new File();
-
-                file.Binary = body.ProfilePicture;
-                file.UploadDate = body.UploadDate;
-                file.FileExtension = body.FileExtension;
-
-                _context.Files.Add(file);
-
-                if(user.ProfilePictureId != null)
-                {
-                    var currentPic = _context.Files.SingleOrDefault(c => c.Id == user.ProfilePictureId);
-
-                    if (currentPic != null)
-                    {
-                        _context.Remove(currentPic);
-                    }
-                }
+                user.ProfilePictureImage = body.ProfilePicture;
+                
                 _context.SaveChanges();
-                user.ProfilePictureId = file.Id;
-                _context.SaveChanges();
-
-                response.Success = true;    
-
+                response.Success = true;
             }
             else
             {
