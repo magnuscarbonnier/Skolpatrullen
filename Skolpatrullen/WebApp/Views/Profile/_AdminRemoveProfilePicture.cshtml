@@ -1,0 +1,43 @@
+﻿@model WebApp.ViewModels.RemoveProfilePicture
+
+
+<div>
+    <a asp-action="RemoveProfilePictureModal" data-toggle="modal" data-target="#RemoveProfilePicModal">Ta bort profilbild</a>
+</div>
+
+
+
+<div class="modal fade" id="RemoveProfilePicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Är du säker?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form enctype="multipart/form-data" asp-action="AdminRemoveProfilePicture">
+                @Html.HiddenFor(m => m.UserId)
+                
+                <div class=" modal-body">
+
+
+                    @{
+                        var base64 = Convert.ToBase64String(Model.Picture);
+                        var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        <img src="@imgsrc" style="max-width:100px;max-height:120px" class="img-thumbnail" />
+                    }
+
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                    <input type="submit" asp-action="AdminRemoveProfilePicture" value="Ta bort bild" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
