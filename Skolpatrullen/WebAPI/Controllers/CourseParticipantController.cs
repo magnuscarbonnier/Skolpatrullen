@@ -88,6 +88,7 @@ namespace WebAPI.Controllers
         }
         CourseParticipant AddCourseParticipant(CourseParticipant courseParticipant)
         {
+            courseParticipant.ApplicationDate = DateTime.Now;
             _context.CourseParticipants.Add(courseParticipant);
             _context.SaveChanges();
             return courseParticipant;
