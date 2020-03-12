@@ -27,9 +27,13 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<LessonViewModel>> GetAllLessons()
         {
             APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
-            response.Data = _context.Lessons.Include(l => l.Course).Select(lesson => (LessonViewModel)lesson).ToList();
-            response.Success = true;
-            response.SuccessMessage = "Hämtade alla lektioner";
+            var lessonlist = _context.Lessons.Include(l => l.Course).Select(lesson => (LessonViewModel)lesson).ToList();
+            if(lessonlist != null)
+            {
+                response.Data = lessonlist;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla lektioner";
+            }
             return response;
         }
 
@@ -38,59 +42,79 @@ namespace WebAPI.Controllers
         public APIResponse<LessonViewModel> GetLessonById(int id)
         {
             APIResponse<LessonViewModel> response = new APIResponse<LessonViewModel>();
-            response.Data = (LessonViewModel)_context.Lessons.Find(id);
-
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade alla lektioner för kurs med id {id}";
+            var lesson = (LessonViewModel)_context.Lessons.Find(id);
+            if(lesson != null)
+            {
+                response.Data = lesson;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade lektionen med id {id}";
+            }
             return response;
         }
 
         [HttpPost]
         [Route("[controller]")]
-        public ObjectResult AddLesson([FromForm] LessonViewModel lessonVM)
+        public APIResponse<Lesson> AddLesson([FromForm] LessonViewModel lessonVM)
         {
+            APIResponse<Lesson> response = new APIResponse<Lesson>();
             var newLesson = (Lesson)lessonVM;
-            _context.Lessons.Add(newLesson);
-            _context.SaveChanges();
-
-            return Ok(new
+            if(newLesson != null)
             {
-                action = "Lektion tillagd"
-            });
+                _context.Lessons.Add(newLesson);
+                _context.SaveChanges();
+                response.Data = newLesson;
+                response.Success = true;
+                response.SuccessMessage = $"Lektionen med id: {lessonVM.id} tillagd";
+            } else
+            {
+                response.FailureMessage = $"Lektionen fanns inte";
+                response.Success = false;
+            }
+            return response;
         }
 
         [HttpPut]
         [Route("[controller]/{id}")]
-        public ObjectResult UpdateLesson(int id, [FromForm] LessonViewModel lessonVM)
+        public APIResponse<Lesson> UpdateLesson(int id, [FromForm] LessonViewModel lessonVM)
         {
+            APIResponse<Lesson> response = new APIResponse<Lesson>();
             var updatedLesson = (Lesson)lessonVM;
             var dbLesson = _context.Lessons.Find(id);
-            dbLesson.Name = updatedLesson.Name;
-            dbLesson.StartDate = updatedLesson.StartDate;
-            dbLesson.EndDate = updatedLesson.EndDate;
-            _context.SaveChanges();
-
-            return Ok(new
+            if(dbLesson != null)
             {
-                action = "Lektion uppdaterad"
-            });
+                dbLesson.Name = updatedLesson.Name;
+                dbLesson.StartDate = updatedLesson.StartDate;
+                dbLesson.EndDate = updatedLesson.EndDate;
+                _context.SaveChanges();
+                response.Data = updatedLesson;
+                response.Success = true;
+                response.SuccessMessage = $"Lektion {id} uppdaterad";
+            } else
+            {
+                response.FailureMessage = $"Lektionen {id} fanns ej";
+                response.Success = false;
+            }
+            return response;
         }
 
         [HttpDelete("{id}")]
         [Route("[controller]/{id}")]
-        public ObjectResult DeleteLesson(int id)
+        public APIResponse<Lesson> DeleteLesson(int id)
         {
+            APIResponse<Lesson> response = new APIResponse<Lesson>();
             var lesson = _context.Lessons.Find(id);
             if (lesson != null)
             {
                 _context.Lessons.Remove(lesson);
                 _context.SaveChanges();
-            }
-
-            return Ok(new
+                response.Success = true;
+                response.SuccessMessage = $"Lektion {id} borttagen";
+            } else
             {
-                action = "Lektion borttagen"
-            });
+                response.FailureMessage = $"Lektionen med id:{id} kunde ej tas bort";
+                response.Success = false;
+            }
+            return response;
         }
     }
 }
