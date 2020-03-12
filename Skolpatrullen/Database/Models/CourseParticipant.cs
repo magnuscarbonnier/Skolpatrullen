@@ -12,7 +12,8 @@ namespace Database.Models
         public Roles Role { get; set; }
         public string Grade { get; set; }
         public Status Status { get; set; }
-       
+        public DateTime ApplicationDate { get; set; }
+
         public User User { get; set; }
         public Course Course { get; set; }
     }

@@ -8,22 +8,17 @@
 
 <hr />
 
-@foreach (var userschool in Model.UserSchoolList)
-{
-    foreach (var course in Model.CourseList.Where(course => course.SchoolId == userschool.SchoolId))
+
+    @foreach (var cp in Model.CourseParticipantList)
     {
-    @foreach (var cp in Model.CourseParticipantList.Where(cp => cp.CourseId == course.Id))
-    {
-        @if (cp.Status == Database.Models.Status.Applied)
-        {
+        
          <div class="list-group-item bg-light border-dark">
             <form asp-action="Update">
-                @Html.HiddenFor(c => cp.Id)
-                
-                <div>@Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().FirstName @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().LastNames, @Model.UserList.Where(user => user.Id == cp.UserId).SingleOrDefault().SocialSecurityNr</div>
-                    <div>Skola: @Model.SchoolList.Where(school => school.Id == course.SchoolId).SingleOrDefault().Name</div>
-                        <div>Kurs: @course.Name</div>
-                            <div><label>Status: </label>@Html.DisplayFor(c => cp.Status)</div>
+                @Html.HiddenFor(d=>cp.Id)
+                <div>@cp.User.FirstName @cp.User.LastNames</div>
+                    <div>Skola: @Model.SchoolList.SingleOrDefault(sc=>sc.Id==cp.Course.SchoolId).Name</div>
+                        <div>Kurs: @cp.Course.Name</div>
+                            <div>Status: @Html.DisplayFor(c => cp.Status)</div>
 
                 <div class="form-group">
                     <input type="submit" name="answer" value="@Lib.Constants.AcceptCP" asp-route-Id="@cp.Id" class="btn btn-success" />
@@ -33,7 +28,5 @@
             </form>
 
         </div>
-        }
+        
     }
-    }
-}

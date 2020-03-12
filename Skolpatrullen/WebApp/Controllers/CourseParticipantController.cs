@@ -57,46 +57,41 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
-            if (User.IsSuperUser != true)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            
             var model = new AdminCourseParticipantViewModel();
             var userSchoolResponse = await APIGetAllUserSchools();
-            if (userSchoolResponse != null)
-            {
-                //if (User.IsSuperUser == true)
-                //{
-                //    model.UserSchoolList = userSchoolResponse.Data;
-                //}
-                //else
-                //{
-                    model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
-                //}
-            }
-
+           
             var courseResponse = await APIGetAllCourses();
-            if (courseResponse.Data != null)
-            {
-                model.CourseList = courseResponse.Data;
-            }
-
+            
             var cpResponse = await APIGetAllCourseParticipants();
-            if (cpResponse != null)
-            {
-                model.CourseParticipantList = cpResponse.Data;
-            }
+            
             var userResponse = await APIGetAllUsers();
-            if (userResponse != null)
-            {
-                model.UserList = userResponse.Data;
-            }
+            
             var schoolResponse = await APIGetAllSchools();
-            if (schoolResponse != null)
+            
+            if (userSchoolResponse != null && courseResponse != null && cpResponse != null && userResponse != null && schoolResponse != null)
             {
+                var response = from cp in cpResponse.Data
+                               join co in courseResponse.Data on cp.CourseId equals co.Id
+                               join us in userResponse.Data on cp.UserId equals us.Id
+                               join sc in schoolResponse.Data on co.SchoolId equals sc.Id
+                               join usS in userSchoolResponse.Data on sc.Id equals usS.Id
+                               where usS.UserId == User.Id && usS.IsAdmin == true || us.IsSuperUser == true
+                               orderby cp.Id
+                               select new CourseParticipant
+                               {
+                                   Course = co,
+                                   CourseId = cp.CourseId,
+                                   Grade = cp.Grade,
+                                   Role = cp.Role,
+                                   Status = cp.Status,
+                                   Id = cp.Id,
+                                   UserId = cp.UserId,
+                                   User = us
+                               };
+                model.CourseParticipantList = response.ToList();
                 model.SchoolList = schoolResponse.Data;
             }
-
             return View(model);
         }
         [HttpPost]
