@@ -15,6 +15,7 @@
          <div class="list-group-item bg-light border-dark">
             <form asp-action="Update">
                 @Html.HiddenFor(d=>cp.Id)
+                <div>Ansökningsdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", cp.ApplicationDate))</div>
                 <div>@cp.User.FirstName @cp.User.LastNames</div>
                     <div>Skola: @Model.SchoolList.SingleOrDefault(sc=>sc.Id==cp.Course.SchoolId).Name</div>
                         <div>Kurs: @cp.Course.Name</div>
