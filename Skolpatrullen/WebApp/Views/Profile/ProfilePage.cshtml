@@ -16,9 +16,9 @@
 
 
             @{
-                if (Model.PVM.User.ProfilePictureImage != null)
+                if (Model.PVM.User.ProfilePicture != null)
                 {
-                    var base64 = Convert.ToBase64String(Model.PVM.User.ProfilePictureImage);
+                    var base64 = Convert.ToBase64String(Model.PVM.User.ProfilePicture.Binary);
                     var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
                     <img src="@imgsrc" style="max-width:100px;max-height:120px" class="img-thumbnail" />
                 }
