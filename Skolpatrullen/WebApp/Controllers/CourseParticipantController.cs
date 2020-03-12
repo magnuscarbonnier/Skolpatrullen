@@ -73,7 +73,7 @@ namespace WebApp.Controllers
                                join us in userResponse.Data on cp.UserId equals us.Id
                                join sc in schoolResponse.Data on co.SchoolId equals sc.Id
                                join usS in userSchoolResponse.Data on sc.Id equals usS.SchoolId
-                               where cp.Status==Status.Applied
+                               where cp.Status==Status.Applied && usS.UserId==User.Id
                                orderby cp.ApplicationDate ascending
                                select new CourseParticipant
                                {
