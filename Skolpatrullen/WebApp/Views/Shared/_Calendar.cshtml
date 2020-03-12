@@ -18,9 +18,7 @@
     <div class="dhx_cal_data"></div>
 </div>
 <script>
-        //uncomment this to make scheduler readonly
-        //scheduler.config.readonly = true;
-        const compactHeader = {
+    const compactHeader = {
         rows: [
             { 
                 cols: [
@@ -65,12 +63,13 @@
     resetConfig();
     scheduler.attachEvent("onBeforeViewChange", resetConfig);
     scheduler.attachEvent("onSchedulerResize", resetConfig);
- 
-    scheduler.config.responsive_lightbox = true; // responsive lightbox
+    scheduler.config.responsive_lightbox = true;
+
+
     scheduler.config.xml_date = "%Y-%m-%d %H:%i";
     scheduler.attachEvent("onTemplatesReady", function () {
         scheduler.templates.event_text = function (start, end, event) {
-            return "<b>" + event.text + "</br><br><i>" + event.course + "</i>";
+            return "<i>" + event.course + "</i></br><b>" + event.text + "</b>";
         }
     });
     scheduler.attachEvent("onEventCreated", function (id, e) {
@@ -79,13 +78,20 @@
         event.courseId = parseInt(courseId);
         return true;
     });
-    scheduler.init('scheduler_here', new Date(2020, 2, 07), "week");
 
+    //uncomment this to make scheduler readonly
+    //scheduler.config.readonly = true;
+    scheduler.init('scheduler_here', new Date(), "month");
     //load data from backend
     scheduler.load("https://localhost:44367/lesson", "json");
+   
     //connect backend to scheduler
     var dp = new dataProcessor("https://localhost:44367/lesson");
     dp.init(scheduler);
+    dp.attachEvent("onAfterUpdate", function (id, action, tid, response) {
+        scheduler.clearAll();
+        scheduler.load("https://localhost:44367/lesson", "json");
+    });
 
     //set data exchange mode
     dp.setTransactionMode("REST");
