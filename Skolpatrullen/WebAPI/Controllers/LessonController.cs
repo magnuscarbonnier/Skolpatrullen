@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         public APIResponse<LessonViewModel> GetLessonById(int id)
         {
             APIResponse<LessonViewModel> response = new APIResponse<LessonViewModel>();
-            var lesson = (LessonViewModel)_context.Lessons.Find(id);
+            var lesson = (LessonViewModel)_context.Lessons.SingleOrDefault(l => l.Id == id);
             if(lesson != null)
             {
                 response.Data = lesson;
@@ -79,7 +79,7 @@ namespace WebAPI.Controllers
         {
             APIResponse<Lesson> response = new APIResponse<Lesson>();
             var updatedLesson = (Lesson)lessonVM;
-            var dbLesson = _context.Lessons.Find(id);
+            var dbLesson = _context.Lessons.SingleOrDefault(l => l.Id == id);
             if(dbLesson != null)
             {
                 dbLesson.Name = updatedLesson.Name;
@@ -102,7 +102,7 @@ namespace WebAPI.Controllers
         public APIResponse<Lesson> DeleteLesson(int id)
         {
             APIResponse<Lesson> response = new APIResponse<Lesson>();
-            var lesson = _context.Lessons.Find(id);
+            var lesson = _context.Lessons.SingleOrDefault(l => l.Id == id);
             if (lesson != null)
             {
                 _context.Lessons.Remove(lesson);
