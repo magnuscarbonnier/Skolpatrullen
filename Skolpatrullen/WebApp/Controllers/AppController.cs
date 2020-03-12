@@ -215,5 +215,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await (APIGet("/Lesson/"));
             return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
         }
+        public async Task<APIResponse<File>> APIGetFileById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/File/GetFileById/" + Id.ToString());
+            return (APIResponse<File>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<File>));
+        }
+        public async Task<APIResponse<File>> APIDeleteFileById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/File/DeleteFileById/" + Id.ToString());
+            return (APIResponse<File>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<File>));
+        }
     }
 }
