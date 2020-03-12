@@ -210,5 +210,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/Course/GetCourseById/" + Id.ToString());
             return (APIResponse<Course>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Course>));
         }
+        public async Task<APIResponse<PasswordRecovery>> APIRecoverPasswordWithEmail(string email)
+        {
+            HttpResponseMessage response = await APIGet("PasswordRecovery/ByEmail/" + email);
+            return (APIResponse<PasswordRecovery>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<PasswordRecovery>));
+        }
     }
 }

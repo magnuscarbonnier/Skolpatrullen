@@ -11,5 +11,9 @@ namespace Database.Models
         public int UserId { get; set; }
         public DateTime ExpireTime { get; set; }
         public User User { get; set; }
+        public PasswordRecovery()
+        {
+            Token = Guid.NewGuid().ToString();
+        }
     }
 }
