@@ -18,7 +18,6 @@ namespace WebApp.Controllers
             {
                 var course = (await APIGetCourseById(id)).Data;
                 return View("LessonList", course);
-
             }
             return RedirectToAction("Index", "Home");
         }
