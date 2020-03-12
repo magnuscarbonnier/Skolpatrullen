@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200311102234_add-courseid-to-lesson")]
-    partial class addcourseidtolesson
+    [Migration("20200312162448_add-lessons")]
+    partial class addlessons
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,6 +94,32 @@ namespace Database.Migrations
                     b.ToTable("CourseRoom");
                 });
 
+            modelBuilder.Entity("Database.Models.File", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Binary")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("FileExtension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UploadDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Files");
+                });
+
             modelBuilder.Entity("Database.Models.Lesson", b =>
                 {
                     b.Property<int>("Id")
@@ -143,6 +169,29 @@ namespace Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("LoginSessions");
+                });
+
+            modelBuilder.Entity("Database.Models.PasswordRecovery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordRecoveries");
                 });
 
             modelBuilder.Entity("Database.Models.Room", b =>
@@ -241,14 +290,18 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("ProfilePictureImage")
-                        .HasColumnType("varbinary(max)");
+                    b.Property<int?>("ProfilePictureId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(null);
 
                     b.Property<string>("SocialSecurityNr")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProfilePictureId");
 
                     b.ToTable("Users");
                 });
@@ -335,6 +388,15 @@ namespace Database.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Database.Models.PasswordRecovery", b =>
+                {
+                    b.HasOne("Database.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Database.Models.Room", b =>
                 {
                     b.HasOne("Database.Models.School", "School")
@@ -342,6 +404,14 @@ namespace Database.Migrations
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Models.User", b =>
+                {
+                    b.HasOne("Database.Models.File", "ProfilePicture")
+                        .WithMany("Users")
+                        .HasForeignKey("ProfilePictureId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Database.Models.UserSchool", b =>

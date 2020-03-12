@@ -208,6 +208,26 @@ namespace WebAPI.Controllers
 
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/ForceChangePassword")]
+        public APIResponse ForceChangePassword(ChangePasswordBody body)
+        {
+            var response = new APIResponse();
+            var user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+            if (user != null)
+            {
+                user.Password = ComputeSha256Hash(body.NewPassword);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Ändrade lösenord för användare med mejladdress {user.Email}";
+            }
+            else
+            {
+                response.FailureMessage = $"Hittar inte användare med Id: " + body.UserId;
+                response.Success = false;
+            }
+            return response;
+        }
 
         [HttpGet]
         [Route("[controller]/GetUserById/{Id}")]
