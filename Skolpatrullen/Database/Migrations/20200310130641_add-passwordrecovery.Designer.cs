@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200310222333_lessons")]
-    partial class lessons
+    [Migration("20200310130641_add-passwordrecovery")]
+    partial class addpasswordrecovery
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,33 +94,6 @@ namespace Database.Migrations
                     b.ToTable("CourseRoom");
                 });
 
-            modelBuilder.Entity("Database.Models.Lesson", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.ToTable("Lessons");
-                });
-
             modelBuilder.Entity("Database.Models.LoginSession", b =>
                 {
                     b.Property<int>("Id")
@@ -143,6 +116,29 @@ namespace Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("LoginSessions");
+                });
+
+            modelBuilder.Entity("Database.Models.PasswordRecovery", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordRecoveries");
                 });
 
             modelBuilder.Entity("Database.Models.Room", b =>
@@ -317,14 +313,16 @@ namespace Database.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Database.Models.Lesson", b =>
+            modelBuilder.Entity("Database.Models.LoginSession", b =>
                 {
-                    b.HasOne("Database.Models.Course", "Course")
-                        .WithMany("CourseLessons")
-                        .HasForeignKey("CourseId");
+                    b.HasOne("Database.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("Database.Models.LoginSession", b =>
+            modelBuilder.Entity("Database.Models.PasswordRecovery", b =>
                 {
                     b.HasOne("Database.Models.User", "User")
                         .WithMany()
