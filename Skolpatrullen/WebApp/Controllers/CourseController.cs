@@ -84,7 +84,7 @@ namespace WebApp.Controllers
             {
                 if (!string.IsNullOrEmpty(courseVM.Search))
                 {
-                    model.CourseList = courseResponse.Data.Where(s => s.Name.Contains(courseVM.Search));
+                    model.CourseList = courseResponse.Data.Where(s => s.Name.ToLower().Contains(courseVM.Search.ToLower()));
                 }
                 else
                 {
