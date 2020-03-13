@@ -12,8 +12,8 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom border-top box-shadow mb-3">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom border-top box-shadow">
+            <div class="container">
                 <a class="navbar-brand text-dark" asp-area=" " asp-controller="Home" asp-action="Index"><img src="~/SP_logo.jpg" height="75" width="75" alt="" /> </a>
                 <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -33,17 +33,20 @@
 
 
                         @{
+
                             if (ViewBag.User != null)
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="ProfilePage"> Min profil</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
-                                </li>
+                                @*<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="~/user-solid.svg" width="25" height="25" />
+                    </a>
+                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
+                    </div>
+                </li>*@
 
                                 if (ViewBag.User.IsSuperUser == true)
                                 {
@@ -65,6 +68,19 @@
 
                                     </li>
                                 }
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <img src="~/user-solid.svg" width="25" height="25" />
+                                    </a>
+                                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
+                                        <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
+                                    </div>
+                                </li>
+
 
                             }
                             else
@@ -103,12 +119,17 @@
         </main>
     </div>
 
-    <footer class="border-top footer embed-responsive border-top box-shadow mb-3">
-        <div class="col text-sm-center">
-            <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
-            <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
-            <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
-            <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
+    <footer class="border-top footer embed-responsive border-top box-shadow">
+        <div class="row">
+
+            <div class="col col-sm-8 text-center">
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
+            </div>
+           <div class="col col-sm-4 text-center">
+                <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
+            </div>
         </div>
     </footer>
 
