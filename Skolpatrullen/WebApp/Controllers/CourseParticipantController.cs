@@ -57,7 +57,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
-            
+
             var model = new AdminCourseParticipantViewModel();
 
             var userSchoolResponse = await APIGetAllUserSchools();
@@ -65,30 +65,56 @@ namespace WebApp.Controllers
             var cpResponse = await APIGetAllCourseParticipants();
             var userResponse = await APIGetAllUsers();
             var schoolResponse = await APIGetAllSchools();
-            
-            if (userSchoolResponse !=null && courseResponse != null && cpResponse != null && userResponse != null && schoolResponse != null)
+
+            if (userSchoolResponse != null && courseResponse != null && cpResponse != null && userResponse != null && schoolResponse != null)
             {
-                var response = from cp in cpResponse.Data
-                               join co in courseResponse.Data on cp.CourseId equals co.Id
-                               join us in userResponse.Data on cp.UserId equals us.Id
-                               join sc in schoolResponse.Data on co.SchoolId equals sc.Id
-                               join usS in userSchoolResponse.Data on sc.Id equals usS.SchoolId
-                               where cp.Status==Status.Applied && usS.UserId==User.Id
-                               orderby cp.ApplicationDate ascending
-                               select new CourseParticipant
-                               {
-                                   ApplicationDate=cp.ApplicationDate,
-                                   Course = co,
-                                   CourseId = cp.CourseId,
-                                   Grade = cp.Grade,
-                                   Role = cp.Role,
-                                   Status = cp.Status,
-                                   Id = cp.Id,
-                                   UserId = cp.UserId,
-                                   User = us
-                               };
-                model.CourseParticipantList = response.ToList();
-                model.SchoolList = schoolResponse.Data;
+                if (User.IsSuperUser)
+                {
+                    var response = from cp in cpResponse.Data
+                                   join co in courseResponse.Data on cp.CourseId equals co.Id
+                                   join us in userResponse.Data on cp.UserId equals us.Id
+                                   join sc in schoolResponse.Data on co.SchoolId equals sc.Id
+                                   where cp.Status == Status.Applied
+                                   orderby cp.ApplicationDate ascending
+                                   select new CourseParticipant
+                                   {
+                                       ApplicationDate = cp.ApplicationDate,
+                                       Course = co,
+                                       CourseId = cp.CourseId,
+                                       Grade = cp.Grade,
+                                       Role = cp.Role,
+                                       Status = cp.Status,
+                                       Id = cp.Id,
+                                       UserId = cp.UserId,
+                                       User = us
+                                   };
+                    model.CourseParticipantList = response.ToList();
+                    model.SchoolList = schoolResponse.Data;
+                }
+                else
+                {
+                    var response = from cp in cpResponse.Data
+                                   join co in courseResponse.Data on cp.CourseId equals co.Id
+                                   join us in userResponse.Data on cp.UserId equals us.Id
+                                   join sc in schoolResponse.Data on co.SchoolId equals sc.Id
+                                   join usS in userSchoolResponse.Data on sc.Id equals usS.SchoolId
+                                   where cp.Status == Status.Applied && usS.UserId == User.Id && usS.IsAdmin == true
+                                   orderby cp.ApplicationDate ascending
+                                   select new CourseParticipant
+                                   {
+                                       ApplicationDate = cp.ApplicationDate,
+                                       Course = co,
+                                       CourseId = cp.CourseId,
+                                       Grade = cp.Grade,
+                                       Role = cp.Role,
+                                       Status = cp.Status,
+                                       Id = cp.Id,
+                                       UserId = cp.UserId,
+                                       User = us
+                                   };
+                    model.CourseParticipantList = response.ToList();
+                    model.SchoolList = schoolResponse.Data;
+                }
             }
             return View(model);
         }
