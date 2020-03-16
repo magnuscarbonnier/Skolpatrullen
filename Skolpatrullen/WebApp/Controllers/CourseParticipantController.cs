@@ -165,13 +165,21 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                IEnumerable<CourseParticipant> cp = new List<CourseParticipant>();
-                var response = await APIGetAllCourseParticipants();
-                if (response.Data != null)
+                var cpresponse = await APIGetAllCourseParticipants();
+                var userresponse = await APIGetAllUsers();
+                if (cpresponse != null && userresponse != null)
                 {
-                    cp = response.Data.Where(x => x.CourseId == Id);
+                    var response = cpresponse.Data
+                        .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
+                        .Where(comb => comb.co.CourseId == Id)
+                        .Select(comb => new CourseParticipantViewModel
+                        {
+                            Name = comb.u.FirstName + " " + comb.u.LastNames,
+                            Role = comb.co.Role
+                        });
+                    return View(response);
                 }
-                return View(cp);
+                return View();
             }
             return View();
         }
