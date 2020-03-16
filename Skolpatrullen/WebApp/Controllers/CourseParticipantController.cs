@@ -158,5 +158,22 @@ namespace WebApp.Controllers
             SetResponseMessage(response);
             return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
         }
+        [HttpGet]
+        [Route("[controller]/CourseParticipantList")]
+        public async Task<IActionResult> CourseParticipantList(int Id)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                IEnumerable<CourseParticipant> cp = new List<CourseParticipant>();
+                var response = await APIGetAllCourseParticipants();
+                if (response.Data != null)
+                {
+                    cp = response.Data.Where(x => x.CourseId == Id);
+                }
+                return View(cp);
+            }
+            return View();
+        }
     }
 }
