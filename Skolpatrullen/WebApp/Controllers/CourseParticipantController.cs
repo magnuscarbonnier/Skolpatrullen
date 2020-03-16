@@ -57,46 +57,67 @@ namespace WebApp.Controllers
         public async Task<IActionResult> AdminCourseParticipant()
         {
             string message = await GetUser();
-            if (User.IsSuperUser != true)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+
             var model = new AdminCourseParticipantViewModel();
+
             var userSchoolResponse = await APIGetAllUserSchools();
-            if (userSchoolResponse != null)
-            {
-                //if (User.IsSuperUser == true)
-                //{
-                //    model.UserSchoolList = userSchoolResponse.Data;
-                //}
-                //else
-                //{
-                    model.UserSchoolList = userSchoolResponse.Data.Where(c => c.UserId == User.Id);
-                //}
-            }
-
             var courseResponse = await APIGetAllCourses();
-            if (courseResponse.Data != null)
-            {
-                model.CourseList = courseResponse.Data;
-            }
-
             var cpResponse = await APIGetAllCourseParticipants();
-            if (cpResponse != null)
-            {
-                model.CourseParticipantList = cpResponse.Data;
-            }
             var userResponse = await APIGetAllUsers();
-            if (userResponse != null)
-            {
-                model.UserList = userResponse.Data;
-            }
             var schoolResponse = await APIGetAllSchools();
-            if (schoolResponse != null)
-            {
-                model.SchoolList = schoolResponse.Data;
-            }
 
+            if (userSchoolResponse != null && courseResponse != null && cpResponse != null && userResponse != null && schoolResponse != null)
+            {
+                if (User.IsSuperUser)
+                {
+                    //Method syntax
+                    var response = cpResponse.Data
+                        .Join(courseResponse.Data, cp => cp.CourseId, co => co.Id, (cp, co) => new { cp, co })
+                        .Join(userResponse.Data, comb => comb.cp.UserId, us => us.Id, (comb, us) => new { comb.cp, comb.co, us })
+                        .Join(schoolResponse.Data, comb => comb.co.SchoolId, sc => sc.Id, (comb, sc) => new { comb.cp, comb.co, comb.us, sc })
+                        .Where(comb => comb.cp.Status == Status.Applied)
+                        .OrderBy(comb => comb.cp.ApplicationDate)
+                        .Select(comb => new CourseParticipant
+                        {
+                            ApplicationDate = comb.cp.ApplicationDate,
+                            Course = comb.co,
+                            CourseId = comb.cp.CourseId,
+                            Grade = comb.cp.Grade,
+                            Role = comb.cp.Role,
+                            Status = comb.cp.Status,
+                            Id = comb.cp.Id,
+                            UserId = comb.cp.UserId,
+                            User = comb.us
+                        });
+                    model.CourseParticipantList = response.ToList();
+                    model.SchoolList = schoolResponse.Data;
+                }
+                else
+                {
+                    //Query syntax
+                    var response = from cp in cpResponse.Data
+                                   join co in courseResponse.Data on cp.CourseId equals co.Id
+                                   join us in userResponse.Data on cp.UserId equals us.Id
+                                   join sc in schoolResponse.Data on co.SchoolId equals sc.Id
+                                   join usS in userSchoolResponse.Data on sc.Id equals usS.SchoolId
+                                   where cp.Status == Status.Applied && usS.UserId == User.Id && usS.IsAdmin == true
+                                   orderby cp.ApplicationDate ascending
+                                   select new CourseParticipant
+                                   {
+                                       ApplicationDate = cp.ApplicationDate,
+                                       Course = co,
+                                       CourseId = cp.CourseId,
+                                       Grade = cp.Grade,
+                                       Role = cp.Role,
+                                       Status = cp.Status,
+                                       Id = cp.Id,
+                                       UserId = cp.UserId,
+                                       User = us
+                                   };
+                    model.CourseParticipantList = response.ToList();
+                    model.SchoolList = schoolResponse.Data;
+                }
+            }
             return View(model);
         }
         [HttpPost]

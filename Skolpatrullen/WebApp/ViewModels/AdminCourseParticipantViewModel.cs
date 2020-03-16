@@ -14,11 +14,10 @@ namespace WebApp.ViewModels
         public Roles Role { get; set; }
         public string Grade { get; set; }
         public Status Status { get; set; }
-        public IEnumerable<Course> CourseList { get; set; }
+        public Course Course { get; set; }
+        public User User { get; set; }
         public IEnumerable<CourseParticipant> CourseParticipantList { get; set; }
-        public IEnumerable<User> UserList { get; set; }
         public IEnumerable<School> SchoolList { get; set; }
-        public IEnumerable<UserSchool> UserSchoolList { get; set; }
         public CourseParticipant ToCourseParticipant()
         {
             return new CourseParticipant
