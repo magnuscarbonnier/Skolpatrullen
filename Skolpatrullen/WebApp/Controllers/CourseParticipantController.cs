@@ -171,7 +171,7 @@ namespace WebApp.Controllers
                 {
                     var response = cpresponse.Data
                         .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
-                        .Where(comb => comb.co.CourseId == Id)
+                        .Where(comb => comb.co.CourseId == Id && comb.co.Status == Status.Accepted)
                         .Select(comb => new CourseParticipantViewModel
                         {
                             Name = comb.u.FirstName + " " + comb.u.LastNames,
