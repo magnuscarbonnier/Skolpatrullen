@@ -47,13 +47,13 @@
             <div class="bg-light">
             @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
             { 
-                    <div>
-                        @course.Name
-                    </div>
+                <div>
+                    @Html.ActionLink(linkText:@course.Name, actionName:"GetCourseById", controllerName:"Course", new { id = course.Id })
+                </div>
             }
             
             <div>
-                @courseParticipant.Status
+                Status: @courseParticipant.Status Roll: @courseParticipant.Role
             </div>
             </div>
             <br />

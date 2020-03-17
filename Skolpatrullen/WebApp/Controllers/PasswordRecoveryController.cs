@@ -51,7 +51,7 @@ namespace WebApp.Controllers
                 var recoveryResponse = await APIGetPasswordRecoveryByToken(newPassword.Token);
                 if (recoveryResponse.Success)
                 {
-                    var a = await APIDeletePasswordRecoveryByToken(newPassword.Token);
+                    APIDeletePasswordRecoveryByToken(newPassword.Token);
                     var passwordResponse = await APIForceChangePassword(new ChangePasswordBody() { NewPassword = newPassword.Password, UserId = recoveryResponse.Data.UserId });
                     SetResponseMessage(passwordResponse);
                 }

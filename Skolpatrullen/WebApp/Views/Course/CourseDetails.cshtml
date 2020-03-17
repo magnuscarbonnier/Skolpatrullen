@@ -17,7 +17,7 @@
                     <a class="nav-link disabled" href="#">Information</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Deltagare</a>
+                    <a class="nav-link text-dark" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })">Deltagare</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })">Kalender</a>
