@@ -294,6 +294,43 @@ namespace WebAPI.Controllers
 
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetCourseRole/{userId}/{courseId}")]
+        public APIResponse<Roles> GetCourseRole(int userId, int courseId)
+        {
+            var response = new APIResponse<Roles>();
+            var participant = _context.CourseParticipants.SingleOrDefault(cp => cp.UserId == userId && cp.CourseId == courseId);
+            if (participant != null)
+            {
+                response.Data = participant.Role;
+                response.Success = true;
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Hittade inte någon kursdeltagare med id {userId} för kurs med id {courseId}";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/IsSchoolAdmin/{userId}/{schoolId}")]
+        public APIResponse<bool> IsSchoolAdmin(int userId, int schoolId)
+        {
+            var response = new APIResponse<bool>();
+            var userSchool = _context.UserSchools.SingleOrDefault(us => us.UserId == userId && us.SchoolId == schoolId);
+            if (userSchool != null)
+            {
+                response.Data = userSchool.IsAdmin;
+                response.Success = true;
+            }
+            else
+            {
+                response.Data = false;
+                response.Success = false;
+                response.FailureMessage = $"Hittade inte någon skoldeltagare med id {userId} för skola med id {schoolId}";
+            }
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
