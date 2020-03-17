@@ -191,7 +191,7 @@ namespace WebApp.Controllers
                 if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
                 {
                     //returnera admin/lärarview
-                    return View("CourseParticipantList", response);
+                    return View("EditCourseParticipantList", response);
                 }
                 else
                 {
