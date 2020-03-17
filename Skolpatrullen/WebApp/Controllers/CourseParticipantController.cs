@@ -158,5 +158,47 @@ namespace WebApp.Controllers
             SetResponseMessage(response);
             return RedirectToAction("AdminCourseParticipant", "CourseParticipant");
         }
+        [HttpGet]
+        [Route("[controller]/CourseParticipantList")]
+        public async Task<IActionResult> CourseParticipantList(int courseId)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var cpresponse = await APIGetAllCourseParticipants();
+                var userresponse = await APIGetAllUsers();
+                if (cpresponse == null || userresponse == null)
+                {
+                    return RedirectToAction("CourseList", "Course");
+                }
+                var response = cpresponse.Data
+                            .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
+                            .Where(comb => comb.co.CourseId == courseId && comb.co.Status == Status.Accepted)
+                            .OrderByDescending(comb => comb.co.Role)
+                            .Select(comb => new CourseParticipantViewModel
+                            {
+                                Name = comb.u.FirstName + " " + comb.u.LastNames,
+                                Role = comb.co.Role
+                            });
+                var course = await APIGetCourseById(courseId);
+                var courseRole = await APIGetCourseRole(User.Id, courseId);
+                var isSchoolAdmin = false;
+                if (course.Data != null)
+                {
+                    var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                    isSchoolAdmin = isSchoolAdminResponse.Data;
+                }
+                if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
+                {
+                    //returnera admin/lärarview
+                    return View("CourseParticipantList", response);
+                }
+                else
+                {
+                    return View("CourseParticipantList", response);
+                }
+            }
+            return RedirectToAction("CourseList", "Course");
+        }
     }
 }
