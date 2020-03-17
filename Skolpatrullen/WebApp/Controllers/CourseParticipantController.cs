@@ -167,21 +167,31 @@ namespace WebApp.Controllers
             {
                 var cpresponse = await APIGetAllCourseParticipants();
                 var userresponse = await APIGetAllUsers();
-                if (cpresponse != null && userresponse != null)
+                var response = cpresponse.Data
+                            .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
+                            .Where(comb => comb.co.CourseId == Id && comb.co.Status == Status.Accepted)
+                            .OrderByDescending(comb => comb.co.Role)
+                            .Select(comb => new CourseParticipantViewModel
+                            {
+                                Name = comb.u.FirstName + " " + comb.u.LastNames,
+                                Role = comb.co.Role
+                            });
+                if (cpresponse == null || userresponse == null)
                 {
-                    var response = cpresponse.Data
-                        .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
-                        .Where(comb => comb.co.CourseId == Id && comb.co.Status == Status.Accepted)
-                        .Select(comb => new CourseParticipantViewModel
-                        {
-                            Name = comb.u.FirstName + " " + comb.u.LastNames,
-                            Role = comb.co.Role
-                        });
-                    return View(response);
+                    return RedirectToAction("CourseList", "Course");
+                }
+                if (User.IsSuperUser)
+                {
+                    //returnera admin/lärarview
+                    return View("CourseParticipantList", response);
+                } 
+                else
+                {
+                     return View("CourseParticipantList", response);
                 }
                 return View();
             }
-            return View();
+            return RedirectToAction("CourseList", "Course");
         }
     }
 }
