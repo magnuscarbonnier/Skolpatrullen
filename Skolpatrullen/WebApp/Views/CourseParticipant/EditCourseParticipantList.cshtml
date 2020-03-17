@@ -35,9 +35,9 @@
                             <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
                         </td>
                         <td class="font-weight-bolder table-info">
-                            @await Html.PartialAsync("_EditCP", new WebApp.ViewModels.CourseParticipantViewModel { Id = item.Id })
+                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Spara ändringar</a>
                         </td>
-
+                        
                     }
                     else
                     {
