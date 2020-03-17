@@ -178,7 +178,9 @@ namespace WebApp.Controllers
                             .Select(comb => new CourseParticipantViewModel
                             {
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
-                                Role = comb.co.Role
+                                Role = comb.co.Role,
+                                Status = comb.co.Status,
+                                Grade=comb.co.Grade
                             });
                 var course = await APIGetCourseById(courseId);
                 var courseRole = await APIGetCourseRole(User.Id, courseId);
