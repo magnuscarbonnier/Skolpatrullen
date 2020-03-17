@@ -29,11 +29,12 @@
                             @item.Name
                         </td>
                         <td class="font-weight-bolder table-info">
-                            @item.Role
+                            <select asp-for="@item.Role" asp-items="Html.GetEnumSelectList<Database.Models.Roles>()"></select>
                         </td>
                         <td class="font-weight-bolder table-info">
-                            @item.Status
+                            <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
                         </td>
+                        
                     }
                     else
                     {
@@ -41,11 +42,12 @@
                             @item.Name
                         </td>
                         <td>
-                            @item.Role
+                            <select asp-for="@item.Role" asp-items="Html.GetEnumSelectList<Database.Models.Roles>()"></select>
                         </td>
                         <td>
-                            @item.Status
+                            <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
                         </td>
+
                     }
                 </tr>
                 }
