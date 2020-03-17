@@ -8,6 +8,7 @@ namespace WebApp.ViewModels
 {
     public class CourseParticipantViewModel
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int CourseId { get; set; }
         public Roles Role { get; set; }

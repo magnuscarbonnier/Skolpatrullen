@@ -34,6 +34,10 @@
                         <td class="font-weight-bolder table-info">
                             <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
                         </td>
+                        <td class="font-weight-bolder table-info">
+                            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="CourseParticipant"
+                               asp-action="AddCourseParticipant" asp-route-Id="@item.Id"></a>
+                        </td>
                         
                     }
                     else
