@@ -245,5 +245,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/File/DeleteFileById/" + Id.ToString());
             return (APIResponse<File>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<File>));
         }
+        public async Task<APIResponse<Roles>> APIGetCourseRole(int userId, int courseId)
+        {
+            HttpResponseMessage response = await APIGet($"/User/GetCourseRole/{userId}/{courseId}");
+            return (APIResponse<Roles>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Roles>));
+        }
+        public async Task<APIResponse<bool>> APIIsSchoolAdmin(int userId, int schoolId)
+        {
+            HttpResponseMessage response = await APIGet($"/User/IsSchoolAdmin/{userId}/{schoolId}");
+            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+        }
     }
 }
