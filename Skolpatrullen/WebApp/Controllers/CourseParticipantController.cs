@@ -213,12 +213,22 @@ namespace WebApp.Controllers
             if (User != null)
             {
                 var cp = await APIGetCourseParticipantById(Id);
-               
+                var course = await APIGetCourseById(cp.Data.CourseId);
+                var courseRole = await APIGetCourseRole(User.Id, cp.Data.CourseId);
+                var isSchoolAdmin = false;
+                if (course.Data != null)
+                {
+                    var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                    isSchoolAdmin = isSchoolAdminResponse.Data;
+                }
                 if (cp == null)
                 {
                     return RedirectToAction("CourseList", "Course");
                 }
                 var model = new CourseParticipantViewModel();
+                model.isSchoolAdmin = isSchoolAdmin;
+                model.isSuperUser = User.IsSuperUser;
+                model.isTeacher = courseRole.Data == Roles.Teacher;
                 model.CourseId = cp.Data.CourseId;
                 model.Grade = cp.Data.Grade;
                 model.Id = cp.Data.Id;
@@ -245,7 +255,7 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            CourseParticipant courseParticipant = APIGetCourseParticipantById(Id).Result.Data;
+            CourseParticipant courseParticipant = (await APIGetCourseParticipantById(Id)).Data;
             if (courseParticipant == null)
             {
                 return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
@@ -258,17 +268,25 @@ namespace WebApp.Controllers
                 var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
                 isSchoolAdmin = isSchoolAdminResponse.Data;
             }
-            if (courseRole.Data == Roles.Teacher)
+            if (isSchoolAdmin||User.IsSuperUser)
+            {
+                courseParticipant.Status = cpVM.Status;
+                courseParticipant.Role = cpVM.Role;
+                if (courseParticipant.Role != Roles.Teacher)
+                {
+                    courseParticipant.Grade = cpVM.Grade;
+                }
+                else
+                {
+                    courseParticipant.Grade = "";
+                }
+            }
+            else if (courseRole.Data == Roles.Teacher)
             {
                 if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Teacher)
                 {
                     courseParticipant.Grade = cpVM.Grade;
                 }
-            }
-            if (isSchoolAdmin||User.IsSuperUser)
-            {
-                courseParticipant.Status = cpVM.Status;
-                courseParticipant.Role = cpVM.Role;
             }
             else
             {

@@ -16,6 +16,9 @@ namespace WebApp.ViewModels
         public string Grade { get; set; }
         public Status Status { get; set; }
         public string Name { get; set; }
+        public bool isSchoolAdmin { get; set; }
+        public bool isSuperUser { get; set; }
+        public bool isTeacher { get; set; }
 
         public List<string> Grades = new List<string>
     {
