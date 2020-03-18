@@ -34,9 +34,9 @@ namespace Database.Models
         {
 
         }
-        public Context(DbContextOptions<Context> options) : base(options)
-        {
+        //public Context(DbContextOptions<Context> options) : base(options)
+        //{
 
-        }
+        //}
     }
 }
