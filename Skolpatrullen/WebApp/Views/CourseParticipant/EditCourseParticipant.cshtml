@@ -1,13 +1,14 @@
 ﻿@model WebApp.ViewModels.CourseParticipantViewModel
 
 @{
-    ViewData["Title"] = "EditCourseParticipant";
+    ViewData["Title"] = "Ändra kursdeltagare";
 }
 
 <h1>Ändra kursdeltagare</h1>
 
 <hr />
 <h4>@Model.User.FirstName @Model.User.LastNames</h4>
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="EditCourseParticipant">
