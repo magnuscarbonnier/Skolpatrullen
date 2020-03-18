@@ -83,6 +83,8 @@ namespace WebAPI.Controllers
             }
             else
             {
+                File profilePic = _context.Files.SingleOrDefault(f => f.Id == session.User.ProfilePictureId);
+                session.User.ProfilePicture = profilePic;
                 UpdateLoginSession(session);
                 response.Data = session;
                 response.Success = true;
