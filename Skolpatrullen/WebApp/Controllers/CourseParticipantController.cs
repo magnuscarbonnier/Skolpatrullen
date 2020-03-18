@@ -33,7 +33,7 @@ namespace WebApp.Controllers
             }
             else
             {
-                model.Status = Database.Models.Status.NotApplied;
+                model.Status = Database.Models.Status.Avslag;
             }
             return View(model);
         }
@@ -75,7 +75,7 @@ namespace WebApp.Controllers
                         .Join(courseResponse.Data, cp => cp.CourseId, co => co.Id, (cp, co) => new { cp, co })
                         .Join(userResponse.Data, comb => comb.cp.UserId, us => us.Id, (comb, us) => new { comb.cp, comb.co, us })
                         .Join(schoolResponse.Data, comb => comb.co.SchoolId, sc => sc.Id, (comb, sc) => new { comb.cp, comb.co, comb.us, sc })
-                        .Where(comb => comb.cp.Status == Status.Applied)
+                        .Where(comb => comb.cp.Status == Status.Ansökt)
                         .OrderBy(comb => comb.cp.ApplicationDate)
                         .Select(comb => new CourseParticipant
                         {
@@ -100,7 +100,7 @@ namespace WebApp.Controllers
                                    join us in userResponse.Data on cp.UserId equals us.Id
                                    join sc in schoolResponse.Data on co.SchoolId equals sc.Id
                                    join usS in userSchoolResponse.Data on sc.Id equals usS.SchoolId
-                                   where cp.Status == Status.Applied && usS.UserId == User.Id && usS.IsAdmin == true
+                                   where cp.Status == Status.Ansökt && usS.UserId == User.Id && usS.IsAdmin == true
                                    orderby cp.ApplicationDate ascending
                                    select new CourseParticipant
                                    {
@@ -140,17 +140,17 @@ namespace WebApp.Controllers
                 switch (answer)
                 {
                     case Constants.AcceptCP:
-                        adminCourseParticipantVM.Status = Status.Accepted;
+                        adminCourseParticipantVM.Status = Status.Antagen;
                         break;
                     case Constants.DenyCP:
-                        adminCourseParticipantVM.Status = Status.NotApplied;
+                        adminCourseParticipantVM.Status = Status.Avslag;
                         break;
                     case Constants.AcceptAsTeacherCP:
-                        adminCourseParticipantVM.Role = Roles.Teacher;
-                        adminCourseParticipantVM.Status = Status.Accepted;
+                        adminCourseParticipantVM.Role = Roles.Lärare;
+                        adminCourseParticipantVM.Status = Status.Antagen;
                         break;
                     default:
-                        adminCourseParticipantVM.Status = Status.Applied;
+                        adminCourseParticipantVM.Status = Status.Ansökt;
                         break;
                 }
             }
@@ -173,7 +173,7 @@ namespace WebApp.Controllers
                 }
                 var response = cpresponse.Data
                             .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
-                            .Where(comb => comb.co.CourseId == courseId && comb.co.Status == Status.Accepted)
+                            .Where(comb => comb.co.CourseId == courseId && comb.co.Status == Status.Antagen)
                             .OrderByDescending(comb => comb.co.Role)
                             .Select(comb => new CourseParticipantViewModel
                             {
@@ -193,7 +193,7 @@ namespace WebApp.Controllers
                     var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
                     isSchoolAdmin = isSchoolAdminResponse.Data;
                 }
-                if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
+                if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
                 {
                     //returnera admin/lärarview
                     return View("EditCourseParticipantList", response);
@@ -228,7 +228,7 @@ namespace WebApp.Controllers
                 var model = new CourseParticipantViewModel();
                 model.isSchoolAdmin = isSchoolAdmin;
                 model.isSuperUser = User.IsSuperUser;
-                model.isTeacher = courseRole.Data == Roles.Teacher;
+                model.isTeacher = courseRole.Data == Roles.Lärare;
                 model.CourseId = cp.Data.CourseId;
                 model.Grade = cp.Data.Grade;
                 model.Id = cp.Data.Id;
@@ -272,7 +272,7 @@ namespace WebApp.Controllers
             {
                 courseParticipant.Status = cpVM.Status;
                 courseParticipant.Role = cpVM.Role;
-                if (courseParticipant.Role != Roles.Teacher)
+                if (courseParticipant.Role != Roles.Lärare)
                 {
                     courseParticipant.Grade = cpVM.Grade;
                 }
@@ -281,9 +281,9 @@ namespace WebApp.Controllers
                     courseParticipant.Grade = "";
                 }
             }
-            else if (courseRole.Data == Roles.Teacher)
+            else if (courseRole.Data == Roles.Lärare)
             {
-                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Teacher)
+                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Lärare)
                 {
                     courseParticipant.Grade = cpVM.Grade;
                 }
