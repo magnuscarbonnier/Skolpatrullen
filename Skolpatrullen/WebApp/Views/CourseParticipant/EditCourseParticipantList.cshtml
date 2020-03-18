@@ -17,6 +17,9 @@
                     <th scope="col">
                         Status
                     </th>
+                    <th scope="col">
+                        Betyg
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +39,9 @@
                             @item.Status
                         </td>
                         <td class="font-weight-bolder table-info">
+                            @item.Grade
+                        </td>
+                        <td class="font-weight-bolder table-info">
                             <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
                         </td>
 
@@ -51,6 +57,9 @@
                         </td>
                         <td>
                             @item.Status
+                        </td>
+                        <td>
+                            @item.Grade
                         </td>
                         <td>
                             <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>

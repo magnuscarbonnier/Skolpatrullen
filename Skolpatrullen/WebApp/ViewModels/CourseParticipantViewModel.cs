@@ -17,6 +17,11 @@ namespace WebApp.ViewModels
         public Status Status { get; set; }
         public string Name { get; set; }
 
+        public List<string> Grades = new List<string>
+    {
+      null,"IG","G","VG","MVG","A","B","C","D","E","F"
+    };
+
         public User User { get; set; }
         public Course Course { get; set; }
         public CourseParticipant ToCourseParticipant()
