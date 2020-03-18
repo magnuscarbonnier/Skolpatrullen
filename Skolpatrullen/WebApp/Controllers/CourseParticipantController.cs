@@ -240,8 +240,35 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            
-            var response = await APIAddOrUpdateCourseParticipant(cpVM.ToCourseParticipant());
+            CourseParticipant courseParticipant = APIGetCourseParticipantById(Id).Result.Data;
+            if (courseParticipant == null)
+            {
+                return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
+            }
+            var course = await APIGetCourseById(cpVM.CourseId);
+            var courseRole = await APIGetCourseRole(User.Id, cpVM.CourseId);
+            var isSchoolAdmin = false;
+            if (course.Data != null)
+            {
+                var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                isSchoolAdmin = isSchoolAdminResponse.Data;
+            }
+            if (courseRole.Data == Roles.Teacher)
+            {
+                courseParticipant.Grade = cpVM.Grade;
+            }
+            if (isSchoolAdmin||User.IsSuperUser)
+            {
+                courseParticipant.Status = cpVM.Status;
+                courseParticipant.Role = cpVM.Role;
+            }
+            else
+            {
+                return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
+            }
+
+            var response = await APIAddOrUpdateCourseParticipant(courseParticipant);
+
             SetResponseMessage(response);
             return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId } );
         }
