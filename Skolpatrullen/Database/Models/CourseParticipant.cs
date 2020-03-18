@@ -10,7 +10,7 @@ namespace Database.Models
         public int UserId { get; set; }
         public int CourseId { get; set; }
         public Roles Role { get; set; }
-        public Grade Grade { get; set; }
+        public string Grade { get; set; }
         public Status Status { get; set; }
         public DateTime ApplicationDate { get; set; }
 

@@ -9,6 +9,14 @@ namespace Lib
         public const string DenyCP = "Avslå ansökan";
         public const string AcceptAsTeacherCP = "Registrera som lärare";
     }
+    public static class Grade
+    {
+        public const string Ej_Betygsatt = null;
+        public const string IG = "IG";
+        public const string G = "G";
+        public const string VG = "VG";
+        public const string MVG = "MVG";
+    }
     public class TokenBody
     {
         public string token { get; set; }
