@@ -83,9 +83,13 @@ namespace WebAPI.Controllers
             }
             else
             {
-                File profilePic = _context.Files.SingleOrDefault(f => f.Id == session.User.ProfilePictureId);
-                session.User.ProfilePicture = profilePic;
                 UpdateLoginSession(session);
+                File profilePic = _context.Files.SingleOrDefault(f => f.Id == session.User.ProfilePictureId);
+                if (profilePic != null)
+                {
+                    profilePic.Users = null;
+                }
+                session.User.ProfilePicture = profilePic;
                 response.Data = session;
                 response.Success = true;
                 response.SuccessMessage = "LoginSession är fortfaraned giltig";
@@ -272,7 +276,7 @@ namespace WebAPI.Controllers
 
                 _context.Files.Add(file);
 
-                if(user.ProfilePictureId != null)
+                if (user.ProfilePictureId != null)
                 {
                     var currentPic = _context.Files.SingleOrDefault(c => c.Id == user.ProfilePictureId);
 
@@ -285,7 +289,7 @@ namespace WebAPI.Controllers
                 user.ProfilePictureId = file.Id;
                 _context.SaveChanges();
 
-                response.Success = true;    
+                response.Success = true;
 
             }
             else
