@@ -7,7 +7,8 @@ namespace Database.Models
     class CourseFile
     {
         public string Name { get; set; }
-        File File { get; set; }
-        Course Course { get; set; }
+        public File File { get; set; }
+        public Course Course { get; set; }
     }
 }
+
