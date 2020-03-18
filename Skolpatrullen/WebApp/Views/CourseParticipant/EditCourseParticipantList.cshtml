@@ -29,15 +29,16 @@
                             @item.Name
                         </td>
                         <td class="font-weight-bolder table-info">
-                            <select asp-for="@item.Role" asp-items="Html.GetEnumSelectList<Database.Models.Roles>()"></select>
+                            @item.Role
+
                         </td>
                         <td class="font-weight-bolder table-info">
-                            <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
+                            @item.Status
                         </td>
                         <td class="font-weight-bolder table-info">
-                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Spara ändringar</a>
+                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
                         </td>
-                        
+
                     }
                     else
                     {
@@ -45,10 +46,14 @@
                             @item.Name
                         </td>
                         <td>
-                            <select asp-for="@item.Role" asp-items="Html.GetEnumSelectList<Database.Models.Roles>()"></select>
+                            @item.Role
+
                         </td>
                         <td>
-                            <select asp-for="@item.Status" asp-items="Html.GetEnumSelectList<Database.Models.Status>()"></select>
+                            @item.Status
+                        </td>
+                        <td>
+                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
                         </td>
 
                     }

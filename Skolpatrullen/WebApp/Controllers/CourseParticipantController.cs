@@ -177,10 +177,13 @@ namespace WebApp.Controllers
                             .OrderByDescending(comb => comb.co.Role)
                             .Select(comb => new CourseParticipantViewModel
                             {
+                                Id = comb.co.Id,
+                                CourseId=comb.co.CourseId,
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
                                 Role = comb.co.Role,
                                 Status = comb.co.Status,
-                                Grade=comb.co.Grade
+                                Grade = comb.co.Grade,
+                                UserId=comb.co.UserId
                             });
                 var course = await APIGetCourseById(courseId);
                 var courseRole = await APIGetCourseRole(User.Id, courseId);
@@ -201,6 +204,46 @@ namespace WebApp.Controllers
                 }
             }
             return RedirectToAction("CourseList", "Course");
+        }
+        [HttpGet]
+        [Route("[controller]/EditCourseParticipant")]
+        public async Task<IActionResult> EditCourseParticipant(int Id)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var cp = await APIGetCourseParticipantById(Id);
+               
+                if (cp == null)
+                {
+                    return RedirectToAction("CourseList", "Course");
+                }
+                var model = new CourseParticipantViewModel();
+                model.CourseId = cp.Data.CourseId;
+                model.Grade = cp.Data.Grade;
+                model.Id = cp.Data.Id;
+                model.Role = cp.Data.Role;
+                model.Status = cp.Data.Status;
+                model.UserId = cp.Data.UserId;
+                return View(model);
+               
+            }
+            return RedirectToAction("CourseParticipantList", "CourseParticipant");
+        }
+        [HttpPost]
+        [Route("[controller]/EditCourseParticipant")]
+        public async Task<IActionResult> EditCourseParticipant(CourseParticipantViewModel cpVM, int Id)
+        {
+            string message = await GetUser();
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            
+            var response = await APIAddOrUpdateCourseParticipant(cpVM.ToCourseParticipant());
+            SetResponseMessage(response);
+            return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId } );
         }
     }
 }
