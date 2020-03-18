@@ -397,13 +397,14 @@ namespace WebAPI.Controllers
                 file.Binary = body.File;
                 file.UploadDate = body.UploadDate;
                 file.FileExtension = body.FileExtension;
+                file.Type = FileTypes.CourseFile;
 
                 _context.Files.Add(file);
                 _context.SaveChanges();
 
                 coursefile.CourseId = body.CourseId;
                 coursefile.FileId = file.Id;
-                coursefile.Name = file.FileExtension;
+                coursefile.Name = body.Name;
 
                 _context.CourseFiles.Add(coursefile);
                 _context.SaveChanges();

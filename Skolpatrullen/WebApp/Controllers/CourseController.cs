@@ -145,7 +145,7 @@ namespace WebApp.Controllers
         }
         [HttpPost]
         [Route("[controller]/UploadCourseFile")]
-        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm)
+        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm, int courseId)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -166,13 +166,13 @@ namespace WebApp.Controllers
                 body.File = bytefile;
                 body.UploadDate = DateTime.Now;
                 body.UserId = User.Id;
-                body.CourseId = vm.CourseId;
+                body.CourseId = courseId;
                 body.FileExtension = Path.GetExtension(vm.File.FileName);
-                body.Name = Path.GetFileName(vm.File.Name);
+                body.Name = vm.File.FileName;
 
                 var response = await APIUploadCourseFile(body);
             }
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("GetCourseById", new { Id = courseId });
         }
     }
 }
