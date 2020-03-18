@@ -26,7 +26,7 @@
                 <a class="nav-link disabled" href="#">Inlämningar</a>
             </li>
             <li class="nav-item">
-                @await Html.PartialAsync("_UploadCourseFiles")
+                @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { })
             </li>
         </ul>
     </div>

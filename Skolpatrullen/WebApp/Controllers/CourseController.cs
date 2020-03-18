@@ -118,16 +118,28 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]/{id}")]
-        public async Task<IActionResult> GetCourseById(int id)
+        public async Task<IActionResult> GetCourseById(int courseId)
         {
             string message = await GetUser();
             var model = new Course();
-            var courseResponse = await APIGetCourseById(id);
-            if (courseResponse.Data != null)
+
+            var course = await APIGetCourseById(courseId);
+            var courseRole = await APIGetCourseRole(User.Id, courseId);
+            var isSchoolAdmin = false;
+            if (course.Data != null)
             {
-                model = courseResponse.Data;
+                var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                isSchoolAdmin = isSchoolAdminResponse.Data;
+                model = course.Data;
             }
-            return View("CourseDetails", model);
+            if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
+            {
+                return View("AdminCourseDetails", model);
+            }
+            else
+            {
+                return View("CourseDetails", model);
+            }
         }
     }
 }
