@@ -18,19 +18,19 @@
                     <div>Max antal platser på kurs: </div>
 
                     @{
-                        if (Model.Status == Database.Models.Status.Applied)
+                        if (Model.Status == Database.Models.Status.Ansökt)
                         {
                             <div>Du har redan ansökt till den här kursen</div>
                         }
-                        else if (Model.Status == Database.Models.Status.Accepted)
+                        else if (Model.Status == Database.Models.Status.Antagen)
                         {
                             <div>Du är redan med i den här kursen</div>
                         }
-                        else if (Model.Status == Database.Models.Status.NotActive)
+                        else if (Model.Status == Database.Models.Status.Inaktiv)
                         {
                             <div>Du har gjort någet fel (behöver något bättre medelande)</div>
                         }
-                        else if(Model.Status == Database.Models.Status.NotApplied)
+                        else if(Model.Status == Database.Models.Status.Avslag)
                         {
                             <div class="form-group">
                                 <input type="submit" value="Ansök" class="btn btn-primary" />
