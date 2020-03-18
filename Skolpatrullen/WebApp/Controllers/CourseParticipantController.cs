@@ -177,8 +177,13 @@ namespace WebApp.Controllers
                             .OrderByDescending(comb => comb.co.Role)
                             .Select(comb => new CourseParticipantViewModel
                             {
+                                Id = comb.co.Id,
+                                CourseId=comb.co.CourseId,
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
-                                Role = comb.co.Role
+                                Role = comb.co.Role,
+                                Status = comb.co.Status,
+                                Grade = comb.co.Grade,
+                                UserId=comb.co.UserId
                             });
                 var course = await APIGetCourseById(courseId);
                 var courseRole = await APIGetCourseRole(User.Id, courseId);
@@ -191,7 +196,7 @@ namespace WebApp.Controllers
                 if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
                 {
                     //returnera admin/lärarview
-                    return View("CourseParticipantList", response);
+                    return View("EditCourseParticipantList", response);
                 }
                 else
                 {
@@ -199,6 +204,99 @@ namespace WebApp.Controllers
                 }
             }
             return RedirectToAction("CourseList", "Course");
+        }
+        [HttpGet]
+        [Route("[controller]/EditCourseParticipant")]
+        public async Task<IActionResult> EditCourseParticipant(int Id)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var cp = await APIGetCourseParticipantById(Id);
+                var course = await APIGetCourseById(cp.Data.CourseId);
+                var courseRole = await APIGetCourseRole(User.Id, cp.Data.CourseId);
+                var isSchoolAdmin = false;
+                if (course.Data != null)
+                {
+                    var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                    isSchoolAdmin = isSchoolAdminResponse.Data;
+                }
+                if (cp == null)
+                {
+                    return RedirectToAction("CourseList", "Course");
+                }
+                var model = new CourseParticipantViewModel();
+                model.isSchoolAdmin = isSchoolAdmin;
+                model.isSuperUser = User.IsSuperUser;
+                model.isTeacher = courseRole.Data == Roles.Teacher;
+                model.CourseId = cp.Data.CourseId;
+                model.Grade = cp.Data.Grade;
+                model.Id = cp.Data.Id;
+                model.Role = cp.Data.Role;
+                model.Status = cp.Data.Status;
+                model.UserId = cp.Data.UserId;
+                var userResponse = APIGetUserById(cp.Data.UserId);
+                if(userResponse != null)
+                {
+                    model.User = userResponse.Result.Data;
+                }
+                return View(model);
+               
+            }
+            return RedirectToAction("CourseParticipantList", "CourseParticipant");
+        }
+        [HttpPost]
+        [Route("[controller]/EditCourseParticipant")]
+        public async Task<IActionResult> EditCourseParticipant(CourseParticipantViewModel cpVM, int Id)
+        {
+            string message = await GetUser();
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            CourseParticipant courseParticipant = (await APIGetCourseParticipantById(Id)).Data;
+            if (courseParticipant == null)
+            {
+                return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
+            }
+            var course = await APIGetCourseById(cpVM.CourseId);
+            var courseRole = await APIGetCourseRole(User.Id, cpVM.CourseId);
+            var isSchoolAdmin = false;
+            if (course.Data != null)
+            {
+                var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                isSchoolAdmin = isSchoolAdminResponse.Data;
+            }
+            if (isSchoolAdmin||User.IsSuperUser)
+            {
+                courseParticipant.Status = cpVM.Status;
+                courseParticipant.Role = cpVM.Role;
+                if (courseParticipant.Role != Roles.Teacher)
+                {
+                    courseParticipant.Grade = cpVM.Grade;
+                }
+                else
+                {
+                    courseParticipant.Grade = "";
+                }
+            }
+            else if (courseRole.Data == Roles.Teacher)
+            {
+                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Teacher)
+                {
+                    courseParticipant.Grade = cpVM.Grade;
+                }
+            }
+            else
+            {
+                return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
+            }
+
+            var response = await APIAddOrUpdateCourseParticipant(courseParticipant);
+
+            SetResponseMessage(response);
+            return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId } );
         }
     }
 }
