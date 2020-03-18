@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -118,13 +120,13 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]/{id}")]
-        public async Task<IActionResult> GetCourseById(int courseId)
+        public async Task<IActionResult> GetCourseById(int id)
         {
             string message = await GetUser();
             var model = new Course();
 
-            var course = await APIGetCourseById(courseId);
-            var courseRole = await APIGetCourseRole(User.Id, courseId);
+            var course = await APIGetCourseById(id);
+            var courseRole = await APIGetCourseRole(User.Id, id);
             var isSchoolAdmin = false;
             if (course.Data != null)
             {
@@ -140,6 +142,37 @@ namespace WebApp.Controllers
             {
                 return View("CourseDetails", model);
             }
+        }
+        [HttpPost]
+        [Route("[controller]/UploadCourseFile")]
+        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if(vm.File != null && vm.File.Length > 0)
+            {
+                FileBody body = new FileBody();
+                byte[] bytefile = null;
+                using (var filestream = vm.File.OpenReadStream())
+                using (var memstream = new MemoryStream())
+                {
+                    filestream.CopyTo(memstream);
+                    bytefile = memstream.ToArray();
+                }
+
+                body.File = bytefile;
+                body.UploadDate = DateTime.Now;
+                body.UserId = User.Id;
+                body.CourseId = vm.CourseId;
+                body.FileExtension = Path.GetExtension(vm.File.FileName);
+                body.Name = Path.GetFileName(vm.File.Name);
+
+                var response = await APIUploadCourseFile(body);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

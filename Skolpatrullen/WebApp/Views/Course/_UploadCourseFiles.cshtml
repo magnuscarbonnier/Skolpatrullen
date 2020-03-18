@@ -3,12 +3,12 @@
 
 <div class="row">
     <div class="col-12" align="right">
-        <a asp-action="UploadCourseFileModal" data-toggle="modal" data-target="#UploadCourseFileModal">Lägg till kursfil</a>
+        <a asp-action="UploadCourseFileModal" data-toggle="modal" data-target="#CourseFileModal">Lägg till kursfil</a>
     </div>
 </div>
     
 
-<div class="modal fade" id="UploadCourseFileModal" tabindex="-1" role="dialog" aria-labelledby="wat" aria-hidden="true">
+<div class="modal fade" id="CourseFileModal" tabindex="-1" role="dialog" aria-labelledby="wat" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -20,7 +20,7 @@
 
             <form enctype="multipart/form-data" asp-action="UploadCourseFile">
                 <div class=" modal-body">
-                    <input type="file" accept=".pdf|image/*" asp-for="file" id="file" style="width: 100%;" />
+                    <input type="file" accept=".pdf|image/*" asp-for="File" id="file" style="width: 100%;" />
                 </div>
 
                 <div class="modal-footer">

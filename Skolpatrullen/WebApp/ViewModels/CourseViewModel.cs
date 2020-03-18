@@ -31,6 +31,8 @@ namespace WebApp.ViewModels
     }
     public class UploadCourseFileViewModel
     {
-        public IFormFile file { get; set; }
+        public int CourseId { get; set; }
+        public int UserId { get; set; }
+        public IFormFile File { get; set; }
     }
 }
