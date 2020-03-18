@@ -225,6 +225,11 @@ namespace WebApp.Controllers
                 model.Role = cp.Data.Role;
                 model.Status = cp.Data.Status;
                 model.UserId = cp.Data.UserId;
+                var userResponse = APIGetUserById(cp.Data.UserId);
+                if(userResponse != null)
+                {
+                    model.User = userResponse.Result.Data;
+                }
                 return View(model);
                
             }
@@ -255,7 +260,10 @@ namespace WebApp.Controllers
             }
             if (courseRole.Data == Roles.Teacher)
             {
-                courseParticipant.Grade = cpVM.Grade;
+                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Teacher)
+                {
+                    courseParticipant.Grade = cpVM.Grade;
+                }
             }
             if (isSchoolAdmin||User.IsSuperUser)
             {
