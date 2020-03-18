@@ -270,7 +270,7 @@ namespace WebAPI.Controllers
 
                 _context.Files.Add(file);
 
-                if(user.ProfilePictureId != null)
+                if (user.ProfilePictureId != null)
                 {
                     var currentPic = _context.Files.SingleOrDefault(c => c.Id == user.ProfilePictureId);
 
@@ -283,7 +283,7 @@ namespace WebAPI.Controllers
                 user.ProfilePictureId = file.Id;
                 _context.SaveChanges();
 
-                response.Success = true;    
+                response.Success = true;
 
             }
             else
@@ -379,6 +379,43 @@ namespace WebAPI.Controllers
                 }
                 return builder.ToString();
             }
+        }
+        [HttpPost]
+        [Route("File/UploadCourseFile")]
+        public APIResponse UploadCourseFile(FileBody body)
+        {
+            APIResponse response = new APIResponse();
+
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+
+            if (user != null && body.File.Length > 0)
+            {
+                File file = new File();
+                CourseFile coursefile = new CourseFile();
+
+                file.Binary = body.File;
+                file.UploadDate = body.UploadDate;
+                file.FileExtension = body.FileExtension;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                coursefile.CourseId = body.CourseId;
+                coursefile.FileId = file.Id;
+                coursefile.Name = file.FileExtension;
+
+                _context.CourseFiles.Add(coursefile);
+                _context.SaveChanges();
+
+                response.Success = true;
+            }
+            else
+            {
+                response.FailureMessage = "Filen laddades inte upp";
+                response.Success = false;
+            }
+            return response;
         }
 
     }
