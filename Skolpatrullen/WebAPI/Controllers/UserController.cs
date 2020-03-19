@@ -84,6 +84,12 @@ namespace WebAPI.Controllers
             else
             {
                 UpdateLoginSession(session);
+                File profilePic = _context.Files.SingleOrDefault(f => f.Id == session.User.ProfilePictureId);
+                if (profilePic != null)
+                {
+                    profilePic.Users = null;
+                }
+                session.User.ProfilePicture = profilePic;
                 response.Data = session;
                 response.Success = true;
                 response.SuccessMessage = "LoginSession är fortfaraned giltig";
