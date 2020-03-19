@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -122,12 +124,55 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new Course();
-            var courseResponse = await APIGetCourseById(id);
-            if (courseResponse.Data != null)
+
+            var course = await APIGetCourseById(id);
+            var courseRole = await APIGetCourseRole(User.Id, id);
+            var isSchoolAdmin = false;
+            if (course.Data != null)
             {
-                model = courseResponse.Data;
+                var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
+                isSchoolAdmin = isSchoolAdminResponse.Data;
+                model = course.Data;
             }
-            return View("CourseDetails", model);
+            if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
+            {
+                return View("AdminCourseDetails", model);
+            }
+            else
+            {
+                return View("CourseDetails", model);
+            }
+        }
+        [HttpPost]
+        [Route("[controller]/UploadCourseFile")]
+        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if(vm.File != null && vm.File.Length > 0)
+            {
+                FileBody body = new FileBody();
+                byte[] bytefile = null;
+                using (var filestream = vm.File.OpenReadStream())
+                using (var memstream = new MemoryStream())
+                {
+                    filestream.CopyTo(memstream);
+                    bytefile = memstream.ToArray();
+                }
+
+                body.File = bytefile;
+                body.UploadDate = DateTime.Now;
+                body.UserId = User.Id;
+                body.CourseId = courseId;
+                body.FileExtension = Path.GetExtension(vm.File.FileName);
+                body.Name = vm.File.FileName;
+
+                var response = await APIUploadCourseFile(body);
+            }
+            return RedirectToAction("GetCourseById", new { Id = courseId });
         }
     }
 }

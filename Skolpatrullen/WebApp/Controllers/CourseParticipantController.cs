@@ -178,12 +178,8 @@ namespace WebApp.Controllers
                             .Select(comb => new CourseParticipantViewModel
                             {
                                 Id = comb.co.Id,
-                                CourseId=comb.co.CourseId,
+                                CourseId = comb.co.CourseId,
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
-                                Role = comb.co.Role,
-                                Status = comb.co.Status,
-                                Grade = comb.co.Grade,
-                                UserId=comb.co.UserId
                             });
                 var course = await APIGetCourseById(courseId);
                 var courseRole = await APIGetCourseRole(User.Id, courseId);
@@ -196,7 +192,22 @@ namespace WebApp.Controllers
                 if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
                 {
                     //returnera admin/lärarview
-                    return View("EditCourseParticipantList", response);
+                    var responseAdmin = cpresponse.Data
+                            .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
+                            .Where(comb => comb.co.CourseId == courseId)
+                            .OrderByDescending(comb => comb.co.Role)
+                            .ThenBy(comb => comb.co.Status)
+                            .Select(comb => new CourseParticipantViewModel
+                            {
+                                Id = comb.co.Id,
+                                CourseId = comb.co.CourseId,
+                                Name = comb.u.FirstName + " " + comb.u.LastNames,
+                                Role = comb.co.Role,
+                                Status = comb.co.Status,
+                                Grade = comb.co.Grade,
+                                UserId = comb.co.UserId
+                            });
+                    return View("EditCourseParticipantList", responseAdmin);
                 }
                 else
                 {
@@ -236,12 +247,12 @@ namespace WebApp.Controllers
                 model.Status = cp.Data.Status;
                 model.UserId = cp.Data.UserId;
                 var userResponse = APIGetUserById(cp.Data.UserId);
-                if(userResponse != null)
+                if (userResponse != null)
                 {
                     model.User = userResponse.Result.Data;
                 }
                 return View(model);
-               
+
             }
             return RedirectToAction("CourseParticipantList", "CourseParticipant");
         }
@@ -268,35 +279,25 @@ namespace WebApp.Controllers
                 var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
                 isSchoolAdmin = isSchoolAdminResponse.Data;
             }
-            if (isSchoolAdmin||User.IsSuperUser)
+            if (isSchoolAdmin || User.IsSuperUser || courseRole.Data == Roles.Lärare)
             {
-                courseParticipant.Status = cpVM.Status;
-                courseParticipant.Role = cpVM.Role;
-                if (courseParticipant.Role != Roles.Lärare)
+                if (isSchoolAdmin || User.IsSuperUser)
                 {
-                    courseParticipant.Grade = cpVM.Grade;
+                    courseParticipant.Status = cpVM.Status;
+                    courseParticipant.Role = cpVM.Role;
                 }
-                else
+                if (courseRole.Data == Roles.Lärare)
                 {
-                    courseParticipant.Grade = "";
+                    if ((courseParticipant.Role != Roles.Lärare) && courseRole.Data == Roles.Lärare)
+                    {
+                        courseParticipant.Grade = cpVM.Grade;
+                    }
                 }
-            }
-            else if (courseRole.Data == Roles.Lärare)
-            {
-                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Lärare)
-                {
-                    courseParticipant.Grade = cpVM.Grade;
-                }
-            }
-            else
-            {
-                return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
-            }
+                var response = await APIAddOrUpdateCourseParticipant(courseParticipant);
 
-            var response = await APIAddOrUpdateCourseParticipant(courseParticipant);
-
-            SetResponseMessage(response);
-            return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId } );
+                SetResponseMessage(response);
+            }
+            return RedirectToAction("CourseParticipantList", "CourseParticipant", new { courseid = cpVM.CourseId });
         }
     }
 }

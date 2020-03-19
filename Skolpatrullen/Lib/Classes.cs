@@ -36,6 +36,15 @@ namespace Lib
         public DateTime UploadDate { get; set; }
         public string FileExtension { get; set; }
     }
+    public class FileBody
+    {
+        public int UserId { get; set; }
+        public int CourseId { get; set; }
+        public string Name { get; set; }
+        public byte[] File { get; set; }
+        public DateTime UploadDate { get; set; }
+        public string FileExtension { get; set; }
+    }
     public class AsId
     {
         public int Id { get; set; }

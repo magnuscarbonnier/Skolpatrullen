@@ -1,4 +1,5 @@
 ﻿using Database.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +28,11 @@ namespace WebApp.ViewModels
                 EndDate = this.EndDate
             };
         }
-
+    }
+    public class UploadCourseFileViewModel
+    {
+        public int CourseId { get; set; }
+        public int UserId { get; set; }
+        public IFormFile File { get; set; }
     }
 }

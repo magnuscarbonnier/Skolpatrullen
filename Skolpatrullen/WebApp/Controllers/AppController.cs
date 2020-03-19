@@ -255,5 +255,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/User/IsSchoolAdmin/{userId}/{schoolId}");
             return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
         }
+        public async Task<APIResponse> APIUploadCourseFile(FileBody body)
+        {
+            HttpResponseMessage response = await APIPost("/File/UploadCourseFile/", body);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
     }
 }
