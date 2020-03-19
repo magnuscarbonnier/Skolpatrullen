@@ -78,5 +78,24 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetCourseFileById/{id}")]
+        public APIResponse<File> GetCourseFileById(int id)
+        {
+            APIResponse<File> response = new APIResponse<File>();
+            var file = _context.Files.SingleOrDefault(f => f.Id == id);
+            if(file != null)
+            {
+                response.Data = file;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade filen med id:{id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns ingen fil med id:{id}";
+            }
+            return response;
+        }
     }
 }
