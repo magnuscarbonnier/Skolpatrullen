@@ -35,7 +35,7 @@ namespace Lib
         public byte[] ProfilePicture { get; set; }
         public string Name { get; set; }
         public DateTime UploadDate { get; set; }
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
     }
     public class CourseFileBody
     {
@@ -45,7 +45,7 @@ namespace Lib
         public string Name { get; set; }
         public byte[] File { get; set; }
         public DateTime UploadDate { get; set; }
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
     }
     public class AsId
     {

@@ -266,7 +266,7 @@ namespace WebAPI.Controllers
 
                 file.Binary = body.ProfilePicture;
                 file.UploadDate = body.UploadDate;
-                file.FileExtension = body.FileExtension;
+                file.ContentType = body.ContentType;
                 file.Name = body.Name;
 
                 _context.Files.Add(file);
@@ -397,7 +397,7 @@ namespace WebAPI.Controllers
 
                 file.Binary = body.File;
                 file.UploadDate = body.UploadDate;
-                file.FileExtension = body.FileExtension;
+                file.ContentType = body.ContentType;
                 file.Type = FileTypes.CourseFile;
                 file.Name = body.Name;
 

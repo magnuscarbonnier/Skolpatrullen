@@ -167,7 +167,7 @@ namespace WebApp.Controllers
                 body.UploadDate = DateTime.Now;
                 body.UserId = User.Id;
                 body.CourseId = courseId;
-                body.FileExtension = Path.GetExtension(vm.File.FileName);
+                body.ContentType = vm.File.ContentType;
                 body.Name = vm.File.FileName;
 
                 var response = await APIUploadCourseFile(body);
@@ -191,7 +191,7 @@ namespace WebApp.Controllers
                         CourseId = courseId,
                         File = f.Binary,
                         Name = f.Name,
-                        FileExtension = f.FileExtension,
+                        ContentType = f.ContentType,
                         UploadDate = f.UploadDate
                     });
                     return View(files);
@@ -202,12 +202,12 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]/DownloadFile/{id}")]
-        public async Task<IActionResult> DownloadFile(int id, string filename)
+        public async Task<IActionResult> DownloadFile(int id)
         {
             var file = await APIGetFileById(id);
             if(file != null)
             {
-                return File(file.Data.Binary, "application/pdf", filename);
+                return File(file.Data.Binary, file.Data.ContentType, file.Data.Name);
             }
             else
             {

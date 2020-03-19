@@ -9,7 +9,7 @@ namespace Database.Models
     {
         public int Id { get; set; }
         [Required]
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
         [Required]
         public byte[] Binary { get; set; }
         [Required]
