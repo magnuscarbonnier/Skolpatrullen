@@ -1,12 +1,14 @@
-﻿@model IEnumerable<Lib.FileBody>
+﻿@model IEnumerable<Lib.CourseFileBody>
 @{
     ViewData["Title"] = "Kursfiler";
 }
 
 <h1>Kursfiler</h1>
 
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaks</a>
+
 @foreach (var file in Model)
 {
-    <p>@file.Name</p>
+    @Html.ActionLink(file.Name, "DownloadFile", new { id = file.Id, filename = file.Name })
 }
 

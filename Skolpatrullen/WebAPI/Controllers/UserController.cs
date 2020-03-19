@@ -382,7 +382,7 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("File/UploadCourseFile")]
-        public APIResponse UploadCourseFile(FileBody body)
+        public APIResponse UploadCourseFile(CourseFileBody body)
         {
             APIResponse response = new APIResponse();
 

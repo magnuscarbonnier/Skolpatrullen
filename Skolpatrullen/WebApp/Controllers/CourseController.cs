@@ -154,7 +154,7 @@ namespace WebApp.Controllers
             }
             if (vm.File != null && vm.File.Length > 0)
             {
-                FileBody body = new FileBody();
+                CourseFileBody body = new CourseFileBody();
                 byte[] bytefile = null;
                 using (var filestream = vm.File.OpenReadStream())
                 using (var memstream = new MemoryStream())
@@ -181,7 +181,7 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                IEnumerable<FileBody> files = new List<FileBody>();
+                IEnumerable<CourseFileBody> files = new List<CourseFileBody>();
                 var response = await APIGetAllCourseFiles(courseId);
                 if(response.Data != null)
                 {
@@ -191,6 +191,20 @@ namespace WebApp.Controllers
                 return View();
             }
             return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        [Route("[controller]/DownloadFile/{id}")]
+        public async Task<IActionResult> DownloadFile(int id, string filename)
+        {
+            var file = await APIGetFileById(id);
+            if(file != null)
+            {
+                return File(file.Data.Binary, "application/pdf", filename);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }
