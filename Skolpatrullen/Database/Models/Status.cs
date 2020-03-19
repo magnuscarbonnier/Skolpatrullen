@@ -6,9 +6,9 @@ namespace Database.Models
 {
     public enum Status
     {
-        Applied = 0,
-        Accepted = 1,
-        NotActive = 2,
-        NotApplied = 3
+        Ansökt = 0,
+        Antagen = 1,
+        Inaktiv = 2,
+        Avslag = 3
     }
 }
