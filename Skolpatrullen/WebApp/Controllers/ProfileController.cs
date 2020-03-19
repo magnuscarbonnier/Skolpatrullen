@@ -175,6 +175,7 @@ namespace WebApp.Controllers
                 body.ProfilePicture = p1;
                 body.UploadDate = DateTime.Now;
                 body.FileExtension = Path.GetExtension(vm.file.FileName);
+                body.Name = vm.file.FileName;
 
                 var response = await APIChangeProfilePicture(body);
             }

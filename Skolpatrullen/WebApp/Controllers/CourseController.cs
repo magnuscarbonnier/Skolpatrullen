@@ -185,7 +185,15 @@ namespace WebApp.Controllers
                 var response = await APIGetAllCourseFiles(courseId);
                 if(response.Data != null)
                 {
-                    files = response.Data;
+                    files = response.Data.Select(f => new CourseFileBody()
+                    {
+                        Id = f.Id,
+                        CourseId = courseId,
+                        File = f.Binary,
+                        Name = f.Name,
+                        FileExtension = f.FileExtension,
+                        UploadDate = f.UploadDate
+                    });
                     return View(files);
                 }
                 return View();

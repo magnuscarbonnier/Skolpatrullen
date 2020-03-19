@@ -16,7 +16,7 @@ namespace Database.Models
         public DateTime UploadDate { get; set; }
         [Required]
         public FileTypes Type { get; set; }
-
+        public string Name { get; set; }
         public ICollection<User> Users { get; set; }
     }
     public enum FileTypes

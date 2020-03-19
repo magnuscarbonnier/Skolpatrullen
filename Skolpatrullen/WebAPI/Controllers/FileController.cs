@@ -60,20 +60,10 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("[controller]/GetAllFilesByCourse/{id}")]
-        public APIResponse<IEnumerable<CourseFileBody>> GetAllFilesByCourse(int id)
+        public APIResponse<IEnumerable<File>> GetAllFilesByCourse(int id)
         {
-            APIResponse<IEnumerable<CourseFileBody>> response = new APIResponse<IEnumerable<CourseFileBody>>();
-            var files = _context.CourseFiles
-                .Include(file => file.File)
-                .Where(coursefile => coursefile.CourseId == id)
-                .Select(comb => new CourseFileBody
-                {
-                    Id = comb.FileId,
-                    CourseId = comb.CourseId,
-                    File = comb.File.Binary,
-                    Name = comb.Name,
-                    UploadDate = comb.File.UploadDate
-                });
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.CourseFiles.Include(cf => cf.File).Where(cf => cf.CourseId == id).Select(cf => cf.File);
             if (files != null)
             {
                 response.Data = files;
