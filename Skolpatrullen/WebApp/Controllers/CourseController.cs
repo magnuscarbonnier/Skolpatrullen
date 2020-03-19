@@ -152,9 +152,9 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            if(vm.File != null && vm.File.Length > 0)
+            if (vm.File != null && vm.File.Length > 0)
             {
-                FileBody body = new FileBody();
+                CourseFileBody body = new CourseFileBody();
                 byte[] bytefile = null;
                 using (var filestream = vm.File.OpenReadStream())
                 using (var memstream = new MemoryStream())
@@ -167,12 +167,52 @@ namespace WebApp.Controllers
                 body.UploadDate = DateTime.Now;
                 body.UserId = User.Id;
                 body.CourseId = courseId;
-                body.FileExtension = Path.GetExtension(vm.File.FileName);
+                body.ContentType = vm.File.ContentType;
                 body.Name = vm.File.FileName;
 
                 var response = await APIUploadCourseFile(body);
             }
             return RedirectToAction("GetCourseById", new { Id = courseId });
+        }
+        [HttpGet]
+        [Route("[controller]/CourseFiles/{courseid}")]
+        public async Task<IActionResult> CourseFiles(int courseId)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                IEnumerable<CourseFileBody> files = new List<CourseFileBody>();
+                var response = await APIGetAllCourseFiles(courseId);
+                if(response.Data != null)
+                {
+                    files = response.Data.Select(f => new CourseFileBody()
+                    {
+                        Id = f.Id,
+                        CourseId = courseId,
+                        File = f.Binary,
+                        Name = f.Name,
+                        ContentType = f.ContentType,
+                        UploadDate = f.UploadDate
+                    });
+                    return View(files);
+                }
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpGet]
+        [Route("[controller]/DownloadFile/{id}")]
+        public async Task<IActionResult> DownloadFile(int id)
+        {
+            var file = await APIGetFileById(id);
+            if(file != null)
+            {
+                return File(file.Data.Binary, file.Data.ContentType, file.Data.Name);
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

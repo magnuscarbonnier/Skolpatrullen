@@ -33,17 +33,19 @@ namespace Lib
     {
         public int UserId { get; set; }
         public byte[] ProfilePicture { get; set; }
+        public string Name { get; set; }
         public DateTime UploadDate { get; set; }
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
     }
-    public class FileBody
+    public class CourseFileBody
     {
+        public int Id { get; set; }
         public int UserId { get; set; }
         public int CourseId { get; set; }
         public string Name { get; set; }
         public byte[] File { get; set; }
         public DateTime UploadDate { get; set; }
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
     }
     public class AsId
     {

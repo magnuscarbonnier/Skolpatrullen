@@ -272,7 +272,8 @@ namespace WebAPI.Controllers
 
                 file.Binary = body.ProfilePicture;
                 file.UploadDate = body.UploadDate;
-                file.FileExtension = body.FileExtension;
+                file.ContentType = body.ContentType;
+                file.Name = body.Name;
 
                 _context.Files.Add(file);
 
@@ -388,7 +389,7 @@ namespace WebAPI.Controllers
         }
         [HttpPost]
         [Route("File/UploadCourseFile")]
-        public APIResponse UploadCourseFile(FileBody body)
+        public APIResponse UploadCourseFile(CourseFileBody body)
         {
             APIResponse response = new APIResponse();
 
@@ -402,15 +403,15 @@ namespace WebAPI.Controllers
 
                 file.Binary = body.File;
                 file.UploadDate = body.UploadDate;
-                file.FileExtension = body.FileExtension;
+                file.ContentType = body.ContentType;
                 file.Type = FileTypes.CourseFile;
+                file.Name = body.Name;
 
                 _context.Files.Add(file);
                 _context.SaveChanges();
 
                 coursefile.CourseId = body.CourseId;
                 coursefile.FileId = file.Id;
-                coursefile.Name = body.Name;
 
                 _context.CourseFiles.Add(coursefile);
                 _context.SaveChanges();

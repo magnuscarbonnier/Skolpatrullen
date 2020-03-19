@@ -9,14 +9,14 @@ namespace Database.Models
     {
         public int Id { get; set; }
         [Required]
-        public string FileExtension { get; set; }
+        public string ContentType { get; set; }
         [Required]
         public byte[] Binary { get; set; }
         [Required]
         public DateTime UploadDate { get; set; }
         [Required]
         public FileTypes Type { get; set; }
-
+        public string Name { get; set; }
         public ICollection<User> Users { get; set; }
     }
     public enum FileTypes

@@ -255,10 +255,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/User/IsSchoolAdmin/{userId}/{schoolId}");
             return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
         }
-        public async Task<APIResponse> APIUploadCourseFile(FileBody body)
+        public async Task<APIResponse> APIUploadCourseFile(CourseFileBody body)
         {
             HttpResponseMessage response = await APIPost("/File/UploadCourseFile/", body);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }       
+        public async Task<APIResponse<IEnumerable<File>>> APIGetAllCourseFiles(int courseId)
+        {
+            HttpResponseMessage response = await APIGet($"/File/GetAllFilesByCourse/{courseId}");
+            return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
         }
     }
 }

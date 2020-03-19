@@ -20,17 +20,24 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/GetFileById/{Id}")]
-        public APIResponse<File> GetFileById(int Id)
+        [Route("[controller]/GetFileById/{id}")]
+        public APIResponse<File> GetFileById(int id)
         {
             APIResponse<File> response = new APIResponse<File>();
-            response.Data = _context.Files.SingleOrDefault(c => c.Id == Id);
-
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade fil med id {Id}";
+            var file = _context.Files.SingleOrDefault(c => c.Id == id);
+            if (file != null)
+            {
+                response.Data = file;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade filen med id:{id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns ingen fil med id:{id}";
+            }
             return response;
         }
-
         [HttpGet]
         [Route("[controller]/DeleteFileById/{Id}")]
         public APIResponse<File> DeleteFileById(int Id)
@@ -49,10 +56,25 @@ namespace WebAPI.Controllers
                 response.SuccessMessage = $"Det fanns ingen fil med id {Id}";
             }
             response.Success = true;
-
-
             return response;
-
+        }
+        [HttpGet]
+        [Route("[controller]/GetAllFilesByCourse/{id}")]
+        public APIResponse<IEnumerable<File>> GetAllFilesByCourse(int id)
+        {
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.CourseFiles.Include(cf => cf.File).Where(cf => cf.CourseId == id).Select(cf => cf.File);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla filer";
+            } else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
         }
     }
 }

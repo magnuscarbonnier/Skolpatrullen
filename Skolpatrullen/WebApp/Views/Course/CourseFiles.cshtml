@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Lib.CourseFileBody>
+@{
+    ViewData["Title"] = "Kursfiler";
+}
+
+<h1>Kursfiler</h1>
+
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaks</a>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Filnamn
+                    </th>
+                    <th scope="col">
+                        Datum
+                    </th>
+                    <th scope="col">
+                        
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var file in Model)
+                {
+                <tr>
+                    <td>
+                        @file.Name
+                    </td>
+                    <td>
+                        @file.UploadDate
+                    </td>
+                    <td>
+                        @Html.ActionLink("Ladda ner", "DownloadFile", new { id = file.Id})
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

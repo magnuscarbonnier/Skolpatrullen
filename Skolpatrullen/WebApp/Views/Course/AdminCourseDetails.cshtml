@@ -28,6 +28,9 @@
             <li class="nav-item">
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
             </li>
+            <li>
+                <a class="nav-link text-dark" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })">Kursfiler</a>
+            </li>
         </ul>
     </div>
     <!-- /#sidebar-wrapper -->
