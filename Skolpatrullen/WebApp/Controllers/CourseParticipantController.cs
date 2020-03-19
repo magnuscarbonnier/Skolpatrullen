@@ -180,10 +180,6 @@ namespace WebApp.Controllers
                                 Id = comb.co.Id,
                                 CourseId=comb.co.CourseId,
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
-                                Role = comb.co.Role,
-                                Status = comb.co.Status,
-                                Grade = comb.co.Grade,
-                                UserId=comb.co.UserId
                             });
                 var course = await APIGetCourseById(courseId);
                 var courseRole = await APIGetCourseRole(User.Id, courseId);
@@ -196,7 +192,22 @@ namespace WebApp.Controllers
                 if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
                 {
                     //returnera admin/lärarview
-                    return View("EditCourseParticipantList", response);
+                    var responseAdmin = cpresponse.Data
+                            .Join(userresponse.Data, co => co.UserId, u => u.Id, (co, u) => new { co, u })
+                            .Where(comb => comb.co.CourseId == courseId)
+                            .OrderByDescending(comb => comb.co.Role)
+                            .ThenBy(comb=>comb.co.Status)
+                            .Select(comb => new CourseParticipantViewModel
+                            {
+                                Id = comb.co.Id,
+                                CourseId = comb.co.CourseId,
+                                Name = comb.u.FirstName + " " + comb.u.LastNames,
+                                Role = comb.co.Role,
+                                Status = comb.co.Status,
+                                Grade = comb.co.Grade,
+                                UserId = comb.co.UserId
+                            });
+                    return View("EditCourseParticipantList", responseAdmin);
                 }
                 else
                 {
@@ -268,24 +279,17 @@ namespace WebApp.Controllers
                 var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, course.Data.SchoolId);
                 isSchoolAdmin = isSchoolAdminResponse.Data;
             }
-            if (isSchoolAdmin||User.IsSuperUser)
+            if (isSchoolAdmin||User.IsSuperUser||courseRole.Data==Roles.Teacher)
             {
                 courseParticipant.Status = cpVM.Status;
                 courseParticipant.Role = cpVM.Role;
-                if (courseParticipant.Role != Roles.Teacher)
+                if ((courseParticipant.Role != Roles.Teacher) && courseRole.Data == Roles.Teacher)
                 {
                     courseParticipant.Grade = cpVM.Grade;
                 }
                 else
                 {
-                    courseParticipant.Grade = "";
-                }
-            }
-            else if (courseRole.Data == Roles.Teacher)
-            {
-                if (courseParticipant.UserId != User.Id && courseParticipant.Role != Roles.Teacher)
-                {
-                    courseParticipant.Grade = cpVM.Grade;
+                    courseParticipant.Grade = courseParticipant.Grade;
                 }
             }
             else
