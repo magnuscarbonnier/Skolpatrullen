@@ -152,7 +152,7 @@ namespace WebApp.Controllers
             {
                 return View();
             }
-            if(vm.File != null && vm.File.Length > 0)
+            if (vm.File != null && vm.File.Length > 0)
             {
                 FileBody body = new FileBody();
                 byte[] bytefile = null;
@@ -173,22 +173,6 @@ namespace WebApp.Controllers
                 var response = await APIUploadCourseFile(body);
             }
             return RedirectToAction("GetCourseById", new { Id = courseId });
-        }
-        [HttpGet]
-        [Route("[controller]/CourseFiles")]
-        public async Task<IActionResult> CourseFiles(int courseId)
-        {
-            string message = await GetUser();
-            if (User != null)
-            {
-                var response = await APIGetAllCourses();
-                if (response.Data != null)
-                {
-
-                }
-                return View();
-            }
-            return RedirectToAction("Index", "Home");
         }
     }
 }
