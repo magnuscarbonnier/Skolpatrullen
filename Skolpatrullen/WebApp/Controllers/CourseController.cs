@@ -134,7 +134,7 @@ namespace WebApp.Controllers
                 isSchoolAdmin = isSchoolAdminResponse.Data;
                 model = course.Data;
             }
-            if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Teacher)
+            if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
             {
                 return View("AdminCourseDetails", model);
             }
