@@ -1,6 +1,12 @@
-﻿
+﻿@model IEnumerable<Lib.FileBody>
 @{
     ViewData["Title"] = "Kursfiler";
 }
 
 <h1>Kursfiler</h1>
+
+@foreach (var file in Model)
+{
+    <p>@file.Name</p>
+}
+

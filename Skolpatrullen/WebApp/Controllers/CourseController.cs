@@ -174,5 +174,23 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("GetCourseById", new { Id = courseId });
         }
+        [HttpGet]
+        [Route("[controller]/CourseFiles/{courseid}")]
+        public async Task<IActionResult> CourseFiles(int courseId)
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                IEnumerable<FileBody> files = new List<FileBody>();
+                var response = await APIGetAllCourseFiles(courseId);
+                if(response.Data != null)
+                {
+                    files = response.Data;
+                    return View(files);
+                }
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
