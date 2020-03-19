@@ -49,10 +49,44 @@ namespace WebAPI.Controllers
                 response.SuccessMessage = $"Det fanns ingen fil med id {Id}";
             }
             response.Success = true;
-
-
             return response;
-
+        }
+        [HttpGet]
+        [Route("[controller]/GetAllFiles")]
+        public APIResponse<IEnumerable<File>> GetAllFiles()
+        {
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.Files.Select(f => f).ToList();
+            if(files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla filer";
+            } else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetAllCourseFiles")]
+        public APIResponse<IEnumerable<CourseFile>> GetAllCourseFiles()
+        {
+            APIResponse<IEnumerable<CourseFile>> response = new APIResponse<IEnumerable<CourseFile>>();
+            var files = _context.CourseFiles.Select(f => f).ToList();
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla kursfiler";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga kursfiler";
+            }
+            return response;
         }
     }
 }
