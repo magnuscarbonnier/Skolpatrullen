@@ -16,6 +16,7 @@ namespace Database.Models
         public DbSet<Lesson> Lessons { get; set; }
         public DbSet<File> Files { get; set; }
         public DbSet<CourseFile> CourseFiles { get; set; }
+        public DbSet<Assignment> Assignments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

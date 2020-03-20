@@ -12,6 +12,7 @@
             <a class="list-group-item" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })">Deltagare</a>
             <a class="list-group-item" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })">Kalender</a>
             <a class="list-group-item disabled" href="#">Inlämningar</a>
+            @await Html.PartialAsync("_AddCourseAssignment", new Database.Models.Assignment { CourseId = Model.Id })
             <a class="list-group-item" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })">Kursfiler</a>
         </div>
         <div class="list-group">
