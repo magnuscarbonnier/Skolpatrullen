@@ -8,50 +8,67 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using WebApp.Models;
 using WebApp.ViewModels;
+using Database.Models;
+using Lib;
 
 namespace WebApp.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : AppController
     {
-        private readonly HttpClient _client;
-        public LoginController()
-        {
-            _client = new HttpClient();
-        }
         [HttpGet]
         [Route("[controller]")]
-        public IActionResult LoginPage()
+        public async Task<IActionResult> LoginPage()
         {
+            string message = await GetUser();
+            if (User != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
         [HttpPost]
         [Route("[controller]")]
         public async Task<IActionResult> LoginPage(LoginViewModel loginVM)
         {
+            string message = await GetUser();
             if (!ModelState.IsValid)
             {
-                return View();
+                return View(new LoginViewModel());
             }
-            try
+            if (User != null)
             {
-                if (loginVM != null)
+                return RedirectToAction("Index", "Home");
+            }
+            if (loginVM != null)
+            {
+                APIResponse<LoginSession> response = await APILogin(loginVM);
+                if (response.Success)
                 {
-                    var json = JsonConvert.SerializeObject(loginVM);
-                    using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
+                    if (response.Data != null)
                     {
-                        HttpResponseMessage response = await _client.PostAsync("https://localhost:44367/User/Login", stringContent);
-                        if (bool.Parse(await response.Content.ReadAsStringAsync()))
-                        {
-                            return RedirectToAction("Index", "Home");
-                        }
+                        Response.Cookies.Append("LoginToken", response.Data.Token);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
+                else
+                {
+                    SetFailureMessage(response.FailureMessage);
+                    return View();
+                }
             }
-            catch
-            {
 
-            }
             return View();
+        }
+        [HttpGet]
+        [Route("[controller]/Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                var response = await APILogout(User);
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }

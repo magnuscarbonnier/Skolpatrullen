@@ -18,7 +18,8 @@ namespace WebApp.ViewModels
         [Required]
         public string Phone { get; set; }
         [Required(ErrorMessage = "Du måste skriva ditt personnummer")]
-        [StringLength(12, ErrorMessage = "Skriv hela ditt personnummer (12 siffror), utan bindestreck", MinimumLength = 12)]
+        [StringLength(13, ErrorMessage = "Skriv hela ditt personnummer, 12 siffror, 13 tecken med bindestreck")]
+        [RegularExpression(@"^\d{8}-\d{4}", ErrorMessage = "Skriv hela ditt personnummer, 12 siffror, 13 tecken med bindestreck")]
         public string SocialSecurityNr { get; set; }
         [Required]
         public string Email { get; set; }

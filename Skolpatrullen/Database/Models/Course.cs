@@ -10,14 +10,14 @@ namespace Database.Models
         
         public int Id { get; set; }
         public int SchoolId { get; set; }
-        public int RoomId { get; set; }
         [Required]
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
+        public ICollection<CourseRoom> CourseRooms { get; set; }
+        public ICollection<Lesson> CourseLessons { get; set; }
         public School School { get; set; }
-        public Room Room { get; set; }
     }
 }

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20200212124214_ChangedPostCodeType")]
-    partial class ChangedPostCodeType
+    [Migration("20200218132058_LoginSession")]
+    partial class LoginSession
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,9 +35,6 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<int>("SchoolId")
                         .HasColumnType("int");
 
@@ -45,8 +42,6 @@ namespace Database.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RoomId");
 
                     b.HasIndex("SchoolId");
 
@@ -81,6 +76,45 @@ namespace Database.Migrations
                     b.ToTable("CourseParticipants");
                 });
 
+            modelBuilder.Entity("Database.Models.CourseRoom", b =>
+                {
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseId", "RoomId");
+
+                    b.HasIndex("RoomId");
+
+                    b.ToTable("CourseRoom");
+                });
+
+            modelBuilder.Entity("Database.Models.LoginSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("LoginSessions");
+                });
+
             modelBuilder.Entity("Database.Models.Room", b =>
                 {
                     b.Property<int>("Id")
@@ -89,10 +123,14 @@ namespace Database.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SchoolId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SchoolId");
 
                     b.ToTable("Rooms");
                 });
@@ -152,13 +190,19 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSuperUser")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
                     b.Property<string>("LastNames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(16)")
+                        .HasMaxLength(16);
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -204,12 +248,6 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Models.Course", b =>
                 {
-                    b.HasOne("Database.Models.Room", "Room")
-                        .WithMany()
-                        .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Models.School", "School")
                         .WithMany("Courses")
                         .HasForeignKey("SchoolId")
@@ -219,28 +257,61 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Models.CourseParticipant", b =>
                 {
-                    b.HasOne("Database.Models.Course", null)
+                    b.HasOne("Database.Models.Course", "Course")
                         .WithMany("CourseParticipants")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Models.User", null)
+                    b.HasOne("Database.Models.User", "User")
                         .WithMany("CourseParticipants")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Database.Models.CourseRoom", b =>
+                {
+                    b.HasOne("Database.Models.Course", "Course")
+                        .WithMany("CourseRooms")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Models.Room", "Room")
+                        .WithMany("CourseRooms")
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Models.LoginSession", b =>
+                {
+                    b.HasOne("Database.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Database.Models.Room", b =>
+                {
+                    b.HasOne("Database.Models.School", "School")
+                        .WithMany("Rooms")
+                        .HasForeignKey("SchoolId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Database.Models.UserSchool", b =>
                 {
-                    b.HasOne("Database.Models.School", null)
+                    b.HasOne("Database.Models.School", "School")
                         .WithMany("UserSchools")
                         .HasForeignKey("SchoolId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Database.Models.User", null)
+                    b.HasOne("Database.Models.User", "User")
                         .WithMany("UserSchools")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

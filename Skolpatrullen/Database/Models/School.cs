@@ -21,5 +21,6 @@ namespace Database.Models
 
         public ICollection<UserSchool> UserSchools { get; set; }
         public ICollection<Course> Courses { get; set; }
+        public ICollection<Room> Rooms { get; set; }
     }
 }

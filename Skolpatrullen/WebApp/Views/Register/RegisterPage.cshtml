@@ -1,62 +1,68 @@
 ﻿@model WebApp.ViewModels.UserViewModel
 @{
-    ViewData["Title"] = "RegisterPage";
+    ViewData["Title"] = "Registrering";
 }
 
-    <form method="post" asp-action="RegisterPage">    
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label asp-for="Email">Mailadress</label>
-                <input asp-for="Email" type="email" class="form-control">
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="Password">Lösenord</label>
-                <input type="password" asp-for="Password" class="form-control">
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="RePassword">Lösenord igen</label>
-                <input type="password" asp-for="RePassword" class="form-control">
-                <span asp-validation-for="RePassword" class="text-danger"></span>
-            </div>
+<form method="post" asp-action="RegisterPage">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Email">Mailadress <label class="text-danger">*</label></label>
+            <input asp-for="Email" type="email" placeholder="namn@exempel.se" class="form-control">
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label asp-for="FirstName">Förnamn</label>
-                <input type="text" asp-for="FirstName" class="form-control">
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="LastNames">Dina efternamn</label>
-                <input type="text" asp-for="LastNames" class="form-control">
-                <span asp-validation-for="LastNames" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="SocialSecurityNr">Personnummer</label>
-            <input type="text" asp-for="SocialSecurityNr" class="form-control">
+        <div class="form-group col-md-6">
+            <label asp-for="SocialSecurityNr">Personnummer <label class="text-danger">*</label></label>
+            <input type="text" asp-for="SocialSecurityNr" placeholder="yyyymmdd-xxxx" class="form-control">
             <span asp-validation-for="SocialSecurityNr" class="text-danger"></span>
         </div>
-        <div class="form-group">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="Password">Lösenord <label class="text-danger">*</label></label>
+            <input type="password" asp-for="Password" class="form-control">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="RePassword">Lösenord igen <label class="text-danger">*</label></label>
+            <input type="password" asp-for="RePassword" class="form-control">
+            <span asp-validation-for="RePassword" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="FirstName">Förnamn <label class="text-danger">*</label></label>
+            <input type="text" asp-for="FirstName" class="form-control">
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="LastNames">Efternamn <label class="text-danger">*</label></label>
+            <input type="text" asp-for="LastNames" class="form-control">
+            <span asp-validation-for="LastNames" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
             <label asp-for="Address">Adress</label>
             <input type="text" asp-for="Address" class="form-control">
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="PostalCode">Postnummer</label>
-            <input type="text" asp-for="PostalCode" class="form-control">
-            <span asp-validation-for="PostalCode" class="text-danger"></span>
-        </div>
-        <div class="form-group">
+        <div class="form-group col-md-6">
             <label asp-for="City">Stad</label>
             <input type="text" asp-for="City" class="form-control">
             <span asp-validation-for="City" class="text-danger"></span>
         </div>
-        <div class="form-group">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label asp-for="PostalCode">Postnummer</label>
+            <input type="text" asp-for="PostalCode" class="form-control">
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-6">
             <label asp-for="Phone">Telefonnummer</label>
             <input type="text" asp-for="Phone" class="form-control">
             <span asp-validation-for="Phone" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Registrera</button>
-    </form>
+    </div>
+    <button type="submit" class="btn btn-primary">Registrera</button>
+</form>

@@ -5,6 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200225132216_Add_ProfilePicture.cs" />
+    <Compile Remove="Migrations\20200225132216_Add_ProfilePicture.Designer.cs" />
+    <Compile Remove="Migrations\20200309124347_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309124347_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309124622_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309124622_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309125417_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309125417_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309125552_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309125552_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309125718_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309125718_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309130040_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309130040_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200309130216_Add_FileTable.cs" />
+    <Compile Remove="Migrations\20200309130216_Add_FileTable.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.1">
       <PrivateAssets>all</PrivateAssets>

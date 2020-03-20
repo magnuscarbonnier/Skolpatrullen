@@ -3,33 +3,110 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - WebApp</title>
+    <title>Skolpatrullen ITHS - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+    <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
+          rel="stylesheet" type="text/css" charset="utf-8">
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebApp</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom border-top box-shadow">
+            <div class="container" >
+                <a class="navbar-brand text-dark" asp-area=" " asp-controller="Home" asp-action="Index"><img src="~/SP.png" height="50" width="50" alt="" /> </a>
+                <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="  navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="navbar-nav mr-4 ">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Skolpatrullen</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Course" asp-action="CourseList">Våra kurser</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Login" asp-action="LoginPage">Login</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="School" asp-action="SchoolListPage">Våra skolor</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="RegisterPage">Register</a>
-                        </li>
+
+
+                        @{
+
+                            if (ViewBag.User != null)
+                            {
+                                @*<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img src="~/user-solid.svg" width="25" height="25" />
+                    </a>
+                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
+                        <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
+                    </div>
+                </li>*@
+
+                                if (ViewBag.User.IsSuperUser == true)
+                                {
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            SuperPowers
+                                        </a>
+                                        <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Room" asp-action="AddRoomPage">Lägg till rum</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Admin" asp-action="AddAdminPage">Lägg till admin</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="AddCoursePage">Lägg till kurs</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="School" asp-action="SchoolListPage">Hantera skolor</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Profile" asp-action="UserListPage">Hantera användare</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="SuperCourseList">Hantera kurser</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="CourseParticipant" asp-action="AdminCourseParticipant">Hantera kursdeltagare</a>
+
+                                        </div>
+
+                                    </li>
+                                }
+
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        @if (ViewBag.User.ProfilePictureId == null)
+                                        {
+                                            <img src="~/user-solid.svg" width="25" height="25" />
+
+                                        }
+                                        else
+                                        {
+                                            var base64 = Convert.ToBase64String(ViewBag.User.ProfilePicture.Binary);
+                                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                                <img src="@imgsrc" class="img-thumbnail" width="50" height="50" />
+
+                                        }
+                                    </a>
+                                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
+                                    </div>
+                                </li>
+
+
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Register" asp-action="RegisterPage">Registrera dig</a>
+                                </li>
+
+                                <li class="btn-link">
+                                    <a class="btn btn-info btn-dark" asp-area="" asp-controller="Login" asp-action="LoginPage">Logga in</a>
+                                </li>
+                            }
+
+                        }
+
                     </ul>
                 </div>
             </div>
@@ -37,15 +114,37 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissable">
+                    <strong>@TempData["SuccessMessage"]</strong>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissable">
+                    <strong>@TempData["ErrorMessage"]</strong>
+                </div>
+            }
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2020 - WebApp - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <footer class="border-top footer embed-responsive border-top box-shadow">
+        <div class="row">
+
+            <div class="col col-sm-8 text-center">
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
+                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
+            </div>
+           <div class="col col-sm-4 text-center">
+                <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
+            </div>
         </div>
     </footer>
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

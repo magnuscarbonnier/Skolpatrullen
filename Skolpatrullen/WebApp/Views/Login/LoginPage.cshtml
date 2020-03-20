@@ -1,31 +1,36 @@
 ﻿@model WebApp.ViewModels.LoginViewModel
 @{
-    ViewData["Title"] = "LoginPage";
+    ViewData["Title"] = "Logga in";
 }
 
 
 <div class="container">
+
     <div class="row">
         <div class="col">
         </div>
-        <div class="col">
+
+        <div class="col-sm-auto">
             <form method="post" asp-action="LoginPage">
+                <p></p>
                 <div class="form-group">
                     <label asp-for="Email">Epostadress</label>
                     <input asp-for="Email" type="email" class="form-control">
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
+
                 <div class="form-group">
                     <label asp-for="Password">Lösenord</label>
                     <input asp-for="Password" type="password" class="form-control">
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
+
                 <button type="submit" class="btn btn-primary">Logga in</button>
-                <button class="btn btn-outline-primary">Registrera dig</button>
+                <p></p>
+                <a class="btn btn-outline-dark btn-sm" asp-area="" asp-controller="PasswordRecovery" asp-action="RecoverPassword">Glömt lösenord?</a>
+                <a class="btn btn-outline-dark btn-sm" asp-area="" asp-controller="Register" asp-action="RegisterPage">Registrera dig</a>
 
             </form>
-
-
         </div>
 
         <div class="col">

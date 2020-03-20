@@ -9,6 +9,10 @@ namespace Database.Models
     {
         public int Id { get; set; }
         [Required]
+        public int SchoolId { get; set; }
         public string Name { get; set; }
+
+        public School School { get; set; }
+        public ICollection<CourseRoom> CourseRooms { get; set; }
     }
 }

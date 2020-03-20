@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using Database.Models;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace WebAPI
 {
@@ -24,9 +25,14 @@ namespace WebAPI
 
         public IConfiguration Configuration { get; }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins, builder => { builder.WithOrigins("https://localhost:44382").AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod(); });
+            });
             services.AddDbContext<Context>(opt => opt.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Skolpatrullen;Trusted_Connection=True;"));
             services.AddControllers();
         }
@@ -38,17 +44,18 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseCors(MyAllowSpecificOrigins);
+    
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+            app.UseRewriter(new RewriteOptions().AddRedirectToHttpsPermanent());
+            
         }
     }
 }

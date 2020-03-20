@@ -8,19 +8,6 @@ namespace Database.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Rooms",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Rooms", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Schools",
                 columns: table => new
                 {
@@ -28,7 +15,9 @@ namespace Database.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
                     Address = table.Column<string>(nullable: false),
-                    Phone = table.Column<string>(nullable: false)
+                    Phone = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: false),
+                    PostalCode = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,7 +35,10 @@ namespace Database.Migrations
                     Phone = table.Column<string>(nullable: false),
                     SocialSecurityNr = table.Column<string>(nullable: false),
                     Email = table.Column<string>(nullable: false),
-                    Password = table.Column<string>(nullable: false)
+                    Password = table.Column<string>(maxLength: 16, nullable: false),
+                    Address = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: false),
+                    PostalCode = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,7 +52,6 @@ namespace Database.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SchoolId = table.Column<int>(nullable: false),
-                    RoomId = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false)
@@ -69,13 +60,27 @@ namespace Database.Migrations
                 {
                     table.PrimaryKey("PK_Courses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Rooms_RoomId",
-                        column: x => x.RoomId,
-                        principalTable: "Rooms",
+                        name: "FK_Courses_Schools_SchoolId",
+                        column: x => x.SchoolId,
+                        principalTable: "Schools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SchoolId = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Courses_Schools_SchoolId",
+                        name: "FK_Rooms_Schools_SchoolId",
                         column: x => x.SchoolId,
                         principalTable: "Schools",
                         principalColumn: "Id",
@@ -137,6 +142,30 @@ namespace Database.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CourseRoom",
+                columns: table => new
+                {
+                    CourseId = table.Column<int>(nullable: false),
+                    RoomId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseRoom", x => new { x.CourseId, x.RoomId });
+                    table.ForeignKey(
+                        name: "FK_CourseRoom_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_CourseRoom_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CourseParticipants_CourseId",
                 table: "CourseParticipants",
@@ -148,13 +177,18 @@ namespace Database.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Courses_RoomId",
-                table: "Courses",
+                name: "IX_CourseRoom_RoomId",
+                table: "CourseRoom",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_SchoolId",
                 table: "Courses",
+                column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_SchoolId",
+                table: "Rooms",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
@@ -174,16 +208,19 @@ namespace Database.Migrations
                 name: "CourseParticipants");
 
             migrationBuilder.DropTable(
+                name: "CourseRoom");
+
+            migrationBuilder.DropTable(
                 name: "UserSchools");
 
             migrationBuilder.DropTable(
                 name: "Courses");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Rooms");
 
             migrationBuilder.DropTable(
-                name: "Rooms");
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Schools");

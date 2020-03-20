@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Database.Models.Course>
+
+@{
+    ViewData["Title"] = "Kurslista";
+}
+
+<h1>Kurslista</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Kursnamn
+            </th>
+            <th>
+                Startdatum
+            </th>
+            <th>
+                Slutdatum
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Name, "GetCourseById", new { id = item.Id })
+            </td>
+            <td>
+                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.StartDate))
+            </td>
+            <td>
+                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
+            </td>
+            <td>
+                @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -19,7 +19,6 @@ namespace Database.Models
         [Required]
         public string Email { get; set; }
         [Required]
-        [StringLength(16, MinimumLength = 8)]
         public string Password { get; set; }
         [Required]
         public string Address { get; set; }
@@ -27,7 +26,10 @@ namespace Database.Models
         public string City { get; set; }
         [Required]
         public string PostalCode { get; set; }
+        public bool IsSuperUser { get; set; }
+        public int? ProfilePictureId { get; set; }
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<UserSchool> UserSchools { get; set; }
+        public File ProfilePicture { get; set; }
     }
 }

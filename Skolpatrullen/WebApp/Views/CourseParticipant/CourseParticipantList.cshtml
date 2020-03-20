@@ -1,0 +1,46 @@
+﻿@model IEnumerable<WebApp.ViewModels.CourseParticipantViewModel>
+
+<h1>Deltagare för kursen</h1>
+
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Namn
+                    </th>
+                    <th scope="col">
+                        Roll
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    @if (item.Role == Database.Models.Roles.Lärare)
+                    {
+                        <td class="font-weight-bolder table-info">
+                            @item.Name
+                        </td>
+                        <td class="font-weight-bolder table-info">
+                            @item.Role
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.Role
+                        </td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

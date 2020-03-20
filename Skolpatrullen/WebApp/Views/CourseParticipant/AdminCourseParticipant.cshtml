@@ -1,0 +1,33 @@
+﻿@model WebApp.ViewModels.AdminCourseParticipantViewModel
+
+@{
+    ViewData["Title"] = "Hantera ansökningar";
+}
+
+<h1>Inkomna ansökningar</h1>
+
+<hr />
+
+
+    @foreach (var cp in Model.CourseParticipantList)
+    {
+        
+         <div class="list-group-item bg-light border-dark">
+            <form asp-action="Update">
+                @Html.HiddenFor(d=>cp.Id)
+                <div>Ansökningsdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", cp.ApplicationDate))</div>
+                <div>@cp.User.FirstName @cp.User.LastNames</div>
+                    <div>Skola: @Model.SchoolList.SingleOrDefault(sc=>sc.Id==cp.Course.SchoolId).Name</div>
+                        <div>Kurs: @cp.Course.Name</div>
+                            <div>Status: @Html.DisplayFor(c => cp.Status)</div>
+
+                <div class="form-group">
+                    <input type="submit" name="answer" value="@Lib.Constants.AcceptCP" asp-route-Id="@cp.Id" class="btn btn-success" />
+                    <input type="submit" name="answer" value="@Lib.Constants.DenyCP" asp-route-Id="@cp.Id" class="btn btn-danger" />
+                    <input type="submit" name="answer" value="@Lib.Constants.AcceptAsTeacherCP" asp-route-Id="@cp.Id" class="btn btn-outline-warning" />
+                </div>
+            </form>
+
+        </div>
+        
+    }
