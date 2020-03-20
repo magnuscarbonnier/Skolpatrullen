@@ -217,7 +217,7 @@ namespace WebApp.Controllers
 
         [HttpPost]
         [Route("[controller]/AddCourseAssignment")]
-        public async Task<IActionResult> AddCourseAssignment(UploadCourseFileViewModel vm, int courseId)
+        public async Task<IActionResult> AddCourseAssignment(Assignment assignment)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
