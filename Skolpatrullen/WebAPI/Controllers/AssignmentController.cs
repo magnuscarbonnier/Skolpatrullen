@@ -9,10 +9,32 @@ using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
 {
+    [ApiController]
     public class AssignmentController : APIController
     {
         public AssignmentController(Context context, ILogger<UserController> logger) : base(context, logger)
         {
+        }
+        
+        [HttpGet]
+        [Route("[controller]/GetAssignmentByCourse/{Id}")]
+        public APIResponse<IEnumerable<Assignment>> GetAssignmentByCourse(int Id)
+        {
+            APIResponse<IEnumerable<Assignment>> response = new APIResponse<IEnumerable<Assignment>>();
+            response.Data = _context.Assignments.Where(a => a.CourseId == Id);
+
+
+            if (response.Data != null)
+            {
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade inlämningar med kurs id {Id}";
+            }
+            else
+            {
+                response.FailureMessage = "Gick inte att hämta inlämningar!";
+                response.Success = false;
+            }
+            return response;
         }
         [HttpPost]
         [Route("[controller]/Add")]
@@ -30,26 +52,6 @@ namespace WebAPI.Controllers
             else
             {
                 response.FailureMessage = "Gick inte att lägga till en inlämning";
-                response.Success = false;
-            }
-            return response;
-        }
-        [HttpGet]
-        [Route("[controller]/GetAssignmentByCourse/{Id}")]
-        public APIResponse<IEnumerable<Assignment>> GetAssignmentByCourse(int Id)
-        {
-            APIResponse<IEnumerable<Assignment>> response = new APIResponse<IEnumerable<Assignment>>();
-            response.Data = _context.Assignments.Where(a => a.CourseId == Id);
-
-
-            if (response.Data != null)
-            {
-                response.Success = true;
-                response.SuccessMessage = $"Hämtade inlämningar med kurs id {Id}";
-            }
-            else
-            {
-                response.FailureMessage = "Gick inte att hämta inlämningar!";
                 response.Success = false;
             }
             return response;

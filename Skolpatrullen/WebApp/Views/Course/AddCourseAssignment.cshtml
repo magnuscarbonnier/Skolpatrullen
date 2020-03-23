@@ -1,9 +1,13 @@
-﻿@model Database.Models.Assignment
+﻿@model WebApp.ViewModels.AssignmentViewModel
 @{
     ViewData["Title"] = "Lägg till inlämning";
 }
 
 <a href="##" onClick="history.go(-1); return false;">Gå tillbaks</a>
+
+<h1>
+    @Model.CourseId
+</h1>
 
 <form method="post" asp-action="AddCourseAssignment">
     <div class="form-row">
@@ -21,7 +25,6 @@
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-
             <div>
                 <label asp-for="Description" class="control-label">Text</label>
                 <textarea asp-for="Description" type="text" class="form-control"></textarea>
@@ -30,6 +33,7 @@
         </div>
     </div>
     <div>
+       @Html.HiddenFor(a => a.CourseId, new { @Value = Model.CourseId })
         <button type="submit" class="btn btn-primary">Lägg till</button>
     </div>
 </form>
