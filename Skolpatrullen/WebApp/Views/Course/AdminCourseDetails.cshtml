@@ -15,8 +15,8 @@
             <a class="list-group-item" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })">Kursfiler</a>
         </div>
         <div class="list-group">
-            <a class="list-group-item" href="@Url.Action("AddCourseAssignment", "course", new { CourseId = Model.Id })">Lägg till inlämning</a>
             @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
+            <a class="list-group-item" href="@Url.Action("AddCourseAssignment", "course", new Database.Models.Assignment { CourseId = Model.Id })">Lägg till inlämning</a>
         </div>
     </div>
 
@@ -27,4 +27,5 @@
         </div>
     </div>
 </div>
+
             
