@@ -51,8 +51,6 @@ namespace Lib
     public class FileBody
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        public int CourseId { get; set; }
         public string Name { get; set; }
         public byte[] File { get; set; }
         public DateTime UploadDate { get; set; }
@@ -60,6 +58,8 @@ namespace Lib
     }
     public class AssignmentFileBody : FileBody
     {
+        public int UserId { get; set; }
+        public int CourseId { get; set; }
         public int AssignmentId { get; set; }
         public IEnumerable<byte[]> Files { get; set; }
         public AssignmentFileType Type { get; set; }
