@@ -1,37 +1,32 @@
 ﻿@model WebApp.ViewModels.UploadCourseFileViewModel
 
 
-<div class="row">
-    <div class="col-12" align="right">
-        <a asp-action="UploadCourseFileModal" data-toggle="modal" data-target="#CourseFileModal">Lägg till kursfil</a>
-    </div>
-</div>
-    
 
-<div class="modal fade" id="CourseFileModal" tabindex="-1" role="dialog" aria-labelledby="wat" aria-hidden="true">
+<a data-toggle="modal" href="#" data-target="#CourseFileModal" class="nav-link text-secondary"><i class="fa fa-file-upload fa-lg"></i> Lägg till kursfil</a>
+
+
+<div class="modal fade" id="CourseFileModal" tabindex="-1" role="dialog" aria-labelledby="UploadFile" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <form enctype="multipart/form-data" asp-action="UploadCourseFile" class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ladda upp fil</h5>
+                <h5 class="modal-title" id="UploadFile">Ladda upp fil</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
 
-            <form enctype="multipart/form-data" asp-action="UploadCourseFile">
-                <div class=" modal-body">
-                    <input type="file" asp-for="File" id="file" style="width: 100%;" />
-                </div>
+            <div class=" modal-body">
+                <input type="file" asp-for="File" id="file" style="width: 100%;" />
+            </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
-                    <input type="submit" asp-action="UploadCourseFile" asp-route-courseId="@Model.CourseId" value="Spara" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                <input type="submit" asp-action="UploadCourseFile" asp-route-courseId="@Model.CourseId" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

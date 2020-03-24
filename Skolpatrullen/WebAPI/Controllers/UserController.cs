@@ -387,44 +387,5 @@ namespace WebAPI.Controllers
                 return builder.ToString();
             }
         }
-        [HttpPost]
-        [Route("File/UploadCourseFile")]
-        public APIResponse UploadCourseFile(CourseFileBody body)
-        {
-            APIResponse response = new APIResponse();
-
-            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
-
-
-            if (user != null && body.File.Length > 0)
-            {
-                File file = new File();
-                CourseFile coursefile = new CourseFile();
-
-                file.Binary = body.File;
-                file.UploadDate = body.UploadDate;
-                file.ContentType = body.ContentType;
-                file.Type = FileTypes.CourseFile;
-                file.Name = body.Name;
-
-                _context.Files.Add(file);
-                _context.SaveChanges();
-
-                coursefile.CourseId = body.CourseId;
-                coursefile.FileId = file.Id;
-
-                _context.CourseFiles.Add(coursefile);
-                _context.SaveChanges();
-
-                response.Success = true;
-            }
-            else
-            {
-                response.FailureMessage = "Filen laddades inte upp";
-                response.Success = false;
-            }
-            return response;
-        }
-
     }
 }
