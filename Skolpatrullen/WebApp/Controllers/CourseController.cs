@@ -143,6 +143,37 @@ namespace WebApp.Controllers
                 return View("CourseDetails", model);
             }
         }
+        [HttpPost]
+        [Route("[controller]/UploadCourseFile")]
+        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if (vm.File != null && vm.File.Length > 0)
+            {
+                CourseFileBody body = new CourseFileBody();
+                byte[] bytefile = null;
+                using (var filestream = vm.File.OpenReadStream())
+                using (var memstream = new MemoryStream())
+                {
+                    filestream.CopyTo(memstream);
+                    bytefile = memstream.ToArray();
+                }
+
+                body.File = bytefile;
+                body.UploadDate = DateTime.Now;
+                body.UserId = User.Id;
+                body.CourseId = courseId;
+                body.ContentType = vm.File.ContentType;
+                body.Name = vm.File.FileName;
+
+                var response = await APIUploadCourseFile(body);
+            }
+            return RedirectToAction("GetCourseById", new { Id = courseId });
+        }
         [HttpGet]
         [Route("[controller]/CourseFiles/{courseid}")]
         public async Task<IActionResult> CourseFiles(int courseId)
