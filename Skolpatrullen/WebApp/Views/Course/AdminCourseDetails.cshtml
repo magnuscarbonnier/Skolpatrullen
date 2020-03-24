@@ -34,16 +34,18 @@
     <div class="col-9">
         <div class="content">
             <h1 class="mt-4">Kurs: @Model.Name</h1>
-                @foreach (var blogpost in Model.CourseBlogPosts)
-                {
-                    <div class="bg-light">
-                        <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  hh:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
-                        <h5>@blogpost.Title</h5> 
-                        <p>@blogpost.Content</p>
-                        <h6>Hashtags: @blogpost.HashTags</h6>
-                    </div>
-                    <br />
-                }
+            @await Html.PartialAsync("_AddCourseBlogPost", new Database.Models.CourseBlogPost { CourseId = Model.Id })
+            @foreach (var blogpost in Model.CourseBlogPosts)
+            {
+                <div class="bg-light">
+                    <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  hh:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
+                    <h5>@blogpost.Title</h5>
+                    <p>@blogpost.Content</p>
+                    <h6>Hashtags: @blogpost.HashTags</h6>
+                    <a asp-area="" asp-controller="Course" asp-action="RemoveCourseBlogPost" asp-route-Id="@blogpost.Id">Ta bort inlägg</a>
+                </div>
+                <br />
+            }
         </div>
     </div>
 </div>

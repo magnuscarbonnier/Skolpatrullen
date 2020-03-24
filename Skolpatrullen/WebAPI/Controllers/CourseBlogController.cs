@@ -47,28 +47,22 @@ namespace WebAPI.Controllers
             }
             return response;
         }
-        //[HttpPost]
-        //[Route("[controller]/Add")]
-        //public APIResponse<Course> Add(Course course)
-        //{
-        //    APIResponse<Course> response = new APIResponse<Course>();
-        //    if (course != null)
-        //    {
-        //        if (course.StartDate > course.EndDate)
-        //        {
-        //            response.FailureMessage = $"Startdatum kan inte vara senare än slutdatum";
-        //            response.Success = false;
-        //        }
-        //        else
-        //        {
-        //            _context.Courses.Add(course);
-        //            _context.SaveChanges();
-        //            response.Data = course;
-        //            response.Success = true;
-        //            response.SuccessMessage = $"La till kurs med namn {course.Name}";
-        //        }
-        //    }
-        //    return response;
-        //}
+        [HttpPost]
+        [Route("[controller]/Add")]
+        public APIResponse<CourseBlogPost> Add(CourseBlogPost blogPost)
+        {
+            APIResponse<CourseBlogPost> response = new APIResponse<CourseBlogPost>();
+            if (blogPost != null)
+            {
+                
+                    _context.CourseBlogPosts.Add(blogPost);
+                    _context.SaveChanges();
+                    response.Data = blogPost;
+                    response.Success = true;
+                    response.SuccessMessage = $"La till inlägg med titel {blogPost.Title}";
+                
+            }
+            return response;
+        }
     }
 }

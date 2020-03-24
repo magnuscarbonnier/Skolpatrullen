@@ -285,5 +285,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await (APIGet("/CourseBlog/GetBlogPostsByCourseId/" + id));
             return (APIResponse<IEnumerable<CourseBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<CourseBlogPost>>));
         }
+        public async Task<APIResponse> APIAddBlogPost(CourseBlogPost blogPost)
+        {
+            HttpResponseMessage response = await APIPost("/CourseBlog/Add/", blogPost);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
     }
 }

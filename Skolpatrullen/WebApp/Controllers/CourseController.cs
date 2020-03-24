@@ -233,5 +233,21 @@ namespace WebApp.Controllers
 
             return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
         }
+        [HttpPost]
+        [Route("[controller]/AddCourseBlogPost")]
+        public async Task<IActionResult> AddCourseBlogPost(CourseBlogPost blogPost, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            blogPost.CourseId = courseId;
+            blogPost.UserId = User.Id;
+            blogPost.PublishDate = DateTime.Now;
+            var response = await APIAddBlogPost(blogPost);
+
+            return RedirectToAction("GetCourseById", new { Id = blogPost.CourseId });
+        }
     }
 }
