@@ -115,5 +115,44 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/UploadAssignmentFile")]
+        public APIResponse UploadAssignmentFile(AssignmentFileBody body)
+        {
+            APIResponse response = new APIResponse();
+
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+
+            if (user != null && body.File.Length > 0)
+            {
+                File file = new File();
+                AssignmentFile assignmentfile = new AssignmentFile();
+
+                file.Binary = body.File;
+                file.UploadDate = body.UploadDate;
+                file.ContentType = body.ContentType;
+                file.Type = FileTypes.CourseFile;
+                file.Name = body.Name;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                assignmentfile.AssignmentId = body.AssignmentId;
+                assignmentfile.FileId = file.Id;
+                assignmentfile.Type = body.Type;
+
+                _context.AssignmentFiles.Add(assignmentfile);
+                _context.SaveChanges();
+
+                response.Success = true;
+            }
+            else
+            {
+                response.FailureMessage = "Filen laddades inte upp";
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }
