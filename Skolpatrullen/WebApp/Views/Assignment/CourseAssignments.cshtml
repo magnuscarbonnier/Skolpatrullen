@@ -31,9 +31,18 @@
                             @Html.ActionLink(assignment.Name, "GetAssignmentById", new { id = assignment.Id })
 
                         </td>
-                        <td>
-                            @assignment.Description.Substring(0, 40)...
-                        </td>
+                        @if (assignment.Description.Length > 40)
+                        {
+                            <td>
+                                @assignment.Description.Substring(0, 40)...
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @assignment.Description
+                            </td>
+                        }
                         <td style="font-weight: bold">
                             @assignment.Deadline.ToString().Substring(0, 10)
                         </td>

@@ -30,11 +30,11 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                IEnumerable<Assignment> files = new List<Assignment>();
+                IEnumerable<Assignment> assignments = new List<Assignment>();
                 var response = await APIGetAssignmentByCourseId(courseId);
                 if (response.Data != null)
                 {
-                    files = response.Data.Select(a => new Assignment()
+                    assignments = response.Data.Select(a => new Assignment()
                     {
                         Id = a.Id,
                         CourseId = courseId,
@@ -42,7 +42,7 @@ namespace WebApp.Controllers
                         Deadline = a.Deadline,
                         Description = a.Description
                     });
-                    return View(files);
+                    return View(assignments);
                 }
                 return View();
             }
