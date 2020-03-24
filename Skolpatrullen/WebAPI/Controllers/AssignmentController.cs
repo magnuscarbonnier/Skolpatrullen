@@ -54,5 +54,16 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetAssignmentById/{Id}")]
+        public APIResponse<Assignment> GetAssignmentById(int Id)
+        {
+            APIResponse<Assignment> response = new APIResponse<Assignment>();
+            response.Data = _context.Assignments.SingleOrDefault(a => a.Id == Id);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade inlämning med id {Id}";
+            return response;
+        }
     }
 }

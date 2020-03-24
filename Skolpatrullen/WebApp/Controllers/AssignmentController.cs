@@ -48,5 +48,35 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> GetAssignmentById(int id)
+        {
+            string message = await GetUser();
+            var model = new Assignment();
+
+            var assignment = await APIGetAssignmentById(id);
+            //var courseRole = await APIGetCourseRole(User.Id, id);
+            //var isSchoolAdmin = false;
+            if (assignment.Data != null)
+            {
+                //var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, assignment.Data.SchoolId);
+                //isSchoolAdmin = isSchoolAdminResponse.Data;
+                model = assignment.Data;
+                return View("AssignmentDetails", model);
+            }
+            else
+            {
+                return NotFound();
+            }
+            //if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
+            //{
+            //    return View("AdminCourseDetails", model);
+            //}
+            //else
+            //{
+            //    return View("CourseDetails", model);
+            //}
+        }
     }
 }

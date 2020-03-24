@@ -280,5 +280,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await (APIGet($"/Lesson/userlessons/{userid}"));
             return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
         }
+        public async Task<APIResponse<Assignment>> APIGetAssignmentById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/Assignment/GetAssignmentById/" + Id.ToString());
+            return (APIResponse<Assignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Assignment>));
+        }
     }
 }
