@@ -22,8 +22,6 @@ namespace WebAPI.Controllers
         {
             APIResponse<IEnumerable<Assignment>> response = new APIResponse<IEnumerable<Assignment>>();
             response.Data = _context.Assignments.Where(a => a.CourseId == Id);
-
-
             if (response.Data != null)
             {
                 response.Success = true;

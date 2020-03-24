@@ -84,7 +84,5 @@ namespace WebAPI.Controllers
             response.SuccessMessage = $"Hämtadde kurs med id {Id}";
             return response;
         }
-
-
     }
 }
