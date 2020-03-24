@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Database.Models
+{
+    public class AssignmentFile
+    {
+        public int Id { get; set; }
+        public int FileId { get; set; }
+        public int AssignmentId { get; set; }
+        public Assignment Assignment{ get; set; }
+        public User User { get; set; }
+        public AssignmentFileType Type { get; set; }
+    }
+}
