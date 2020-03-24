@@ -139,6 +139,7 @@ namespace WebAPI.Controllers
                 assignmentfile.AssignmentId = body.AssignmentId;
                 assignmentfile.FileId = file.Id;
                 assignmentfile.Type = body.Type;
+                assignmentfile.UserId = body.UserId;
 
                 _context.AssignmentFiles.Add(assignmentfile);
                 _context.SaveChanges();

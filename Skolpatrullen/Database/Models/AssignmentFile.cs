@@ -9,8 +9,9 @@ namespace Database.Models
         public int Id { get; set; }
         public int FileId { get; set; }
         public int AssignmentId { get; set; }
-        public Assignment Assignment{ get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
         public AssignmentFileType Type { get; set; }
+        public Assignment Assignment{ get; set; }
     }
 }
