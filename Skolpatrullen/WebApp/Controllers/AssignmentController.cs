@@ -49,19 +49,15 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
-        [Route("[controller]/{id}")]
-        public async Task<IActionResult> GetAssignmentById(int id)
+        [Route("[controller]/{AssignmentId}")]
+        public async Task<IActionResult> GetAssignmentById(int AssignmentId)
         {
             string message = await GetUser();
             var model = new Assignment();
 
-            var assignment = await APIGetAssignmentById(id);
-            //var courseRole = await APIGetCourseRole(User.Id, id);
-            //var isSchoolAdmin = false;
+            var assignment = await APIGetAssignmentById(AssignmentId);
             if (assignment.Data != null)
             {
-                //var isSchoolAdminResponse = await APIIsSchoolAdmin(User.Id, assignment.Data.SchoolId);
-                //isSchoolAdmin = isSchoolAdminResponse.Data;
                 model = assignment.Data;
                 return View("AssignmentDetails", model);
             }
@@ -69,14 +65,6 @@ namespace WebApp.Controllers
             {
                 return NotFound();
             }
-            //if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
-            //{
-            //    return View("AdminCourseDetails", model);
-            //}
-            //else
-            //{
-            //    return View("CourseDetails", model);
-            //}
         }
     }
 }
