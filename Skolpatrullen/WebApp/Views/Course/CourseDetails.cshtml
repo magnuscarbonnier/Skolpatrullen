@@ -33,7 +33,7 @@
             @foreach (var blogpost in Model.CourseBlogPosts)
             {
                 <div class="bg-light">
-                    <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  hh:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
+                    <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
                     <h5>@blogpost.Title</h5>
                     <p>@blogpost.Content</p>
                     <h6>Hashtags: @blogpost.HashTags</h6>
