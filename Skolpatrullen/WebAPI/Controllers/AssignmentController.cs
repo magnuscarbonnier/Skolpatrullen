@@ -18,14 +18,14 @@ namespace WebAPI.Controllers
         
         [HttpGet]
         [Route("[controller]/GetAssignmentByCourse/{Id}")]
-        public APIResponse<IEnumerable<Assignment>> GetAssignmentByCourse(int Id)
+        public APIResponse<IEnumerable<Assignment>> GetAssignmentByCourse(int CourseId)
         {
             APIResponse<IEnumerable<Assignment>> response = new APIResponse<IEnumerable<Assignment>>();
-            response.Data = _context.Assignments.Where(a => a.CourseId == Id);
+            response.Data = _context.Assignments.Where(a => a.CourseId == CourseId);
             if (response.Data != null)
             {
                 response.Success = true;
-                response.SuccessMessage = $"Hämtade inlämningar med kurs id {Id}";
+                response.SuccessMessage = $"Hämtade inlämningar med kurs id {CourseId}";
             }
             else
             {
@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
                 _context.SaveChanges();
                 response.Data = assignment;
                 response.Success = true;
-                response.SuccessMessage = $"La till kurs med namn {assignment.Name}";
+                response.SuccessMessage = $"La till inlämning med namn {assignment.Name}";
             }
             else
             {
