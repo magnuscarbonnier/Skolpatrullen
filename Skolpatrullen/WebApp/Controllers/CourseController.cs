@@ -214,19 +214,6 @@ namespace WebApp.Controllers
                 return View();
             }
         }
-        [HttpPost]
-        [Route("[controller]/AddCourseAssignment")]
-        public async Task<IActionResult> AddCourseAssignment(Assignment assignment, int courseId)
-        {
-            string message = await GetUser();
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            assignment.CourseId = courseId;
-            var response = await APIAddAssignment(assignment);
-
-            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
-        }
+        
     }
 }
