@@ -1,9 +1,8 @@
-﻿@model Database.Models.Course
+﻿@model Database.Models.User
+
 @{
     ViewData["Title"] = "Home Page";
 }
-
-@Html.HiddenFor(c => c.Id, new { Id = "CourseId" })
 <div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100vh;'>
     <div class="dhx_cal_navline">
         <div class="dhx_cal_prev_button">&nbsp;</div>
@@ -76,14 +75,14 @@
     scheduler.config.readonly = true;
     scheduler.init('scheduler_here', new Date(), "month");
     //load data from backend
-    scheduler.load("https://localhost:44367/lesson", "json");
+    scheduler.load("https://localhost:44367/lesson/userlessons/@Model.Id", "json");
 
     //connect backend to scheduler
-    var dp = new dataProcessor("https://localhost:44367/lesson/");
+    var dp = new dataProcessor("https://localhost:44367/lesson/userlessons/@Model.Id");
     dp.init(scheduler);
     dp.attachEvent("onAfterUpdate", function (id, action, tid, response) {
         scheduler.clearAll();
-        scheduler.load("https://localhost:44367/lesson", "json");
+        scheduler.load("https://localhost:44367/lesson/userlessons/@Model.Id", "json");
     });
 
     //set data exchange mode

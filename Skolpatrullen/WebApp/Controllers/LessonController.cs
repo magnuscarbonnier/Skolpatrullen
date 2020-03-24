@@ -28,8 +28,7 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                //var course = (await APIGetCourseById(id)).Data;
-                return View("LessonList");
+                return View("UserLessonList", User);
             }
             return RedirectToAction("Index", "Home");
         }
