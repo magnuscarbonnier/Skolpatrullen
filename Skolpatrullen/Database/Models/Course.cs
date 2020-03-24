@@ -18,7 +18,7 @@ namespace Database.Models
         public ICollection<CourseParticipant> CourseParticipants { get; set; }
         public ICollection<CourseRoom> CourseRooms { get; set; }
         public ICollection<Lesson> CourseLessons { get; set; }
-        public ICollection<CourseBlogPost> CourseBlogPosts { get; set; }
+        public IEnumerable<CourseBlogPost> CourseBlogPosts { get; set; }
         public School School { get; set; }
     }
 }

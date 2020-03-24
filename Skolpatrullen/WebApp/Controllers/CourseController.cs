@@ -126,6 +126,7 @@ namespace WebApp.Controllers
             var model = new Course();
 
             var course = await APIGetCourseById(id);
+            var courseBlog = await APIGetBlogPostsByCourseId(id);
             var courseRole = await APIGetCourseRole(User.Id, id);
             var isSchoolAdmin = false;
             if (course.Data != null)
@@ -136,10 +137,14 @@ namespace WebApp.Controllers
             }
             if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data;
                 return View("AdminCourseDetails", model);
             }
             else
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data;
                 return View("CourseDetails", model);
             }
         }
