@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,10 @@ namespace WebApp.ViewModels
         public DateTime Deadline { get; set; }
 
         public int CourseId { get; set; }
-
-        public IEnumerable<UploadCourseFileViewModel> AssignmentFiles { get; set; }
+    }
+    public class UploadAssignmentFileViewModel : AssignmentViewModel
+    {
+        public int UserId { get; set; }
+        public IFormFile File { get; set; }
     }
 }

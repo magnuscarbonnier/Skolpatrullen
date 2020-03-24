@@ -144,8 +144,8 @@ namespace WebApp.Controllers
             }
         }
         [HttpPost]
-        [Route("[controller]/UploadCourseFile")]
-        public async Task<IActionResult> UploadCourseFile(UploadCourseFileViewModel vm, int courseId)
+        [Route("[controller]/UploadAssignmentFile")]
+        public async Task<IActionResult> UploadAssignmentFile(UploadAssignmentFileViewModel vm, int courseId)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
@@ -154,7 +154,7 @@ namespace WebApp.Controllers
             }
             if (vm.File != null && vm.File.Length > 0)
             {
-                CourseFileBody body = new CourseFileBody();
+                AssignmentFileBody body = new AssignmentFileBody();
                 byte[] bytefile = null;
                 using (var filestream = vm.File.OpenReadStream())
                 using (var memstream = new MemoryStream())
@@ -166,11 +166,11 @@ namespace WebApp.Controllers
                 body.File = bytefile;
                 body.UploadDate = DateTime.Now;
                 body.UserId = User.Id;
-                body.CourseId = courseId;
+                body.AssignmentId = vm.Id;
                 body.ContentType = vm.File.ContentType;
                 body.Name = vm.File.FileName;
 
-                var response = await APIUploadCourseFile(body);
+                var response = await APIUploadAssignmentFile(body);
             }
             return RedirectToAction("GetCourseById", new { Id = courseId });
         }
@@ -216,17 +216,58 @@ namespace WebApp.Controllers
         }
         [HttpPost]
         [Route("[controller]/AddCourseAssignment")]
-        public async Task<IActionResult> AddCourseAssignment(Assignment assignment, int courseId)
+        public async Task<IActionResult> AddCourseAssignment(UploadAssignmentFileViewModel assignment, int courseId)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            assignment.CourseId = courseId;
-            var response = await APIAddAssignment(assignment);
+            Assignment newAssignmnet = new Assignment();
+            newAssignmnet.CourseId = courseId;
+            newAssignmnet.Deadline = assignment.Deadline;
+            newAssignmnet.Description = assignment.Description;
+            newAssignmnet.Name = assignment.Name;
+
+            if(assignment.File != null)
+            {
+                //add file to db
+            }
+
+            var response = await APIAddAssignment(newAssignmnet);
 
             return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
+        }
+        [HttpPost]
+        [Route("[controller]/UploadCourseAssignment")]
+        public async Task<IActionResult> UploadCourseAssignment(UploadAssignmentFileViewModel vm, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            if (vm.File != null && vm.File.Length > 0)
+            {
+                CourseFileBody body = new CourseFileBody();
+                byte[] bytefile = null;
+                using (var filestream = vm.File.OpenReadStream())
+                using (var memstream = new MemoryStream())
+                {
+                    filestream.CopyTo(memstream);
+                    bytefile = memstream.ToArray();
+                }
+
+                body.File = bytefile;
+                body.UploadDate = DateTime.Now;
+                body.UserId = User.Id;
+                body.CourseId = courseId;
+                body.ContentType = vm.File.ContentType;
+                body.Name = vm.File.FileName;
+
+                var response = await APIUploadCourseFile(body);
+            }
+            return RedirectToAction("GetCourseById", new { Id = courseId });
         }
     }
 }
