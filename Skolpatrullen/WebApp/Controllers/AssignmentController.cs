@@ -49,13 +49,13 @@ namespace WebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
         [HttpGet]
-        [Route("[controller]/{AssignmentId}")]
-        public async Task<IActionResult> GetAssignmentById(int AssignmentId)
+        [Route("[controller]/{id}")]
+        public async Task<IActionResult> GetAssignmentById(int id)
         {
             string message = await GetUser();
             var model = new Assignment();
 
-            var assignment = await APIGetAssignmentById(AssignmentId);
+            var assignment = await APIGetAssignmentById(id);
             if (assignment.Data != null)
             {
                 model = assignment.Data;
