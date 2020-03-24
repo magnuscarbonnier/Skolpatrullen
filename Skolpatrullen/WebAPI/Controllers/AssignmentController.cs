@@ -17,7 +17,7 @@ namespace WebAPI.Controllers
         }
         
         [HttpGet]
-        [Route("[controller]/GetAssignmentByCourse/{Id}")]
+        [Route("[controller]/GetAssignmentByCourse/{CourseId}")]
         public APIResponse<IEnumerable<Assignment>> GetAssignmentByCourse(int CourseId)
         {
             APIResponse<IEnumerable<Assignment>> response = new APIResponse<IEnumerable<Assignment>>();
