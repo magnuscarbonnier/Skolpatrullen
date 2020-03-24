@@ -153,5 +153,24 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetFilesByAssignment/{id}")]
+        public APIResponse<IEnumerable<File>> GetFilesByAssignment(int id)
+        {
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.AssignmentFiles.Include(af => af.FileId).Where(af => af.AssignmentId == id).Select(af => af.File);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla filer";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
     }
 }

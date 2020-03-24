@@ -13,5 +13,6 @@ namespace Database.Models
         public User User { get; set; }
         public AssignmentFileType Type { get; set; }
         public Assignment Assignment{ get; set; }
+        public File File { get; set; }
     }
 }
