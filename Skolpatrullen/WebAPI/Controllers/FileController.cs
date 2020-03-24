@@ -82,10 +82,8 @@ namespace WebAPI.Controllers
         public APIResponse UploadCourseFile(CourseFileBody body)
         {
             APIResponse response = new APIResponse();
-
+            
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
-
-
             if (user != null && body.File.Length > 0)
             {
                 File file = new File();
