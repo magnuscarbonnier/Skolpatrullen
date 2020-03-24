@@ -37,13 +37,13 @@
             @await Html.PartialAsync("_AddCourseBlogPost", new Database.Models.CourseBlogPost { CourseId = Model.Id })
             @foreach (var blogpost in Model.CourseBlogPosts)
             {
-                <div class="bg-light">
-                    <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
-                    <h5>@blogpost.Title</h5>
-                    <p>@blogpost.Content</p>
-                    <h6>Hashtags: @blogpost.HashTags</h6>
-                    <a asp-area="" asp-controller="Course" asp-action="RemoveCourseBlogPost" asp-route-Id="@blogpost.Id">Ta bort inlägg</a>
-                </div>
+        <div class="bg-light">
+            <h6>@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
+            <h5>@blogpost.Title</h5>
+            <p>@blogpost.Content</p>
+            <h6>Hashtags: @blogpost.HashTags</h6>
+            @Html.ActionLink("Ta bort", "RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })
+        </div>
                 <br />
             }
         </div>

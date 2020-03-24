@@ -295,5 +295,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/File/UploadAssignmentFile/", body);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
+        public async Task<APIResponse> APIRemoveBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/CourseBlog/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
     }
 }

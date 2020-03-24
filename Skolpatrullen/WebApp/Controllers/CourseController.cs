@@ -249,5 +249,13 @@ namespace WebApp.Controllers
 
             return RedirectToAction("GetCourseById", new { Id = blogPost.CourseId });
         }
+        [HttpGet]
+        [Route("[controller]/RemoveCourseBlogPost/{id}")]
+        public async Task<IActionResult> RemoveCourseBlogPost(int Id, int CourseId)
+        {
+            var response = await APIRemoveBlogPost(Id);
+            SetResponseMessage(response);
+            return RedirectToAction("GetCourseById", new { id = CourseId});
+        }
     }
 }

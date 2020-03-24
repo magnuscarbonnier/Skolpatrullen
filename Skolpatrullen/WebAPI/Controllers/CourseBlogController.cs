@@ -21,24 +21,24 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<CourseBlogPost>> GetBlogPostsByCourseId(int id)
         {
             APIResponse<IEnumerable<CourseBlogPost>> response = new APIResponse<IEnumerable<CourseBlogPost>>();
- 
+
             var courseBlogList = from cbp in _context.CourseBlogPosts
-                           join co in _context.Courses on cbp.CourseId equals co.Id
-                           join us in _context.Users on cbp.UserId equals us.Id
-                           where cbp.CourseId == id
-                           orderby cbp.PublishDate descending
-                           select new CourseBlogPost
-                           {
-                               Id = cbp.Id,
-                               Title=cbp.Title,
-                               Content=cbp.Content,
-                               HashTags=cbp.HashTags,
-                               PublishDate=cbp.PublishDate,
-                               Course=co,
-                               CourseId=cbp.CourseId,
-                               UserId = cbp.UserId,
-                               User = us
-                           };
+                                 join co in _context.Courses on cbp.CourseId equals co.Id
+                                 join us in _context.Users on cbp.UserId equals us.Id
+                                 where cbp.CourseId == id
+                                 orderby cbp.PublishDate descending
+                                 select new CourseBlogPost
+                                 {
+                                     Id = cbp.Id,
+                                     Title = cbp.Title,
+                                     Content = cbp.Content,
+                                     HashTags = cbp.HashTags,
+                                     PublishDate = cbp.PublishDate,
+                                     Course = co,
+                                     CourseId = cbp.CourseId,
+                                     UserId = cbp.UserId,
+                                     User = us
+                                 };
             if (courseBlogList != null)
             {
                 response.Data = courseBlogList;
@@ -54,13 +54,33 @@ namespace WebAPI.Controllers
             APIResponse<CourseBlogPost> response = new APIResponse<CourseBlogPost>();
             if (blogPost != null)
             {
-                
-                    _context.CourseBlogPosts.Add(blogPost);
-                    _context.SaveChanges();
-                    response.Data = blogPost;
-                    response.Success = true;
-                    response.SuccessMessage = $"La till inlägg med titel {blogPost.Title}";
-                
+
+                _context.CourseBlogPosts.Add(blogPost);
+                _context.SaveChanges();
+                response.Data = blogPost;
+                response.Success = true;
+                response.SuccessMessage = $"La till inlägg med titel {blogPost.Title}";
+
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public APIResponse Remove(int id)
+        {
+            APIResponse response = new APIResponse();
+            var removeBlogPost = _context.CourseBlogPosts.SingleOrDefault(s => s.Id == id);
+            if (removeBlogPost != null)
+            {
+                _context.Remove(removeBlogPost);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Tog bort inlägg med id {removeBlogPost.Id} och titel {removeBlogPost.Title}";
+            }
+            else
+            {
+                response.FailureMessage = $"Inlägget fanns inte";
+                response.Success = false;
             }
             return response;
         }
