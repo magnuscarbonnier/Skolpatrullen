@@ -275,9 +275,9 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet("/Assignment/GetAssignmentByCourse/" + id);
             return (APIResponse<IEnumerable<Assignment>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Assignment>>));
         }
-        public async Task<APIResponse<IEnumerable<LessonViewModel>>> APIGetAllLessons(int userid)
+        public async Task<APIResponse<IEnumerable<LessonViewModel>>> APIGetUserLessons(int userid)
         {
-            HttpResponseMessage response = await (APIGet($"/Lesson/userlessons/{userid}"));
+            HttpResponseMessage response = await (APIGet($"/Lesson/UserLessons/{userid}"));
             return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
         }
         public async Task<APIResponse<IEnumerable<CourseBlogPost>>> APIGetBlogPostsByCourseId(int id)
