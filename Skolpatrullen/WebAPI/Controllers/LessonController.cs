@@ -117,15 +117,15 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/userlessons/{id}")]
-        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByUserId(int id)
+        [Route("[controller]/UserLessons/{UserId}")]
+        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByUserId(int UserId)
         {
             APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
             var lessonlist = _context.Lessons
                 .Include(les => les.Course)
                     .ThenInclude(c => c.CourseParticipants)
                         .ThenInclude(cp => cp.User)
-                .Where(les => les.Course.CourseParticipants.Any(cp => cp.User.Id == id && cp.Status == Status.Antagen))
+                .Where(les => les.Course.CourseParticipants.Any(cp => cp.User.Id == UserId && cp.Status == Status.Antagen))
                 .Select(les => (LessonViewModel)les)
                 .ToList();
             
