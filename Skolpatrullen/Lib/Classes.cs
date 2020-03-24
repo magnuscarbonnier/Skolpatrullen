@@ -61,6 +61,7 @@ namespace Lib
     public class AssignmentFileBody : FileBody
     {
         public int AssignmentId { get; set; }
+        public IEnumerable<byte[]> Files { get; set; }
         public AssignmentFileType Type { get; set; }
     }
     public class AsId

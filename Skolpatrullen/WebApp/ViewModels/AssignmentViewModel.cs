@@ -18,6 +18,6 @@ namespace WebApp.ViewModels
     public class UploadAssignmentFileViewModel : AssignmentViewModel
     {
         public int UserId { get; set; }
-        public IFormFile File { get; set; }
+        public IEnumerable<IFormFile> File { get; set; }
     }
 }
