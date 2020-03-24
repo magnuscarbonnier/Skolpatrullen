@@ -265,10 +265,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/File/GetAllFilesByCourse/{courseId}");
             return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
         }
-        public async Task<APIResponse> APIAddAssignment(Assignment assignment)
+        public async Task<APIResponse<Assignment>> APIAddAssignment(Assignment assignment)
         {
             HttpResponseMessage response = await APIPost("/Assignment/Add/", assignment);
-            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+            return (APIResponse<Assignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Assignment>));
         }
         public async Task<APIResponse<IEnumerable<Assignment>>> APIGetAssignmentByCourseId(int id)
         {

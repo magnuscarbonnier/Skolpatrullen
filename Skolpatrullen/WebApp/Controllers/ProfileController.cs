@@ -205,5 +205,32 @@ namespace WebApp.Controllers
 
 
         }
+        [HttpGet]
+        [Route("[controller]/GetPublicProfile/{userId}")]
+        public async Task<IActionResult> GetPublicProfile(int userId)
+        {
+            string message = await GetUser();
+            var user = await APIGetUserById(userId);
+
+            if (user != null)
+            {
+                ProfileViewModel pvm = new ProfileViewModel();
+                pvm.Address = user.Data.Address;
+                pvm.City = user.Data.City;
+                pvm.Email = user.Data.Email;
+                pvm.Phone = user.Data.Phone;
+                pvm.PostalCode = user.Data.PostalCode;
+                pvm.Name = user.Data.FirstName + " " + user.Data.LastNames;
+
+                if(user.Data.ProfilePictureId != null)
+                {
+                    var fileResponse = await APIGetFileById(Convert.ToInt32(user.Data.ProfilePictureId));
+                    pvm.File = fileResponse.Data;
+                }
+                return View("PublicProfilePage", pvm);
+            }
+            return View("CourseParticipantList");
+
+        }
     }
 }
