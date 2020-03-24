@@ -124,8 +124,7 @@ namespace WebAPI.Controllers
             var lessonlist = _context.Lessons
                 .Include(les => les.Course)
                     .ThenInclude(c => c.CourseParticipants)
-                        .ThenInclude(cp => cp.User)
-                .Where(les => les.Course.CourseParticipants.Any(cp => cp.User.Id == UserId && cp.Status == Status.Antagen))
+                .Where(les => les.Course.CourseParticipants.Any(cp => cp.UserId == UserId && cp.Status == Status.Antagen))
                 .Select(les => (LessonViewModel)les)
                 .ToList();
             
