@@ -116,5 +116,26 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/userlessons/{id}")]
+        public APIResponse<IEnumerable<LessonViewModel>> GetLessonsByUserId(int id)
+        {
+            APIResponse<IEnumerable<LessonViewModel>> response = new APIResponse<IEnumerable<LessonViewModel>>();
+            var lessonlist = _context.Lessons
+                .Include(les => les.Course)
+                    .ThenInclude(c => c.CourseParticipants)
+                        .ThenInclude(cp => cp.User)
+                .Where(les => les.Course.CourseParticipants.Any(cp => cp.User.Id == id && cp.Status == Status.Antagen))
+                .Select(les => (LessonViewModel)les)
+                .ToList();
+            
+            if (lessonlist != null)
+            {
+                response.Data = lessonlist;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla lektioner";
+            }
+            return response;
+        }
     }
 }

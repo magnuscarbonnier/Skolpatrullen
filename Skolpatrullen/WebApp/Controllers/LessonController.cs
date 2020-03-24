@@ -21,5 +21,17 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        [Route("[controller]/UserCalendar")]
+        public async Task<IActionResult> UserLessonCalendar()
+        {
+            string message = await GetUser();
+            if (User != null)
+            {
+                //var course = (await APIGetCourseById(id)).Data;
+                return View("LessonList");
+            }
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
