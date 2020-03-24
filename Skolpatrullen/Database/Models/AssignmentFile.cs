@@ -15,4 +15,9 @@ namespace Database.Models
         public Assignment Assignment{ get; set; }
         public File File { get; set; }
     }
+    public enum AssignmentFileType
+    {
+        StudentFile = 0,
+        AssignmentFile = 1
+    }
 }
