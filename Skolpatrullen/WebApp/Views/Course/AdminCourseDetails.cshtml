@@ -26,7 +26,7 @@
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
             </li>
             <li>
-                @await Html.PartialAsync("_AddCourseAssignment", new Database.Models.Assignment { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
+                @await Html.PartialAsync("_AddCourseAssignment", new WebApp.ViewModels.AssignmentViewModel { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
             </li>
         </ul>
     </div>

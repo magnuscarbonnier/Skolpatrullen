@@ -113,5 +113,66 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpPost]
+        [Route("[controller]/UploadAssignmentFile")]
+        public APIResponse UploadAssignmentFile(AssignmentFileBody body)
+        {
+            APIResponse response = new APIResponse();
+
+            //checks if user exists
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+
+            if (user != null && body.File.Length > 0)
+            {
+                File file = new File();
+                AssignmentFile assignmentfile = new AssignmentFile();
+
+                file.Binary = body.File;
+                file.UploadDate = body.UploadDate;
+                file.ContentType = body.ContentType;
+                file.Type = FileTypes.CourseFile;
+                file.Name = body.Name;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                assignmentfile.AssignmentId = body.AssignmentId;
+                assignmentfile.FileId = file.Id;
+                assignmentfile.Type = body.Type;
+                assignmentfile.UserId = body.UserId;
+
+                _context.AssignmentFiles.Add(assignmentfile);
+                _context.SaveChanges();
+
+                response.SuccessMessage = "Laddade upp inlämningsfil";
+                response.Success = true;
+            }
+            else
+            {
+                response.FailureMessage = "Filen laddades inte upp";
+                response.Success = false;
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetFilesByAssignment/{AssignmentId}")]
+        public APIResponse<IEnumerable<File>> GetFilesByAssignment(int AssignmentId)
+        {
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.AssignmentId == AssignmentId).Select(af => af.File);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla filer";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
     }
 }

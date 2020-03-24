@@ -183,7 +183,7 @@ namespace WebApp.Controllers
             {
                 IEnumerable<CourseFileBody> files = new List<CourseFileBody>();
                 var response = await APIGetAllCourseFiles(courseId);
-                if(response.Data != null)
+                if (response.Data != null)
                 {
                     files = response.Data.Select(f => new CourseFileBody()
                     {
@@ -205,7 +205,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DownloadFile(int id)
         {
             var file = await APIGetFileById(id);
-            if(file != null)
+            if (file != null)
             {
                 return File(file.Data.Binary, file.Data.ContentType, file.Data.Name);
             }
@@ -214,6 +214,50 @@ namespace WebApp.Controllers
                 return View();
             }
         }
-        
+        [HttpPost]
+        [Route("[controller]/AddCourseAssignment")]
+        public async Task<IActionResult> AddCourseAssignment(AssignmentViewModel assignment, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            Assignment newAssignmnet = new Assignment();
+            newAssignmnet.CourseId = courseId;
+            newAssignmnet.Deadline = assignment.Deadline;
+            newAssignmnet.Description = assignment.Description;
+            newAssignmnet.Name = assignment.Name;
+
+            var response = await APIAddAssignment(newAssignmnet);
+
+            if (assignment.File != null && assignment.File.Any())
+            {
+                foreach (var file in assignment.File)
+                {
+                    AssignmentFileBody body = new AssignmentFileBody();
+                    byte[] bytefile = null;
+                    using (var filestream = file.OpenReadStream())
+                    using (var memstream = new MemoryStream())
+                    {
+                        filestream.CopyTo(memstream);
+                        bytefile = memstream.ToArray();
+                    }
+
+                    body.File = bytefile;
+                    body.UploadDate = DateTime.Now;
+                    body.UserId = User.Id;
+                    body.AssignmentId = response.Data.Id;
+                    body.ContentType = file.ContentType;
+                    body.Name = file.FileName;
+                    body.Type = AssignmentFileType.AssignmentFile;
+
+                    APIUploadAssignmentFile(body);
+                }
+            }
+
+
+            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
+        }
     }
 }
