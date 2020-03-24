@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Database.Models.Assignment>
+@{
+    ViewData["Title"] = "Inlämningar";
+}
+
+<h1>Inlämningar</h1>
+
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Namn
+                    </th>
+                    <th scope="col">
+                        Beskrivning
+                    </th>
+                    <th scope="col">
+                        Deadline
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(assignment.Name, "DownloadFile", new { id = assignment.Id })
+
+                        </td>
+                        <td>
+                            @assignment.Description
+                        </td>
+                        <td>
+                            @assignment.Deadline
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
