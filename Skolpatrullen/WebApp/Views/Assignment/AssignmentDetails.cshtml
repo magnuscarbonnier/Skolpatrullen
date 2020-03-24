@@ -1,0 +1,32 @@
+﻿@model Database.Models.Assignment
+
+@{
+    ViewData["Title"] = "Inlämning";
+}
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+
+
+<div>
+    <h1>@Model.Name</h1>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Sista inlämningsdag
+        </dt>
+        <dd class="col-sm-10" style="font-weight: bold">
+            @Html.DisplayFor(model => model.Deadline)
+        </dd>
+        <dt class="col-sm-2">
+            Filer
+        </dt>
+        <dd class="col-sm-10">
+            ExFil
+        </dd>
+        <dt class="col-sm-2">
+            Beskrivning
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+    </dl>
+</div>

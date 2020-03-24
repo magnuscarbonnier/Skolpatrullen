@@ -17,7 +17,7 @@
                 <a class="nav-link text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary disabled" href="#"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
+                <a class="nav-link text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
