@@ -252,7 +252,7 @@ namespace WebApp.Controllers
                     body.Name = file.FileName;
                     body.Type = AssignmentFileType.AssignmentFile;
 
-                    var fileresponse = await APIUploadAssignmentFile(body);
+                    APIUploadAssignmentFile(body);
                 }
             }
 
