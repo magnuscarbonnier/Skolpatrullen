@@ -29,6 +29,11 @@ namespace WebAPI.Controllers
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla inlägg för kurs med id: {CourseId}";
             }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Kunde inte hämta kursinlägg";
+            }
             return response;
         }
         [HttpPost]
@@ -38,13 +43,16 @@ namespace WebAPI.Controllers
             APIResponse<CourseBlogPost> response = new APIResponse<CourseBlogPost>();
             if (blogPost != null)
             {
-
                 _context.CourseBlogPosts.Add(blogPost);
                 _context.SaveChanges();
                 response.Data = blogPost;
                 response.Success = true;
                 response.SuccessMessage = $"La till inlägg med titel {blogPost.Title}";
-
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Fick inget inlägg";
             }
             return response;
         }
