@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -45,10 +46,21 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<CourseParticipant>> GetCourseParticipantsByUserId(int Id)
         {
             APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
-            response.Data = _context.CourseParticipants.Where(u => u.UserId == Id).ToList();
 
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
+            var courseParticipants = _context.CourseParticipants.Where(cp=>cp.UserId==Id);
+                
+            if (courseParticipants != null)
+            {
+                response.Data = courseParticipants;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga kursdeltaganden för användare med id {Id}";
+            }
+            
             return response;
         }
         [HttpGet]
