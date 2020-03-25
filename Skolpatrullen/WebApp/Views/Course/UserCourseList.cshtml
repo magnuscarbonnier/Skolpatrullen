@@ -3,7 +3,7 @@
     ViewData["Title"] = "UserCourseList";
 }
 
-<h1>UserCourseList</h1>
+<h1>Dina kurser</h1>
 
 Kurser du är antagen till:
 @foreach (var courseParticipant in Model.CourseParticipantList.Where(cp => cp.Status == Database.Models.Status.Antagen))
@@ -33,11 +33,13 @@ Kurser du är antagen till:
         </div>
         <div>
             Status: @courseParticipant.Status
-            @if(courseParticipant.Status==Database.Models.Status.Ansökt)
-            {
-            <a href="@Url.ActionLink("RemoveCP", "CourseParticipant", new { id = courseParticipant.Id })">Ta bort ansökan</a>
-            }
         </div>
+            @if (courseParticipant.Status == Database.Models.Status.Ansökt)
+            {
+                <div>
+                <a class="btn btn-danger" href="@Url.ActionLink("RemoveCP", "CourseParticipant", new { id = courseParticipant.Id })">Ta bort ansökan</a>
+                </div>
+            }
     </div>
     <br />
 }
