@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
         {
             APIResponse response = new APIResponse();
             var removeCP = _context.CourseParticipants.SingleOrDefault(s => s.Id == id);
-            if (removeCP != null && removeCP.Status==Status.Ansökt)
+            if (removeCP != null && removeCP.Status==Status.Ansökt && removeCP.Grade == null)
             {
                 _context.Remove(removeCP);
                 _context.SaveChanges();
@@ -97,7 +97,7 @@ namespace WebAPI.Controllers
             else if (removeCP != null && removeCP.Status != Status.Ansökt)
             {
                 response.Success = false;
-                response.SuccessMessage = $"Du får ej ta bort kursdeltagare med id {id}. Går endast att ta bort om status är Ansökt.";
+                response.SuccessMessage = $"Du får ej ta bort kursdeltagare med id {id}. Går endast att ta bort om status är Ansökt och betyg ej är satt.";
             }
             else
             {
