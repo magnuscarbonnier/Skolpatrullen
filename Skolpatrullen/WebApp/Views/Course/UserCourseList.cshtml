@@ -35,7 +35,7 @@ Kurser du är antagen till:
             Status: @courseParticipant.Status
             @if(courseParticipant.Status==Database.Models.Status.Ansökt)
             {
-            <a href="@Url.ActionLink("Remove", "CourseParticipant", new Database.Models.CourseParticipant { Id = courseParticipant.Id })">Ta bort ansökan</a>
+            <a href="@Url.ActionLink("RemoveCP", "CourseParticipant", new { id = courseParticipant.Id })">Ta bort ansökan</a>
             }
         </div>
     </div>

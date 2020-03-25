@@ -81,6 +81,31 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public APIResponse Remove(int id)
+        {
+            APIResponse response = new APIResponse();
+            var removeCP = _context.CourseParticipants.SingleOrDefault(s => s.Id == id);
+            if (removeCP != null && removeCP.Status==Status.Ansökt)
+            {
+                _context.Remove(removeCP);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Tog bort kursdeltagare med id {id}";
+            }
+            else if (removeCP != null && removeCP.Status != Status.Ansökt)
+            {
+                response.Success = false;
+                response.SuccessMessage = $"Du får ej ta bort kursdeltagare med id {id}. Går endast att ta bort om status är Ansökt.";
+            }
+            else
+            {
+                response.FailureMessage = $"Kursdeltagaren fanns inte";
+                response.Success = false;
+            }
+            return response;
+        }
         CourseParticipant AddOrUpdateCourseParticipant(CourseParticipant courseParticipant)
         {
             var existingCourseParticipant = _context.CourseParticipants.SingleOrDefault(cp => cp.CourseId == courseParticipant.CourseId && cp.UserId == courseParticipant.UserId);
