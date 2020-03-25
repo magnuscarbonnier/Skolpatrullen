@@ -126,6 +126,7 @@ namespace WebApp.Controllers
             var model = new Course();
 
             var course = await APIGetCourseById(id);
+            var courseBlog = await APIGetBlogPostsByCourseId(id);
             var courseRole = await APIGetCourseRole(User.Id, id);
             var isSchoolAdmin = false;
             if (course.Data != null)
@@ -136,10 +137,14 @@ namespace WebApp.Controllers
             }
             if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data;
                 return View("AdminCourseDetails", model);
             }
             else
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data;
                 return View("CourseDetails", model);
             }
         }
@@ -258,6 +263,30 @@ namespace WebApp.Controllers
 
 
             return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
+        }
+        [HttpPost]
+        [Route("[controller]/AddCourseBlogPost")]
+        public async Task<IActionResult> AddCourseBlogPost(CourseBlogPost blogPost, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            blogPost.CourseId = courseId;
+            blogPost.UserId = User.Id;
+            blogPost.PublishDate = DateTime.Now;
+            var response = await APIAddBlogPost(blogPost);
+
+            return RedirectToAction("GetCourseById", new { Id = blogPost.CourseId });
+        }
+        [HttpGet]
+        [Route("[controller]/RemoveCourseBlogPost/{id}")]
+        public async Task<IActionResult> RemoveCourseBlogPost(int Id, int CourseId)
+        {
+            var response = await APIRemoveBlogPost(Id);
+            SetResponseMessage(response);
+            return RedirectToAction("GetCourseById", new { id = CourseId});
         }
     }
 }

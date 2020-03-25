@@ -280,6 +280,16 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await (APIGet($"/Lesson/UserLessons/{userid}"));
             return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
         }
+        public async Task<APIResponse<IEnumerable<CourseBlogPost>>> APIGetBlogPostsByCourseId(int id)
+        {
+            HttpResponseMessage response = await (APIGet("/CourseBlog/GetBlogPostsByCourseId/" + id));
+            return (APIResponse<IEnumerable<CourseBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<CourseBlogPost>>));
+        }
+        public async Task<APIResponse> APIAddBlogPost(CourseBlogPost blogPost)
+        {
+            HttpResponseMessage response = await APIPost("/CourseBlog/Add/", blogPost);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
         public async Task<APIResponse<Assignment>> APIGetAssignmentById(int Id)
         {
             HttpResponseMessage response = await APIGet("/Assignment/GetAssignmentById/" + Id.ToString());
@@ -288,6 +298,11 @@ namespace WebApp.Controllers
         public async Task<APIResponse> APIUploadAssignmentFile(AssignmentFileBody body)
         {
             HttpResponseMessage response = await APIPost("/File/UploadAssignmentFile/", body);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIRemoveBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/CourseBlog/Remove/{id}");
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
     }
