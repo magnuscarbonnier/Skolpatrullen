@@ -20,14 +20,29 @@ namespace WebApp.ViewModels
         public Course Course { get; set; }
         public User User { get; set; }
         public IEnumerable<CourseBlogPost> BlogPosts { get; set; }
-        public CourseBlogPost ToBlogPost(CourseBlogPost courseBlogPost)
+        public static explicit operator CourseBlogPost(CourseBlogViewModel vm)
         {
-            courseBlogPost.Title = Title;
-            courseBlogPost.Content = Content;
-            courseBlogPost.PublishDate = PublishDate;
-            courseBlogPost.UserId = UserId;
-            courseBlogPost.CourseId = CourseId;
-            return courseBlogPost;
+            return new CourseBlogPost
+            {
+                Id = vm.Id,
+                Title = vm.Title,
+                Content = vm.Content,
+                PublishDate = vm.PublishDate,
+                UserId = vm.UserId,
+                CourseId = vm.CourseId
+            };
+        }
+        public static explicit operator CourseBlogViewModel(CourseBlogPost post)
+        {
+            return new CourseBlogViewModel
+            {
+                Id = post.Id,
+                Title = post.Title,
+                Content = post.Content,
+                PublishDate = post.PublishDate,
+                UserId = post.UserId,
+                CourseId = post.CourseId
+            };
         }
     }
 }
