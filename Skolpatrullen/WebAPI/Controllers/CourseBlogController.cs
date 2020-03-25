@@ -17,32 +17,17 @@ namespace WebAPI.Controllers
         {
         }
         [HttpGet]
-        [Route("[controller]/GetBlogPostsByCourseId/{id}")]
-        public APIResponse<IEnumerable<CourseBlogPost>> GetBlogPostsByCourseId(int id)
+        [Route("[controller]/GetBlogPostsByCourseId/{CourseId}")]
+        public APIResponse<IEnumerable<CourseBlogPost>> GetBlogPostsByCourseId(int CourseId)
         {
             APIResponse<IEnumerable<CourseBlogPost>> response = new APIResponse<IEnumerable<CourseBlogPost>>();
 
-            var courseBlogList = from cbp in _context.CourseBlogPosts
-                                 join co in _context.Courses on cbp.CourseId equals co.Id
-                                 join us in _context.Users on cbp.UserId equals us.Id
-                                 where cbp.CourseId == id
-                                 orderby cbp.PublishDate descending
-                                 select new CourseBlogPost
-                                 {
-                                     Id = cbp.Id,
-                                     Title = cbp.Title,
-                                     Content = cbp.Content,
-                                     PublishDate = cbp.PublishDate,
-                                     Course = co,
-                                     CourseId = cbp.CourseId,
-                                     UserId = cbp.UserId,
-                                     User = us
-                                 };
+            var courseBlogList = _context.CourseBlogPosts.Include(cb => cb.User).Where(cb => cb.CourseId == CourseId);
             if (courseBlogList != null)
             {
                 response.Data = courseBlogList;
                 response.Success = true;
-                response.SuccessMessage = $"Hämtade alla inlägg för kurs med id: {id}";
+                response.SuccessMessage = $"Hämtade alla inlägg för kurs med id: {CourseId}";
             }
             return response;
         }
