@@ -17,7 +17,7 @@
                 <a class="nav-link text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary disabled" href="#"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
+                <a class="nav-link text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
@@ -26,7 +26,7 @@
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
             </li>
             <li>
-                @await Html.PartialAsync("_AddCourseAssignment", new WebApp.ViewModels.UploadAssignmentFileViewModel { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
+                @await Html.PartialAsync("_AddCourseAssignment", new WebApp.ViewModels.AssignmentViewModel { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
             </li>
         </ul>
     </div>
