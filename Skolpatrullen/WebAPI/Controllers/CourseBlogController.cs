@@ -32,7 +32,6 @@ namespace WebAPI.Controllers
                                      Id = cbp.Id,
                                      Title = cbp.Title,
                                      Content = cbp.Content,
-                                     HashTags = cbp.HashTags,
                                      PublishDate = cbp.PublishDate,
                                      Course = co,
                                      CourseId = cbp.CourseId,

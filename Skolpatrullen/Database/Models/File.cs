@@ -17,7 +17,7 @@ namespace Database.Models
         [Required]
         public FileTypes Type { get; set; }
         public string Name { get; set; }
-        public ICollection<User> Users { get; set; }
+        public IEnumerable<User> Users { get; set; }
     }
     public enum FileTypes
     {
