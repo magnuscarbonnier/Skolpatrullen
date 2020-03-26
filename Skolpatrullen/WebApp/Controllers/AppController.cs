@@ -310,5 +310,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/CourseParticipant/Remove/{id}");
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
+        public async Task<APIResponse<IEnumerable<Course>>> APIGetCoursesByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/Course/GetCoursesByUserId/{id}");
+            return (APIResponse<IEnumerable<Course>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Course>>));
+        }
+        public async Task<APIResponse<IEnumerable<School>>> APIGetSchoolsByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/School/GetSchoolsByUserId/{id}");
+            return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
+        }
     }
 }

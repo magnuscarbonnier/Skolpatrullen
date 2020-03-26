@@ -6,6 +6,7 @@ using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -28,6 +29,20 @@ namespace WebAPI.Controllers
                 response.Data = schoollist;
                 response.Success = true;
                 response.SuccessMessage = "Hämtade alla skolor";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetSchoolsByUserId/{Id}")]
+        public APIResponse<IEnumerable<School>> GetSchoolsByUserId(int Id)
+        {
+            APIResponse<IEnumerable<School>> response = new APIResponse<IEnumerable<School>>();
+            var schoollist = _context.CourseParticipants.Include(cp => cp.Course).ThenInclude(co => co.School).Where(cp => cp.UserId == Id).Select(cp=>cp.Course.School);
+            if (schoollist != null)
+            {
+                response.Data = schoollist;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla skolor för användare med id {Id}";
             }
             return response;
         }
