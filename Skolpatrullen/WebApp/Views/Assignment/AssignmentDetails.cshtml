@@ -20,7 +20,10 @@
             Filer
         </dt>
         <dd class="col-sm-10">
-            ExFil
+            @foreach (var file in Model.AssignmentFiles)
+            {
+                @file.Name
+            }
         </dd>
         <dt class="col-sm-2">
             Beskrivning

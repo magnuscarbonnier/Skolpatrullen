@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
+using Lib;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
 
@@ -12,17 +14,48 @@ namespace WebApp.Controllers
     {
         [HttpPost]
         [Route("[controller]/AddCourseAssignment")]
-        public async Task<IActionResult> AddCourseAssignment(Assignment assignment, int courseId)
+        public async Task<IActionResult> AddCourseAssignment(AssignmentViewModel assignment, int courseId)
         {
             string message = await GetUser();
             if (!ModelState.IsValid)
             {
                 return View();
             }
-            assignment.CourseId = courseId;
-            var response = await APIAddAssignment(assignment);
+            Assignment newAssignmnet = new Assignment();
+            newAssignmnet.CourseId = courseId;
+            newAssignmnet.Deadline = assignment.Deadline;
+            newAssignmnet.Description = assignment.Description;
+            newAssignmnet.Name = assignment.Name;
 
-            return RedirectToAction("GetCourseById", "Course", new { Id = assignment.CourseId });
+            var response = await APIAddAssignment(newAssignmnet);
+
+            if (assignment.File != null && assignment.File.Any())
+            {
+                foreach (var file in assignment.File)
+                {
+                    AssignmentFileBody body = new AssignmentFileBody();
+                    byte[] bytefile = null;
+                    using (var filestream = file.OpenReadStream())
+                    using (var memstream = new MemoryStream())
+                    {
+                        filestream.CopyTo(memstream);
+                        bytefile = memstream.ToArray();
+                    }
+
+                    body.File = bytefile;
+                    body.UploadDate = DateTime.Now;
+                    body.UserId = User.Id;
+                    body.AssignmentId = response.Data.Id;
+                    body.ContentType = file.ContentType;
+                    body.Name = file.FileName;
+                    body.Type = AssignmentFileType.AssignmentFile;
+
+                    APIUploadAssignmentFile(body);
+                }
+            }
+
+
+            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
         }
         [HttpGet]
         [Route("[controller]/CourseAssignments/{courseid}")]
@@ -55,10 +88,13 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new AssignmentViewModel();
-
+            
             var assignment = await APIGetAssignmentById(id);
+
             if (assignment.Data != null)
             {
+                var assignmentfiles = await APIGetFilesByAssignment(id);
+                model.AssignmentFiles = assignmentfiles.Data;
                 model.CourseId = assignment.Data.CourseId;
                 model.Deadline = assignment.Data.Deadline;
                 model.Description = assignment.Data.Description;

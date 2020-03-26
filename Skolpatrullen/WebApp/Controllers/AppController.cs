@@ -305,10 +305,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/CourseBlog/Remove/{id}");
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
-        public async Task<APIResponse> APIGetFilesByAssignment(int id)
+        public async Task<APIResponse<IEnumerable<File>>> APIGetFilesByAssignment(int id)
         {
-            HttpResponseMessage response = await APIGet($"File/GetFilesByAssignment/{id}");
-            return (APIResponse<File>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<File>));
+            HttpResponseMessage response = await APIGet($"/File/GetFilesByAssignment/{id}");
+            return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
         }
     }
 }

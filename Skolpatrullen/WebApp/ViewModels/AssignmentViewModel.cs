@@ -16,6 +16,6 @@ namespace WebApp.ViewModels
         public int CourseId { get; set; }
         public int UserId { get; set; }
         public IEnumerable<IFormFile> File { get; set; }
-        public IEnumerable<AssignmentFile> AssignmentFiles { get; set; }
+        public IEnumerable<File> AssignmentFiles { get; set; }
     }
 }
