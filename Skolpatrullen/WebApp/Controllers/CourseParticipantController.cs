@@ -259,8 +259,8 @@ namespace WebApp.Controllers
             return RedirectToAction("CourseParticipantList", "CourseParticipant");
         }
         [HttpGet]
-        [Route("[controller]/RemoveCP/{id}")]
-        public async Task<IActionResult> RemoveCP(int id)
+        [Route("[controller]/RemoveCourseParticipant/{id}")]
+        public async Task<IActionResult> RemoveCourseParticipant(int id)
         {
             string message = await GetUser();
             var response = await APIRemoveCourseParticipant(id);
