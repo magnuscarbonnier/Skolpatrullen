@@ -53,9 +53,7 @@ namespace WebApp.Controllers
                     APIUploadAssignmentFile(body);
                 }
             }
-
-
-            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
+            return RedirectToAction("GetCourseById", "course", new { Id = assignment.CourseId });
         }
         [HttpGet]
         [Route("[controller]/CourseAssignments/{courseid}")]
