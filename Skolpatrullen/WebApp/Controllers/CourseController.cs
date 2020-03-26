@@ -295,27 +295,27 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new UserCourseListViewModel();
             var courseParticipantsResponse = APIGetCourseParticipantsByUserId(User.Id);
-            var courseResponse = APIGetAllCourses();
-            var schoolResponse = APIGetAllSchools();
-            if (courseParticipantsResponse != null && courseResponse != null && schoolResponse != null)
-            {
-                var courseParticipants = from cp in courseParticipantsResponse.Result.Data
-                                         join co in courseResponse.Result.Data on cp.CourseId equals co.Id
-                                         orderby cp.Status
-                                         orderby cp.ApplicationDate ascending
-                                         select new CourseParticipant
-                                         {
-                                            ApplicationDate = cp.ApplicationDate,
-                                            Course = co,
-                                            CourseId = cp.CourseId,
-                                            Grade = cp.Grade,
-                                            Role = cp.Role,
-                                            Status = cp.Status,
-                                            Id = cp.Id,
-                                         };
-                model.CourseParticipantList = courseParticipants.ToList();
+            var courseResponse = APIGetCoursesByUserId(User.Id);
+            var schoolResponse = APIGetSchoolsByUserId(User.Id);
+            //if (courseParticipantsResponse != null && courseResponse != null && schoolResponse != null)
+            //{
+            //    var courseParticipants = from cp in courseParticipantsResponse.Result.Data
+            //                             join co in courseResponse.Result.Data on cp.CourseId equals co.Id
+            //                             orderby cp.Status
+            //                             orderby cp.ApplicationDate ascending
+            //                             select new CourseParticipant
+            //                             {
+            //                                ApplicationDate = cp.ApplicationDate,
+            //                                Course = co,
+            //                                CourseId = cp.CourseId,
+            //                                Grade = cp.Grade,
+            //                                Role = cp.Role,
+            //                                Status = cp.Status,
+            //                                Id = cp.Id,
+            //                             };
+                model.CourseParticipantList = courseParticipantsResponse.Result.Data.ToList();
                 model.SchoolList = schoolResponse.Result.Data.ToList();
-            }
+            //}
             return View(model);
         }
     }

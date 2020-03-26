@@ -37,10 +37,23 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<School>> GetSchoolsByUserId(int Id)
         {
             APIResponse<IEnumerable<School>> response = new APIResponse<IEnumerable<School>>();
-            var schoollist = _context.CourseParticipants.Include(cp => cp.Course).ThenInclude(co => co.School).Where(cp => cp.UserId == Id).Select(cp=>cp.Course.School);
-            if (schoollist != null)
+            var schools = _context.CourseParticipants
+                  .Include(cp => cp.Course)
+                  .ThenInclude(cp=>cp.School)
+                  .Where(cp => cp.UserId == Id)
+                  .Select(cp => new School
+                  {
+                        Id=cp.Course.School.Id,
+                         Address=cp.Course.School.Address,
+                          Name=cp.Course.School.Name,
+                           Phone=cp.Course.School.Phone,
+                            PostalCode=cp.Course.School.PostalCode,
+                             City=cp.Course.School.City                              
+                  })
+                  .Distinct();
+            if (schools != null)
             {
-                response.Data = schoollist;
+                response.Data = schools;
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla skolor för användare med id {Id}";
             }

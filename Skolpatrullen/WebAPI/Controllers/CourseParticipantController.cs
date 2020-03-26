@@ -55,11 +55,6 @@ namespace WebAPI.Controllers
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
             }
-            else
-            {
-                response.Success = false;
-                response.FailureMessage = $"Fanns inga kursdeltaganden för användare med id {Id}";
-            }
             
             return response;
         }

@@ -90,10 +90,19 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<Course>> GetCourseByUserId(int Id)
         {
             APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
-            var courselist = _context.CourseParticipants.Include(cp => cp.Course).ThenInclude(co=>co.School).Where(cp => cp.UserId == Id).Select(cp=>cp.Course);
-            if (courselist != null)
+            var courses = _context.CourseParticipants
+                  .Include(cp => cp.Course)
+                  .Where( cp => cp.UserId == Id).Select(cp => new Course
+                  {
+                       EndDate=cp.Course.EndDate,
+                        Id=cp.Course.Id,
+                         Name=cp.Course.Name,
+                          SchoolId=cp.Course.SchoolId,
+                           StartDate=cp.Course.StartDate
+                  }); 
+            if (courses != null)
             {
-                response.Data = courselist;
+                response.Data = courses;
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla kurser för användare med id {Id}";
             }
