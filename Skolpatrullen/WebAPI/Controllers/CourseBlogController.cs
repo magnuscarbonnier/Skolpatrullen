@@ -24,8 +24,7 @@ namespace WebAPI.Controllers
 
             var courseBlogList = _context.CourseBlogPosts
                 .Include(cb => cb.User)
-                .Where(cb => cb.CourseId == CourseId)
-                .OrderByDescending(cb=>cb.PublishDate);
+                .Where(cb => cb.CourseId == CourseId);
             if (courseBlogList != null)
             {
                 response.Data = courseBlogList;
