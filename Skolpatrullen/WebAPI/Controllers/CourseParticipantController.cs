@@ -49,11 +49,16 @@ namespace WebAPI.Controllers
 
             var courseParticipants = _context.CourseParticipants.Where(cp=>cp.UserId==Id);
                 
-            if (courseParticipants != null)
+            if (courseParticipants.Any())
             {
                 response.Data = courseParticipants;
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga kursdeltaganden för användare med id {Id}";
             }
             
             return response;

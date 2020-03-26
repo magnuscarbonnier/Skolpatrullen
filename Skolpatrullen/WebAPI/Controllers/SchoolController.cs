@@ -51,11 +51,16 @@ namespace WebAPI.Controllers
                              City=cp.Course.School.City                              
                   })
                   .Distinct();
-            if (schools != null)
+            if (schools.Any())
             {
                 response.Data = schools;
                 response.Success = true;
                 response.SuccessMessage = $"Hämtade alla skolor för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga skolor för användare med id {Id}";
             }
             return response;
         }

@@ -95,12 +95,12 @@ namespace WebAPI.Controllers
                   .Where( cp => cp.UserId == Id).Select(cp => new Course
                   {
                        EndDate=cp.Course.EndDate,
-                        Id=cp.Course.Id,
-                         Name=cp.Course.Name,
-                          SchoolId=cp.Course.SchoolId,
-                           StartDate=cp.Course.StartDate
+                       Id=cp.Course.Id,
+                       Name=cp.Course.Name,
+                       SchoolId=cp.Course.SchoolId,
+                       StartDate=cp.Course.StartDate
                   }); 
-            if (courses != null)
+            if (courses.Any())
             {
                 response.Data = courses;
                 response.Success = true;
@@ -109,7 +109,7 @@ namespace WebAPI.Controllers
             else
             {
                 response.Success = false;
-                response.SuccessMessage = $"Fanns inga kurser för användare med id {Id}";
+                response.FailureMessage = $"Fanns inga kurser för användare med id {Id}";
             }
             return response;
         }
