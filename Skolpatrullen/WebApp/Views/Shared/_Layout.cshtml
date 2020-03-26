@@ -6,9 +6,15 @@
     <title>Skolpatrullen ITHS - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
     <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.js"></script>
     <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
+          rel="stylesheet" type="text/css" charset="utf-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.css"
           rel="stylesheet" type="text/css" charset="utf-8">
 </head>
 <body>
@@ -69,19 +75,20 @@
 
                                     </li>
                                 }
+                            
 
-                                <li class="nav-item avatar dropdown">
+                                <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         @if (ViewBag.User.ProfilePictureId == null)
                                         {
-                                            <img src="~/user-solid.svg" width="25" height="25" />
+                                            <img src="~/user-solid.svg" width="25" height="25" class="rounded-circle" />
 
                                         }
                                         else
                                         {
                                             var base64 = Convert.ToBase64String(ViewBag.User.ProfilePicture.Binary);
                                             var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                                            <img src="@imgsrc" class="img-thumbnail" width="50" height="50" />
+                                            <img src="@imgsrc" class=" rounded-circle" alt="logo" width="25" height="25" />
 
                                         }
                                     </a>

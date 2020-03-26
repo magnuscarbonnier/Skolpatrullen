@@ -1,5 +1,7 @@
 ﻿@model WebApp.ViewModels.ChangeProfilePictureViewModel
 
+<link rel="stylesheet" href="croppie.css" />
+<script src="croppie.js"></script>
 
 <div class="row">
     <div class="col-12" align="right">
@@ -23,7 +25,12 @@
 
             <form enctype="multipart/form-data" asp-action="ChangeProfilePicture">
                 <div class=" modal-body">
-                    <input type="file" accept="image/*" asp-for="file" id="file" style="width: 100%;" />
+                    <input id="uploadImage" type="file" accept="image/*" asp-for="file" style="width: 100%;"/>
+
+
+
+
+
                 </div>
 
                 <div class="modal-footer">
@@ -34,6 +41,21 @@
         </div>
     </div>
 </div>
+<script>
+    $uploadCrop = $('#uploadImage').croppie(
+        {
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+                type: 'circle'
+            },
+            boundary: {
+                width: 300,
+                height: 300
+            }
+        });
+</script>
 
 
 

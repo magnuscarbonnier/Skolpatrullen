@@ -29,7 +29,7 @@
                     @if (item.Role == Database.Models.Roles.Lärare)
                     {
                         <td class="font-weight-bolder table-info">
-                            @item.Name
+                            <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
                         </td>
                         <td class="font-weight-bolder table-info">
                             @item.Role
@@ -49,7 +49,7 @@
                     else
                     {
                         <td>
-                            @item.Name
+                            <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
                         </td>
                         <td>
                             @item.Role

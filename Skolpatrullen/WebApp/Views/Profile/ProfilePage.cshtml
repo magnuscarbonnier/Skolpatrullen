@@ -15,6 +15,7 @@
 
 
 
+
             @{
                 if (Model.PVM.User.ProfilePicture != null)
                 {
@@ -28,6 +29,10 @@
                 }
             }
         </div>
+
+
+
+
     </div>
 
 }
@@ -38,6 +43,93 @@
 @await Html.PartialAsync("_ChangeProfile", Model.PVM)
 
 @await Html.PartialAsync("_ChangePassword", Model.CPVM)
+
+
+
+
+
+
+
+<input type="file" name="upload_image" id="upload_image" accept="image/*"/>
+<div id="uploaded_image">
+
+</div>
+
+<div class="row">
+    <div class="col-12" align="right">
+        <a asp-action="ProfilePictureModal" data-toggle="modal" data-target="#croppieTest">Croppie</a>
+
+    </div>
+
+</div>
+
+
+<div class="modal" id="croppieTest" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form enctype="multipart/form-data">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">CROPPIE</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+                <div class=" modal-body">
+
+                    <div id="image_demo" style="width:350px; margin-top:30px">
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                    <input type="submit" value="Spara" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    $(document).ready(function ()
+    {
+        $image_crop = $('#image_demo').croppie({
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+                type: 'square'
+            },
+            boundary: {
+                width: 300,
+                height: 300
+            }
+        });
+        $('#upload_image').on('change', function () {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                $image_crop.croppie('bind', {
+                    url: event.target.result
+                }).then(function () {
+                    console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+            $('#croppieTest').modal('show');
+        });
+    }
+</script>
+
+
+
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
