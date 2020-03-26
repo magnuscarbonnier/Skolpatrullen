@@ -138,13 +138,13 @@ namespace WebApp.Controllers
             if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
             {
                 if (courseBlog.Data != null)
-                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate); ;
+                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate);
                 return View("AdminCourseDetails", model);
             }
             else
             {
                 if (courseBlog.Data != null)
-                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate); ;
+                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate);
                 return View("CourseDetails", model);
             }
         }
