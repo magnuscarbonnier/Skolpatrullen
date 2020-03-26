@@ -1,0 +1,28 @@
+﻿@model WebApp.ViewModels.ProfileViewModel
+
+@if (!Model.CourseParticipantList.Any())
+{
+    <h6>Du har inte blivit antagen till någon kurs än.</h6>
+}
+@if (Model.CourseParticipantList.Any())
+{
+    <h6>Kurser du är antagen till:</h6>
+
+    @foreach (var courseParticipant in Model.CourseParticipantList)
+    {
+        <div class="bg-light box-shadow">
+            Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
+            <div>
+                Kurs: @Html.ActionLink(linkText: courseParticipant.Course.Name, actionName: "GetCourseById", controllerName: "Course", new { id = courseParticipant.CourseId })
+            </div>
+            <div>
+                Status: @courseParticipant.Status, Roll: @courseParticipant.Role
+            </div>
+            @if (courseParticipant.Grade != null && courseParticipant.Role != Database.Models.Roles.Lärare)
+            {
+                <div>Betyg: @courseParticipant.Grade</div>
+            }
+            </div>
+        <br />
+    }
+}

@@ -290,7 +290,7 @@ namespace WebApp.Controllers
         }
         [HttpGet]
         [Route("[controller]/UserCourseList")]
-        public async Task<IActionResult> _UserCourseList()
+        public async Task<IActionResult> UserCourseList()
         {
             string message = await GetUser();
             var model = new UserCourseListViewModel();
