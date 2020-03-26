@@ -1,8 +1,5 @@
 ﻿@model WebApp.ViewModels.ChangeProfilePictureViewModel
 
-<link rel="stylesheet" href="croppie.css" />
-<script src="croppie.js"></script>
-
 <div class="row">
     <div class="col-12" align="right">
         <a asp-action="ProfilePictureModal" data-toggle="modal" data-target="#ProfilePicModal">Byt profilbild</a>
@@ -26,13 +23,7 @@
             <form enctype="multipart/form-data" asp-action="ChangeProfilePicture">
                 <div class=" modal-body">
                     <input id="uploadImage" type="file" accept="image/*" asp-for="file" style="width: 100%;"/>
-
-
-
-
-
                 </div>
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
                     <input type="submit" asp-action="ChangeProfilePicture" value="Spara" class="btn btn-primary" />
