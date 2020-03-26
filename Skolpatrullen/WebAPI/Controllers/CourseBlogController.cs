@@ -22,7 +22,9 @@ namespace WebAPI.Controllers
         {
             APIResponse<IEnumerable<CourseBlogPost>> response = new APIResponse<IEnumerable<CourseBlogPost>>();
 
-            var courseBlogList = _context.CourseBlogPosts.Include(cb => cb.User).Where(cb => cb.CourseId == CourseId);
+            var courseBlogList = _context.CourseBlogPosts
+                .Include(cb => cb.User)
+                .Where(cb => cb.CourseId == CourseId);
             if (courseBlogList != null)
             {
                 response.Data = courseBlogList;
