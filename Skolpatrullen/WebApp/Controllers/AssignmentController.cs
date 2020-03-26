@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Database.Models;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
@@ -53,12 +54,16 @@ namespace WebApp.Controllers
         public async Task<IActionResult> GetAssignmentById(int id)
         {
             string message = await GetUser();
-            var model = new Assignment();
+            var model = new AssignmentViewModel();
 
             var assignment = await APIGetAssignmentById(id);
             if (assignment.Data != null)
             {
-                model = assignment.Data;
+                model.CourseId = assignment.Data.CourseId;
+                model.Deadline = assignment.Data.Deadline;
+                model.Description = assignment.Data.Description;
+                model.Name = assignment.Data.Name;
+
                 return View("AssignmentDetails", model);
             }
             else
