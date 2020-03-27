@@ -33,7 +33,6 @@
 @await Html.PartialAsync("_ChangeProfile", Model.PVM)
 @await Html.PartialAsync("_ChangePassword", Model.CPVM)
 
-<input type="file" name="upload_image" id="upload_image" accept="image/*" />
 <div id="uploaded_image"></div>
 
 <div class="row">
@@ -56,6 +55,7 @@
                 <div class=" modal-body">
                     <div id="image_demo" style="width:350px; margin-top:30px">
                     </div>
+                    <input type="file" name="upload_image" id="upload_image" accept="image/*" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
@@ -95,10 +95,10 @@
             $('#croppieTest').modal('show');
         });
         $('.actionUpload').on('click', function() {
-            $image_crop.croppie('result','blob').then(function(blob) {
+            $image_crop.croppie('result', 'blob').then(function (blob) {
                 var formData = new FormData();
-                formData.append('filename', 'testFileName.png');
                 formData.append('blob', blob);
+                formData.append('filename', 'testFileName.png');
 
                 $.ajax({
                     type: 'POST',
@@ -106,8 +106,8 @@
                     data: formData,
                     processData: false,  // tell jQuery not to process the data
                     contentType: false,  // tell jQuery not to set contentType
-                     success: function (msg) {
-                        alert("Done, Picture Uploaded.");
+                    success: function (msg) {
+                        alert("Done, Picture Uploaded." + formData.keys());
                      }
                 });
             });
