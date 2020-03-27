@@ -24,7 +24,7 @@ namespace WebApp.ViewModels
         public string City { get; set; }
         public string PostalCode { get; set; }
         public IEnumerable<CourseParticipant> CourseParticipantList { get; set; }
-        public IEnumerable<Course> CourseList { get; set; }
+        public IEnumerable<School> SchoolList { get; set; }
         public User User { get; set; }
         public User UpdateUser(User user)
         {

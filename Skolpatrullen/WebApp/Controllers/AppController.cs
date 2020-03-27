@@ -2,6 +2,7 @@
 using Lib;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -304,6 +305,21 @@ namespace WebApp.Controllers
         {
             HttpResponseMessage response = await APIGet($"/CourseBlog/Remove/{id}");
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIRemoveCourseParticipant(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/CourseParticipant/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<IEnumerable<Course>>> APIGetCoursesByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/Course/GetCoursesByUserId/{id}");
+            return (APIResponse<IEnumerable<Course>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Course>>));
+        }
+        public async Task<APIResponse<IEnumerable<School>>> APIGetSchoolsByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/School/GetSchoolsByUserId/{id}");
+            return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
         }
         public async Task<APIResponse<IEnumerable<File>>> APIGetFilesByAssignment(int id)
         {

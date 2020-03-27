@@ -258,6 +258,14 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("CourseParticipantList", "CourseParticipant");
         }
+        [HttpGet]
+        [Route("[controller]/RemoveCourseParticipant/{id}")]
+        public async Task<IActionResult> RemoveCourseParticipant(int id)
+        {
+            string message = await GetUser();
+            var response = await APIRemoveCourseParticipant(id);
+            return SetResponseMessage(response, RedirectToAction("UserCourseList", "Course"), RedirectToAction("Index", "Home"));
+        }
         [HttpPost]
         [Route("[controller]/EditCourseParticipant")]
         public async Task<IActionResult> EditCourseParticipant(CourseParticipantViewModel cpVM, int Id)

@@ -40,24 +40,24 @@
         </form>
     </div>
     <div class="col-md-4">
-        
-        Kurser:
+        @await Html.PartialAsync("_UserCourseList", new WebApp.ViewModels.ProfileViewModel { CourseParticipantList=Model.CourseParticipantList, SchoolList=Model.SchoolList})
+        @*Kurser:
         @foreach (var courseParticipant in Model.CourseParticipantList)
         {
             <div class="bg-light">
             @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
-            { 
+            {
                 <div>
                     @Html.ActionLink(linkText:@course.Name, actionName:"GetCourseById", controllerName:"Course", new { id = course.Id })
                 </div>
             }
-            
+
             <div>
                 Status: @courseParticipant.Status Roll: @courseParticipant.Role
             </div>
             </div>
             <br />
-        }
+        }*@
 
     </div>
 </div>
