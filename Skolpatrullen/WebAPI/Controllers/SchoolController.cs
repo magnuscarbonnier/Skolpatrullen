@@ -39,16 +39,16 @@ namespace WebAPI.Controllers
             APIResponse<IEnumerable<School>> response = new APIResponse<IEnumerable<School>>();
             var schools = _context.CourseParticipants
                   .Include(cp => cp.Course)
-                  .ThenInclude(cp=>cp.School)
+                  .ThenInclude(cp => cp.School)
                   .Where(cp => cp.UserId == Id)
                   .Select(cp => new School
                   {
-                        Id=cp.Course.School.Id,
-                         Address=cp.Course.School.Address,
-                          Name=cp.Course.School.Name,
-                           Phone=cp.Course.School.Phone,
-                            PostalCode=cp.Course.School.PostalCode,
-                             City=cp.Course.School.City                              
+                      Id = cp.Course.School.Id,
+                      Address = cp.Course.School.Address,
+                      Name = cp.Course.School.Name,
+                      Phone = cp.Course.School.Phone,
+                      PostalCode = cp.Course.School.PostalCode,
+                      City = cp.Course.School.City
                   })
                   .Distinct();
             if (schools.Any())
