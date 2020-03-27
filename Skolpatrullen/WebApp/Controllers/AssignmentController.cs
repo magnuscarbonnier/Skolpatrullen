@@ -53,9 +53,7 @@ namespace WebApp.Controllers
                     APIUploadAssignmentFile(body);
                 }
             }
-
-
-            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
+            return RedirectToAction("GetCourseById", "course", new { Id = assignment.CourseId });
         }
         [HttpGet]
         [Route("[controller]/CourseAssignments/{courseid}")]
@@ -87,12 +85,19 @@ namespace WebApp.Controllers
         public async Task<IActionResult> GetAssignmentById(int id)
         {
             string message = await GetUser();
-            var model = new Assignment();
-
+            var model = new AssignmentViewModel();
+            
             var assignment = await APIGetAssignmentById(id);
+
             if (assignment.Data != null)
             {
-                model = assignment.Data;
+                var assignmentfiles = await APIGetFilesByAssignment(id);
+                model.AssignmentFiles = assignmentfiles.Data;
+                model.CourseId = assignment.Data.CourseId;
+                model.Deadline = assignment.Data.Deadline;
+                model.Description = assignment.Data.Description;
+                model.Name = assignment.Data.Name;
+
                 return View("AssignmentDetails", model);
             }
             else
