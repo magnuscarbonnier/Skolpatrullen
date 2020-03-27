@@ -220,51 +220,6 @@ namespace WebApp.Controllers
             }
         }
         [HttpPost]
-        [Route("[controller]/AddCourseAssignment")]
-        public async Task<IActionResult> AddCourseAssignment(AssignmentViewModel assignment, int courseId)
-        {
-            string message = await GetUser();
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-            Assignment newAssignmnet = new Assignment();
-            newAssignmnet.CourseId = courseId;
-            newAssignmnet.Deadline = assignment.Deadline;
-            newAssignmnet.Description = assignment.Description;
-            newAssignmnet.Name = assignment.Name;
-
-            var response = await APIAddAssignment(newAssignmnet);
-
-            if (assignment.File != null && assignment.File.Any())
-            {
-                foreach (var file in assignment.File)
-                {
-                    AssignmentFileBody body = new AssignmentFileBody();
-                    byte[] bytefile = null;
-                    using (var filestream = file.OpenReadStream())
-                    using (var memstream = new MemoryStream())
-                    {
-                        filestream.CopyTo(memstream);
-                        bytefile = memstream.ToArray();
-                    }
-
-                    body.File = bytefile;
-                    body.UploadDate = DateTime.Now;
-                    body.UserId = User.Id;
-                    body.AssignmentId = response.Data.Id;
-                    body.ContentType = file.ContentType;
-                    body.Name = file.FileName;
-                    body.Type = AssignmentFileType.AssignmentFile;
-
-                    APIUploadAssignmentFile(body);
-                }
-            }
-
-
-            return RedirectToAction("GetCourseById", new { Id = assignment.CourseId });
-        }
-        [HttpPost]
         [Route("[controller]/AddCourseBlogPost")]
         public async Task<IActionResult> AddCourseBlogPost(CourseBlogPost blogPost, int courseId)
         {
