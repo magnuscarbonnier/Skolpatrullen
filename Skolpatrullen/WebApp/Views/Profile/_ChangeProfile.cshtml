@@ -40,16 +40,18 @@
         </form>
     </div>
     <div class="col-md-4">
-        @if (Model.CourseParticipantList==null)
+        @if (Model.CourseParticipantList == null)
         {
-            <h6>Du har inte blivit antagen till någon kurs än.</h6>
+            <h6>Du har inte sökt några kurser än.</h6>
         }
-        @if (Model.CourseParticipantList != null)
+        else
         {
-            <h6>Kurser du är antagen till:</h6>
-
-            @foreach (var courseParticipant in Model.CourseParticipantList)
+            @if (Model.CourseParticipantList.Any(cp => cp.Status == Database.Models.Status.Antagen))
             {
+                <h6>Kurser du är antagen till:</h6>
+
+                @foreach (var courseParticipant in Model.CourseParticipantList)
+                {
                 <div class="bg-light box-shadow">
                     Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
                     <div>
@@ -64,24 +66,12 @@
                     }
                 </div>
                 <br />
-            }
-        } @*Kurser:
-        @foreach (var courseParticipant in Model.CourseParticipantList)
-        {
-            <div class="bg-light">
-            @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
-            {
-                <div>
-                    @Html.ActionLink(linkText:@course.Name, actionName:"GetCourseById", controllerName:"Course", new { id = course.Id })
-                </div>
-            }
-
-            <div>
-                Status: @courseParticipant.Status Roll: @courseParticipant.Role
-            </div>
-            </div>
-            <br />
-        }*@
-
+                }
+             }
+             else
+             {
+             <h6>Du har inte blivit antagen till någon kurs än.</h6>
+             }
+        }
     </div>
 </div>
