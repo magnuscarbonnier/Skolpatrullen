@@ -22,17 +22,7 @@ namespace WebAPI.Controllers
         {
             APIResponse<IEnumerable<StartBlogPost>> response = new APIResponse<IEnumerable<StartBlogPost>>();
 
-            var startBlogList = _context.StartBlogPosts.Include(sb => sb.User)
-                .Select(c => new StartBlogPost
-                {
-                    Content = c.Content,
-                    Id = c.Id,
-                    PublishDate = c.PublishDate,
-                    Title = c.Title,
-                    UserId = c.UserId,
-                    User = c.User
-                })
-                     .ToList(); ;
+            var startBlogList = _context.StartBlogPosts;
             if (startBlogList != null)
             {
                 response.Data = startBlogList;
