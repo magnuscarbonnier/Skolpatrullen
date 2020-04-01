@@ -249,13 +249,13 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new UserCourseListViewModel();
-            var courseParticipantsResponse = APIGetCourseParticipantsByUserId(User.Id);
-            var courseResponse = APIGetCoursesByUserId(User.Id);
-            var schoolResponse = APIGetSchoolsByUserId(User.Id);
-            if (courseParticipantsResponse != null && courseResponse != null && schoolResponse != null)
+            var courseParticipantsResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseResponse = await APIGetCoursesByUserId(User.Id);
+            var schoolResponse = await APIGetSchoolsByUserId(User.Id);
+            if (courseParticipantsResponse.Data != null && courseResponse.Data != null && schoolResponse.Data != null)
             {
-                var courseParticipants = from cp in courseParticipantsResponse.Result.Data
-                                         join co in courseResponse.Result.Data on cp.CourseId equals co.Id
+                var courseParticipants = from cp in courseParticipantsResponse.Data
+                                         join co in courseResponse.Data on cp.CourseId equals co.Id
                                          orderby cp.ApplicationDate ascending, cp.Status
                                          select new CourseParticipant
                                          {
@@ -268,7 +268,7 @@ namespace WebApp.Controllers
                                              Id = cp.Id,
                                          };
                 model.CourseParticipantList = courseParticipants.ToList();
-                model.SchoolList = schoolResponse.Result.Data.ToList();
+                model.SchoolList = schoolResponse.Data.ToList();
             }
             return View(model);
         }

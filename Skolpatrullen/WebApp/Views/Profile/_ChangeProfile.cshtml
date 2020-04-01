@@ -40,24 +40,38 @@
         </form>
     </div>
     <div class="col-md-4">
-        @await Html.PartialAsync("_UserCourseList", new WebApp.ViewModels.ProfileViewModel { CourseParticipantList=Model.CourseParticipantList, SchoolList=Model.SchoolList})
-        @*Kurser:
-        @foreach (var courseParticipant in Model.CourseParticipantList)
+        @if (Model.CourseParticipantList == null)
         {
-            <div class="bg-light">
-            @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
+            <h6>Du har inte sökt några kurser än.</h6>
+        }
+        else
+        {
+            @if (Model.CourseParticipantList.Any(cp => cp.Status == Database.Models.Status.Antagen))
             {
-                <div>
-                    @Html.ActionLink(linkText:@course.Name, actionName:"GetCourseById", controllerName:"Course", new { id = course.Id })
+                <h6>Kurser du är antagen till:</h6>
+
+                @foreach (var courseParticipant in Model.CourseParticipantList)
+                {
+                <div class="bg-light box-shadow">
+                    Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
+                    <div>
+                        Kurs: @Html.ActionLink(linkText: courseParticipant.Course.Name, actionName: "GetCourseById", controllerName: "Course", new { id = courseParticipant.CourseId })
+                    </div>
+                    <div>
+                        Status: @courseParticipant.Status, Roll: @courseParticipant.Role
+                    </div>
+                    @if (courseParticipant.Grade != null && courseParticipant.Role != Database.Models.Roles.Lärare)
+                    {
+                        <div>Betyg: @courseParticipant.Grade</div>
+                    }
                 </div>
-            }
-
-            <div>
-                Status: @courseParticipant.Status Roll: @courseParticipant.Role
-            </div>
-            </div>
-            <br />
-        }*@
-
+                <br />
+                }
+             }
+             else
+             {
+             <h6>Du har inte blivit antagen till någon kurs än.</h6>
+             }
+        }
     </div>
 </div>
