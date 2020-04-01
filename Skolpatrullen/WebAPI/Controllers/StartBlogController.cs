@@ -22,28 +22,28 @@ namespace WebAPI.Controllers
         {
             APIResponse<IEnumerable<StartBlogPost>> response = new APIResponse<IEnumerable<StartBlogPost>>();
 
-            //var startBlogList = _context.StartBlogPosts.Include(sb=>sb.User)
-            //    .Select(c=>new StartBlogPost
-            //{
-            //       Content=c.Content,
-            //        Id=c.Id,
-            //         PublishDate= c.PublishDate,
-            //          Title=c.Title,
-            //           UserId=c.UserId,
-            //           User=c.User
-            //})
-            //         .ToList(); ;
-            //if (startBlogList != null)
-            //{
-            //    response.Data = startBlogList;
-            //    response.Success = true;
-            //    response.SuccessMessage = $"Hämtade alla inlägg";
-            //}
-            //else
-            //{
-            //    response.Success = false;
-            //    response.FailureMessage = "Kunde inte hämta inlägg";
-            //}
+            var startBlogList = _context.StartBlogPosts.Include(sb => sb.User)
+                .Select(c => new StartBlogPost
+                {
+                    Content = c.Content,
+                    Id = c.Id,
+                    PublishDate = c.PublishDate,
+                    Title = c.Title,
+                    UserId = c.UserId,
+                    User = c.User
+                })
+                     .ToList(); ;
+            if (startBlogList != null)
+            {
+                response.Data = startBlogList;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla inlägg";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Kunde inte hämta inlägg";
+            }
             return response;
         }
         //[HttpPost]
