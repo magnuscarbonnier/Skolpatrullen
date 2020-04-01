@@ -222,12 +222,26 @@ namespace WebApp.Controllers
                 pvm.Phone = user.Data.Phone;
                 pvm.PostalCode = user.Data.PostalCode;
                 pvm.Name = user.Data.FirstName + " " + user.Data.LastNames;
+                pvm.CourseParticipantList = user.Data.CourseParticipants;
 
                 if (user.Data.ProfilePictureId != null)
                 {
                     var fileResponse = await APIGetFileById(Convert.ToInt32(user.Data.ProfilePictureId));
                     pvm.File = fileResponse.Data;
                 }
+
+                var courseParticipantsResponse = APIGetAllCourseParticipants();
+                if (courseParticipantsResponse != null)
+                {
+                    pvm.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == user.Data.Id).ToList();
+                }
+                var courseResponse = APIGetAllCourses();
+                if (courseResponse != null)
+                {
+                    pvm.CourseList = courseResponse.Result.Data.ToList();
+                }
+
+
                 return View("PublicProfilePage", pvm);
             }
             return View("CourseParticipantList");
