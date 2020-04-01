@@ -359,32 +359,6 @@ namespace Database.Migrations
                     b.ToTable("Schools");
                 });
 
-            modelBuilder.Entity("Database.Models.StartBlogPost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Content")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("StartBlogPost");
-                });
-
             modelBuilder.Entity("Database.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -601,15 +575,6 @@ namespace Database.Migrations
                     b.HasOne("Database.Models.School", "School")
                         .WithMany("Rooms")
                         .HasForeignKey("SchoolId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Database.Models.StartBlogPost", b =>
-                {
-                    b.HasOne("Database.Models.User", "User")
-                        .WithMany("StartBlogPosts")
-                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
