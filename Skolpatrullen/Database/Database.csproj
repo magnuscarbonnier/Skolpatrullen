@@ -25,6 +25,8 @@
     <Compile Remove="Migrations\20200320094438_AssignmentAdded.Designer.cs" />
     <Compile Remove="Migrations\20200401095342_addStartPageBlog.cs" />
     <Compile Remove="Migrations\20200401095342_addStartPageBlog.Designer.cs" />
+    <Compile Remove="Migrations\20200401161544_StartBlog.cs" />
+    <Compile Remove="Migrations\20200401161544_StartBlog.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
