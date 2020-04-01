@@ -18,7 +18,7 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("[controller]/GetAll")]
-        public APIResponse<IEnumerable<StartBlogPost>> GetBlogPosts()
+        public APIResponse<IEnumerable<StartBlogPost>> GetAll()
         {
             APIResponse<IEnumerable<StartBlogPost>> response = new APIResponse<IEnumerable<StartBlogPost>>();
 
@@ -38,16 +38,16 @@ namespace WebAPI.Controllers
         }
         //[HttpPost]
         //[Route("[controller]/Add")]
-        //public APIResponse<CourseBlogPost> Add(CourseBlogPost blogPost)
+        //public APIResponse<StartBlogPost> Add(StartBlogPost blogPost)
         //{
-        //    APIResponse<CourseBlogPost> response = new APIResponse<CourseBlogPost>();
+        //    APIResponse<StartBlogPost> response = new APIResponse<StartBlogPost>();
         //    if (blogPost != null)
         //    {
-        //        _context.CourseBlogPosts.Add(blogPost);
+        //        _context.StartBlogPosts.Add(blogPost);
         //        _context.SaveChanges();
         //        response.Data = blogPost;
         //        response.Success = true;
-        //        response.SuccessMessage = $"La till inlägg med titel {blogPost.Title}";
+        //        response.SuccessMessage = $"La till inlägg med titel: {blogPost.Title}";
         //    }
         //    else
         //    {
@@ -61,7 +61,7 @@ namespace WebAPI.Controllers
         //public APIResponse Remove(int id)
         //{
         //    APIResponse response = new APIResponse();
-        //    var removeBlogPost = _context.CourseBlogPosts.SingleOrDefault(s => s.Id == id);
+        //    var removeBlogPost = _context.StartBlogPosts.SingleOrDefault(s => s.Id == id);
         //    if (removeBlogPost != null)
         //    {
         //        _context.Remove(removeBlogPost);
