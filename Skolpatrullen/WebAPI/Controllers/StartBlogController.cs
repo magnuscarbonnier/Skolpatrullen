@@ -36,26 +36,26 @@ namespace WebAPI.Controllers
             }
             return response;
         }
-        //[HttpPost]
-        //[Route("[controller]/Add")]
-        //public APIResponse<StartBlogPost> Add(StartBlogPost blogPost)
-        //{
-        //    APIResponse<StartBlogPost> response = new APIResponse<StartBlogPost>();
-        //    if (blogPost != null)
-        //    {
-        //        _context.StartBlogPosts.Add(blogPost);
-        //        _context.SaveChanges();
-        //        response.Data = blogPost;
-        //        response.Success = true;
-        //        response.SuccessMessage = $"La till inlägg med titel: {blogPost.Title}";
-        //    }
-        //    else
-        //    {
-        //        response.Success = false;
-        //        response.FailureMessage = "Fick inget inlägg";
-        //    }
-        //    return response;
-        //}
+        [HttpPost]
+        [Route("[controller]/Add")]
+        public APIResponse<StartBlogPost> Add(StartBlogPost blogPost)
+        {
+            APIResponse<StartBlogPost> response = new APIResponse<StartBlogPost>();
+            if (blogPost != null)
+            {
+                _context.StartBlogPosts.Add(blogPost);
+                _context.SaveChanges();
+                response.Data = blogPost;
+                response.Success = true;
+                response.SuccessMessage = $"La till inlägg med titel: {blogPost.Title}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Fick inget inlägg";
+            }
+            return response;
+        }
         [HttpGet]
         [Route("[controller]/Remove/{id}")]
         public APIResponse Remove(int id)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Database.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;
@@ -53,6 +54,22 @@ namespace WebApp.Controllers
             
             var response = await APIRemoveStartBlogPost(Id);
             SetResponseMessage(response);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Route("[controller]/AddStartBlogPost")]
+        public async Task<IActionResult> AddStartBlogPost(StartBlogPost blogPost)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            blogPost.UserId = User.Id;
+            blogPost.PublishDate = DateTime.Now;
+            var response = await APIAddStartBlogPost(blogPost);
+
             return RedirectToAction("Index");
         }
 

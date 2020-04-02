@@ -32,27 +32,34 @@
         </div>
     </header>
    <br />
-    <header>
-        @foreach (var post in Model.BlogPosts)
-        {
-            <div class="container">
-                <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
-                    <h2 class=" font-italic mt-sm-5">@post.Title @Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", post.PublishDate))</h2>
-                    <h6 class="mb-4">
-                        @post.Content
-                    </h6>
-                    @if (ViewBag.User != null)
-                    {
-                    if (ViewBag.User.IsSuperUser == true)
-                    {
-                            <a class="nav-link text-secondary" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
-                    }
-        }
-                    <hr class="hr-light">
-                </div>
-            </div>
-        }
-    </header>
+   <header>
+       @if (ViewBag.User != null)
+       {
+           if (ViewBag.User.IsSuperUser == true)
+           {
+               @await Html.PartialAsync("_AddStartBlogPost", new Database.Models.StartBlogPost())
+           }
+       }
+               @foreach (var post in Model.BlogPosts)
+               {
+                   <div class="container">
+                       <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
+                           <h2 class=" font-italic mt-sm-5">@post.Title @Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", post.PublishDate))</h2>
+                           <h6 class="mb-4">
+                               @post.Content
+                           </h6>
+                           @if (ViewBag.User != null)
+                           {
+                               if (ViewBag.User.IsSuperUser == true)
+                               {
+                                   <a class="nav-link text-secondary" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                               }
+                           }
+                           <hr class="hr-light">
+                       </div>
+                   </div>
+               }
+           </header>
 
     <header>
         <div class="container">
