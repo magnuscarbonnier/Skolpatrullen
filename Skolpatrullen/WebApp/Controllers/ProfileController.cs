@@ -123,7 +123,7 @@ namespace WebApp.Controllers
             var response = await APIGetAllUsers();
             if (response.Data != null)
             {
-                model = response.Data.ToList();
+                model = response.Data.OrderBy(us=>us.LastNames).ToList();
             }
             if (!string.IsNullOrEmpty(response.FailureMessage))
             {
