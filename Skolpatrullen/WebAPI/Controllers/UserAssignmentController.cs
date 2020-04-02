@@ -50,11 +50,20 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpPost]
-        [Route("[controller]/Add")]
-        public APIResponse<UserAssignment> Add(UserAssignment userAssignment)
+        [Route("[controller]/AddOrUpdate")]
+        public APIResponse<UserAssignment> AddOrUpdate(UserAssignment userAssignment)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            if(userAssignment != null)
+            var existingUserAssignment = _context.UserAssignments.SingleOrDefault(ua => ua.Id == userAssignment.Id);
+            if(existingUserAssignment != null)
+            {
+                _context.UserAssignments.Update(userAssignment);
+                _context.SaveChanges();
+                response.Data = userAssignment;
+                response.Success = true;
+                response.SuccessMessage = $"Du har uppdaterat en inlämning";
+            } 
+            else if (userAssignment != null)
             {
                 _context.UserAssignments.Add(userAssignment);
                 _context.SaveChanges();
