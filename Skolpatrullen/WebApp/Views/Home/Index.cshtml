@@ -4,10 +4,36 @@
 }
 
 <html lang="en">
-<body>
+<head>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var maxLength = 300;
+                $(".show-read-more").each(function () {
+                    var myStr = $(this).text();
+                    if ($.trim(myStr).length > maxLength) {
+                        var newStr = myStr.substring(0, maxLength);
+                        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                        $(this).empty().html(newStr);
+                        $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                        $(this).append('<span class="more-text">' + removedStr + '</span>');
+                    }
+                });
+                $(".read-more").click(function () {
+                    $(this).siblings(".more-text").contents().unwrap();
+                    $(this).remove();
+                });
+            });
+        </script>
+        <style>
+            .show-read-more .more-text {
+                display: none;
+            }
+        </style>
+</head>
 
+<body>
     <header>
- 
         <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
             <div class="mask rgba-gradient align-items-center">
                 <p></p>
@@ -31,36 +57,36 @@
             </div>
         </div>
     </header>
-   <br />
-   <header>
-       @if (ViewBag.User != null)
-       {
-           if (ViewBag.User.IsSuperUser == true)
-           {
-               @await Html.PartialAsync("_AddStartBlogPost", new Database.Models.StartBlogPost())
-           }
-       }
-               @foreach (var post in Model.BlogPosts)
-               {
-                   <div class="container">
-                       <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
-                           <h4 class=" font-italic mt-sm-5">@post.Title </h4>
-                           <p class="mb-4">
-                               @post.Content
-                           </p>
-                           <p style="font-size: 75%;" class="font-italic mt-sm-5"> Publicerat @Convert.ToString(string.Format("{0:yyyy/MM/dd kl HH:mm}", post.PublishDate))</p>
-                           @if (ViewBag.User != null)
-                           {
-                               if (ViewBag.User.IsSuperUser == true)
-                               {
-                                   <a class="nav-link text-danger" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
-                               }
-                           }
-                           <hr class="hr-light">
-                       </div>
-                   </div>
-               }
-           </header>
+    <br />
 
+    <header>
+        @if (ViewBag.User != null)
+        {
+            if (ViewBag.User.IsSuperUser == true)
+            {
+                @await Html.PartialAsync("_AddStartBlogPost", new Database.Models.StartBlogPost())
+            }
+        }
+        @foreach (var post in Model.BlogPosts)
+        {
+            <div class="container">
+                <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
+                    <h4 class=" font-italic mt-sm-5">@post.Title </h4>
+                    <p class="show-read-more mb-4">
+                        @post.Content
+                    </p>
+                    <p style="font-size: 75%;" class="mt-sm-5"><em> Publicerat @Convert.ToString(string.Format("{0:yyyy/MM/dd kl HH:mm}", post.PublishDate))</em></p>
+                    @if (ViewBag.User != null)
+                    {
+                        if (ViewBag.User.IsSuperUser == true)
+                        {
+                            <a class="nav-link text-danger" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                        }
+                    }
+                    <hr class="hr-light">
+                </div>
+            </div>
+        }
+    </header>
 </body>
 </html>
