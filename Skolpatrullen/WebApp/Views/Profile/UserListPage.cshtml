@@ -5,12 +5,25 @@
 }
 <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Alla användare</h1>
-<form asp-controller="Profile" asp-action="SearchUsers">
-    <p>
-        Förnamn: <input asp-for="SearchFirstName" type="text"> Efternamn: <input asp-for="SearchLastNames" type="text">
-        <input type="submit" value="Filtrera" />
-    </p>
-</form>
+<div class="row justify-content-start">
+    <div class="col col-lg-6">
+        <form asp-controller="Profile" asp-action="SearchUsers">
+            <div class="input-group">
+                <div>
+                    Förnamn <input asp-for="SearchFirstName" type="text" class="form-control">
+                </div>
+
+                <div>
+                    Efternamn <input asp-for="SearchLastNames" type="text" class="form-control">
+                </div>
+                <div class="align-self-end">
+                    <input class="btn btn-outline-secondary" type="submit" value="Filtrera" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
 @foreach (var item in Model.UserList)
 {
     <div class="row">
