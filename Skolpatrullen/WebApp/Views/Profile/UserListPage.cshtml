@@ -10,12 +10,9 @@
         <form asp-controller="Profile" asp-action="SearchUsers">
             <div class="input-group">
                 <div>
-                    Förnamn <input asp-for="SearchFirstName" type="text" class="form-control">
+                    Förnamn, efternamn eller personnummer <input asp-for="Search" type="text" class="form-control">
                 </div>
 
-                <div>
-                    Efternamn <input asp-for="SearchLastNames" type="text" class="form-control">
-                </div>
                 <div class="align-self-end">
                     <input class="btn btn-outline-secondary" type="submit" value="Filtrera" />
                 </div>
