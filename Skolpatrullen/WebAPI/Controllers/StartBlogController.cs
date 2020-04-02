@@ -56,25 +56,25 @@ namespace WebAPI.Controllers
         //    }
         //    return response;
         //}
-        //[HttpGet]
-        //[Route("[controller]/Remove/{id}")]
-        //public APIResponse Remove(int id)
-        //{
-        //    APIResponse response = new APIResponse();
-        //    var removeBlogPost = _context.StartBlogPosts.SingleOrDefault(s => s.Id == id);
-        //    if (removeBlogPost != null)
-        //    {
-        //        _context.Remove(removeBlogPost);
-        //        _context.SaveChanges();
-        //        response.Success = true;
-        //        response.SuccessMessage = $"Tog bort inlägg med id {removeBlogPost.Id} och titel {removeBlogPost.Title}";
-        //    }
-        //    else
-        //    {
-        //        response.FailureMessage = $"Inlägget fanns inte";
-        //        response.Success = false;
-        //    }
-        //    return response;
-        //}
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public APIResponse Remove(int id)
+        {
+            APIResponse response = new APIResponse();
+            var removeBlogPost = _context.StartBlogPosts.SingleOrDefault(s => s.Id == id);
+            if (removeBlogPost != null)
+            {
+                _context.Remove(removeBlogPost);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Tog bort inlägg med titel: {removeBlogPost.Title}";
+            }
+            else
+            {
+                response.FailureMessage = $"Inlägget fanns inte";
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }

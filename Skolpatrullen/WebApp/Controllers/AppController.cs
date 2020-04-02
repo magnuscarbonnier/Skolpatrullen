@@ -326,5 +326,15 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/File/GetFilesByAssignment/{id}");
             return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
         }
+        public async Task<APIResponse<IEnumerable<StartBlogPost>>> APIGetAllStartBlogPosts()
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/GetAll");
+            return (APIResponse<IEnumerable<StartBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<StartBlogPost>>));
+        }
+        public async Task<APIResponse> APIRemoveStartBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
     }
 }

@@ -1,16 +1,17 @@
-﻿@{
+﻿@model WebApp.ViewModels.StartBlogViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <html lang="en">
 <body>
-    
+
     <header>
  
         <div class="view" style="background-image: url('https://mdbootstrap.com/img/Photos/Others/architecture.jpg'); background-repeat: no-repeat; background-size: cover; background-position: center center;">
             <div class="mask rgba-gradient align-items-center">
                 <p></p>
-                <div class="container-fluid style="margin-top:80px"">
+                <div class="container-fluid style=" margin-top:80px"">
                     <div class="row">
                         <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
                             <h1 class="h1-responsive font-weight-bold mt-sm-5">Välkommen till Skolpatrullen </h1>
@@ -30,22 +31,27 @@
             </div>
         </div>
     </header>
-
+   <br />
     <header>
-        <div class="container">
-            <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
-                <h2 class=" font-italic mt-sm-5">Sök nu till höstens kurser</h2>
-                <h6 class="mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt
-                    dolorum nulla magnam veniam sapiente, fugiat! Commodi sequi non animi ea dolor molestiae
-                    iste.
-                </h6>
-                <hr class="hr-light">
-
+        @foreach (var post in Model.BlogPosts)
+        {
+            <div class="container">
+                <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
+                    <h2 class=" font-italic mt-sm-5">@post.Title @Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", post.PublishDate))</h2>
+                    <h6 class="mb-4">
+                        @post.Content
+                    </h6>
+                    @if (ViewBag.User != null)
+                    {
+                    if (ViewBag.User.IsSuperUser == true)
+                    {
+                            <a class="nav-link text-secondary" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                    }
+        }
+                    <hr class="hr-light">
+                </div>
             </div>
-
-            </div>
-
+        }
     </header>
 
     <header>
@@ -60,9 +66,7 @@
                 <hr class="hr-light">
             </div>
         </div>
-
     </header>
-
 
 </body>
 </html>

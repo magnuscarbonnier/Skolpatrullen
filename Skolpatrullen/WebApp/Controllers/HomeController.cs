@@ -12,10 +12,24 @@ namespace WebApp.Controllers
 {
     public class HomeController : AppController
     {
+        //public async Task<IActionResult> Index()
+        //{
+        //    string message = await GetUser();
+        //    return View();
+        //}
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             string message = await GetUser();
-            return View();
+            var model = new StartBlogViewModel();
+
+            var startBlog = await APIGetAllStartBlogPosts();
+            
+            if (startBlog.Data != null)
+            {
+                model.BlogPosts = startBlog.Data.OrderByDescending(bp=>bp.PublishDate).Take(5);
+            }
+            return View(model);
         }
 
         public async Task<IActionResult> Privacy()
@@ -30,5 +44,17 @@ namespace WebApp.Controllers
             string message = await GetUser();
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [HttpGet]
+        [Route("[controller]/RemoveStartBlogPost/{id}")]
+        public async Task<IActionResult> RemoveStartBlogPost(int Id)
+        {
+            string message = await GetUser();
+            
+            var response = await APIRemoveStartBlogPost(Id);
+            SetResponseMessage(response);
+            return RedirectToAction("Index");
+        }
+
     }
 }
