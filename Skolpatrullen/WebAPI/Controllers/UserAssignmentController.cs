@@ -69,5 +69,25 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/Remove/{UserAssignmentId}")]
+        public APIResponse Remove(int UserAssignmentId)
+        {
+            APIResponse response = new APIResponse();
+            var userassignment = _context.Courses.Where(c => c.Id == UserAssignmentId);
+            if (userassignment != null)
+            {
+                _context.Remove(userassignment);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Tog bort en elev inlämning med id {userassignment}";
+            }
+            else
+            {
+                response.FailureMessage = $"Inlämningen fanns ej";
+                response.Success = false;
+            }
+            return response;
+        }
     }
 }
