@@ -44,15 +44,16 @@
                {
                    <div class="container">
                        <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
-                           <h2 class=" font-italic mt-sm-5">@post.Title @Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", post.PublishDate))</h2>
-                           <h6 class="mb-4">
+                           <h4 class=" font-italic mt-sm-5">@post.Title </h4>
+                           <p class="mb-4">
                                @post.Content
-                           </h6>
+                           </p>
+                           <p style="font-size: 75%;" class="font-italic mt-sm-5"> Publicerat @Convert.ToString(string.Format("{0:yyyy/MM/dd kl HH:mm}", post.PublishDate))</p>
                            @if (ViewBag.User != null)
                            {
                                if (ViewBag.User.IsSuperUser == true)
                                {
-                                   <a class="nav-link text-secondary" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                                   <a class="nav-link text-danger" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
                                }
                            }
                            <hr class="hr-light">
