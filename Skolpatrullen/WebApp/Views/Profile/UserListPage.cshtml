@@ -1,12 +1,17 @@
-﻿@model System.Collections.Generic.List<Database.Models.User>
+﻿@model WebApp.ViewModels.UserListViewModel
 
 @{
     ViewData["Title"] = "Alla användare";
 }
 <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Alla användare</h1>
-
-@foreach (var item in Model)
+<form asp-controller="Profile" asp-action="SearchUsers">
+    <p>
+        Förnamn: <input asp-for="SearchFirstName" type="text"> Efternamn: <input asp-for="SearchLastNames" type="text">
+        <input type="submit" value="Filtrera" />
+    </p>
+</form>
+@foreach (var item in Model.UserList)
 {
     <div class="row">
         <div class="col-lg-6">

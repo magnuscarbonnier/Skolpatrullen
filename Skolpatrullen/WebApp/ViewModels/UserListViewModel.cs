@@ -10,6 +10,8 @@ namespace WebApp.ViewModels
     public class UserListViewModel
     {
         public IEnumerable<User> UserList { get; set; }
+        public string SearchFirstName { get; set; }
+        public string SearchLastNames { get; set; }
     }
    
 }
