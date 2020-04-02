@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -82,6 +83,34 @@ namespace WebAPI.Controllers
 
             response.Success = true;
             response.SuccessMessage = $"Hämtadde kurs med id {Id}";
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetCoursesByUserId/{Id}")]
+        public APIResponse<IEnumerable<Course>> GetCourseByUserId(int Id)
+        {
+            APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
+            var courses = _context.CourseParticipants
+                  .Include(cp => cp.Course)
+                  .Where( cp => cp.UserId == Id).Select(cp => new Course
+                  {
+                       EndDate=cp.Course.EndDate,
+                       Id=cp.Course.Id,
+                       Name=cp.Course.Name,
+                       SchoolId=cp.Course.SchoolId,
+                       StartDate=cp.Course.StartDate
+                  }); 
+            if (courses.Any())
+            {
+                response.Data = courses;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla kurser för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga kurser för användare med id {Id}";
+            }
             return response;
         }
     }

@@ -119,6 +119,7 @@ namespace WebAPI.Controllers
         {
             APIResponse response = new APIResponse();
 
+            //checks if user exists
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
 
 
@@ -144,6 +145,7 @@ namespace WebAPI.Controllers
                 _context.AssignmentFiles.Add(assignmentfile);
                 _context.SaveChanges();
 
+                response.SuccessMessage = "Laddade upp inlämningsfil";
                 response.Success = true;
             }
             else
@@ -154,11 +156,11 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetFilesByAssignment/{id}")]
-        public APIResponse<IEnumerable<File>> GetFilesByAssignment(int id)
+        [Route("[controller]/GetFilesByAssignment/{AssignmentId}")]
+        public APIResponse<IEnumerable<File>> GetFilesByAssignment(int AssignmentId)
         {
             APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
-            var files = _context.AssignmentFiles.Include(af => af.FileId).Where(af => af.AssignmentId == id).Select(af => af.File);
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.AssignmentId == AssignmentId).Select(af => af.File);
             if (files != null)
             {
                 response.Data = files;

@@ -26,15 +26,27 @@ namespace WebApp.Controllers
             {
                 model.PVM.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
             }
-            var courseParticipantsResponse = APIGetAllCourseParticipants();
-            if (courseParticipantsResponse != null)
+            var courseParticipantsResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseResponse = await APIGetCoursesByUserId(User.Id);
+            var schoolResponse = await APIGetSchoolsByUserId(User.Id);
+            if (courseParticipantsResponse.Data != null && courseResponse.Data != null && schoolResponse.Data != null)
             {
-                model.PVM.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == User.Id).ToList();
-            }
-            var courseResponse = APIGetAllCourses();
-            if (courseResponse != null)
-            {
-                model.PVM.CourseList = courseResponse.Result.Data.ToList();
+                var courseParticipants = from cp in courseParticipantsResponse.Data
+                                         join co in courseResponse.Data on cp.CourseId equals co.Id
+                                         orderby co.StartDate ascending
+                                         where cp.Status == Status.Antagen
+                                         select new CourseParticipant
+                                         {
+                                             ApplicationDate = cp.ApplicationDate,
+                                             Course = co,
+                                             CourseId = cp.CourseId,
+                                             Grade = cp.Grade,
+                                             Role = cp.Role,
+                                             Status = cp.Status,
+                                             Id = cp.Id,
+                                         };
+                model.PVM.CourseParticipantList = courseParticipants.ToList();
+                model.PVM.SchoolList = schoolResponse.Data.ToList();
             }
 
             return View(model);

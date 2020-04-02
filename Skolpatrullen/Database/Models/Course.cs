@@ -15,9 +15,10 @@ namespace Database.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public ICollection<CourseParticipant> CourseParticipants { get; set; }
-        public ICollection<CourseRoom> CourseRooms { get; set; }
-        public ICollection<Lesson> CourseLessons { get; set; }
+        public IEnumerable<CourseParticipant> CourseParticipants { get; set; }
+        public IEnumerable<CourseRoom> CourseRooms { get; set; }
+        public IEnumerable<Lesson> CourseLessons { get; set; }
+        public IEnumerable<CourseBlogPost> CourseBlogPosts { get; set; }
         public School School { get; set; }
     }
 }

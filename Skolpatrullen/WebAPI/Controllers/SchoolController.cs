@@ -6,6 +6,7 @@ using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -28,6 +29,38 @@ namespace WebAPI.Controllers
                 response.Data = schoollist;
                 response.Success = true;
                 response.SuccessMessage = "Hämtade alla skolor";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetSchoolsByUserId/{Id}")]
+        public APIResponse<IEnumerable<School>> GetSchoolsByUserId(int Id)
+        {
+            APIResponse<IEnumerable<School>> response = new APIResponse<IEnumerable<School>>();
+            var schools = _context.CourseParticipants
+                  .Include(cp => cp.Course)
+                  .ThenInclude(cp => cp.School)
+                  .Where(cp => cp.UserId == Id)
+                  .Select(cp => new School
+                  {
+                      Id = cp.Course.School.Id,
+                      Address = cp.Course.School.Address,
+                      Name = cp.Course.School.Name,
+                      Phone = cp.Course.School.Phone,
+                      PostalCode = cp.Course.School.PostalCode,
+                      City = cp.Course.School.City
+                  })
+                  .Distinct();
+            if (schools.Any())
+            {
+                response.Data = schools;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla skolor för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga skolor för användare med id {Id}";
             }
             return response;
         }
