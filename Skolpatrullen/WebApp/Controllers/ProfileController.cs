@@ -171,10 +171,13 @@ namespace WebApp.Controllers
             {
                 return View();
             }
+            if(Request.Form.Files.Count > 0)
+            {
+                vm.file = Request.Form.Files[0];
+            }
             if (vm.file != null && vm.file.Length > 0)
             {
                 ChangeProfilePictureBody body = new ChangeProfilePictureBody();
-
                 byte[] p1 = null;
                 using (var fs1 = vm.file.OpenReadStream())
                 using (var ms1 = new MemoryStream())
@@ -191,14 +194,12 @@ namespace WebApp.Controllers
 
                 var response = await APIChangeProfilePicture(body);
             }
-            else if(vm.file == null)
+            else if (vm == null)
             {
                 var fileResponse = await APIGetFileById(Convert.ToInt32(User.ProfilePictureId));
                 var response = await APIDeleteFileById(fileResponse.Data.Id);
             }
             return RedirectToAction("ProfilePage", "Profile");
-
-
         }
 
         [HttpPost]
@@ -233,12 +234,26 @@ namespace WebApp.Controllers
                 pvm.Phone = user.Data.Phone;
                 pvm.PostalCode = user.Data.PostalCode;
                 pvm.Name = user.Data.FirstName + " " + user.Data.LastNames;
+                pvm.CourseParticipantList = user.Data.CourseParticipants;
 
-                if(user.Data.ProfilePictureId != null)
+                if (user.Data.ProfilePictureId != null)
                 {
                     var fileResponse = await APIGetFileById(Convert.ToInt32(user.Data.ProfilePictureId));
                     pvm.File = fileResponse.Data;
                 }
+
+                var courseParticipantsResponse = APIGetAllCourseParticipants();
+                if (courseParticipantsResponse != null)
+                {
+                    pvm.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == user.Data.Id).ToList();
+                }
+                var courseResponse = APIGetAllCourses();
+                if (courseResponse != null)
+                {
+                    pvm.CourseList = courseResponse.Result.Data.ToList();
+                }
+
+
                 return View("PublicProfilePage", pvm);
             }
             return View("CourseParticipantList");
