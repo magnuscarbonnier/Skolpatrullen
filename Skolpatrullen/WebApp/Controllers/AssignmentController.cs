@@ -97,6 +97,7 @@ namespace WebApp.Controllers
                 model.Deadline = assignment.Data.Deadline;
                 model.Description = assignment.Data.Description;
                 model.Name = assignment.Data.Name;
+                model.Id = assignment.Data.Id;
 
                 return View("AssignmentDetails", model);
             }

@@ -39,7 +39,8 @@
                     </a>
                 </div>
             }
+
         </div>
     </div>
 </div>
-<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+@Html.ActionLink("Lämna in", "AddUserAssignment", "UserAssignment", new { assignmentId = Model.Id })
