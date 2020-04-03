@@ -34,16 +34,16 @@
                             <td class="font-weight-bolder table-info">
                                 @item.Role
 
-                            </td>
-                            <td class="font-weight-bolder table-info">
-                                @item.Status
-                            </td>
-                            <td class="font-weight-bolder table-info">
-                                @item.Grade
-                            </td>
-                            <td class="font-weight-bolder table-info">
-                                <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
-                            </td>
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    @item.Status
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    @item.Grade
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
+                                </td>
 
                         }
                         else
@@ -54,17 +54,16 @@
                             <td>
                                 @item.Role
 
-                            </td>
-                            <td>
-                                @item.Status
-                            </td>
-                            <td>
-                                @item.Grade
-                            </td>
-                            <td>
-                                <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
-                            </td>
-
+                                </td>
+                                <td>
+                                    @item.Status
+                                </td>
+                                <td>
+                                    @item.Grade
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
+                                </td>
                         }
                     </tr>
                 }
