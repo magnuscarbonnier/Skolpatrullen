@@ -125,25 +125,25 @@
 
         </main>
     </div>
-    <footer>
-        <hr class="box-shadow" />
-        <div class="embed-responsive">
-            <div class="row justify-content-center">
 
-                <div class="d-inline-block text-center">
-                    <a class="d-inline text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
-                    <a class="d-inline text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
-                    <a class="d-inline text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
-                </div>
-                <div class="d-inline text-center">
-                    <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @*#main {
+        overflow:auto;
+        padding-bottom:150px; /* this needs to be bigger than footer height*/
+        }
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @RenderSection("Scripts", required: false)
-</body>
+        .footer {
+        position: relative;
+        margin-top: -150px; /* negative value of footer height */
+        height: 150px;
+        clear:both;
+        padding-top:20px;
+        }*@
+
+
+
+
+            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="~/js/site.js" asp-append-version="true"></script>
+            @RenderSection("Scripts", required: false)
+        </body>
 </html>
