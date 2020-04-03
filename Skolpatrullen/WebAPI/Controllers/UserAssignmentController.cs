@@ -54,10 +54,11 @@ namespace WebAPI.Controllers
         public APIResponse<UserAssignment> AddOrUpdate(UserAssignment userAssignment)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            var existingUserAssignment = _context.UserAssignments.SingleOrDefault(ua => ua.Id == userAssignment.Id);
+            var existingUserAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.AssignmentId == userAssignment.AssignmentId);
             if(existingUserAssignment != null)
             {
-                _context.UserAssignments.Update(userAssignment);
+                existingUserAssignment.Description = userAssignment.Description;
+                _context.UserAssignments.Update(existingUserAssignment);
                 _context.SaveChanges();
                 response.Data = userAssignment;
                 response.Success = true;

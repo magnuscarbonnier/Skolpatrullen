@@ -9,7 +9,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form enctype="multipart/form-data" asp-action="AddUserAssignment">
+        <form enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
@@ -18,7 +18,7 @@
             </div>
             <input type="file" multiple="multiple" asp-for="Files" id="file" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Lämna in" asp-controller="UserAssignment" asp-action="AddUserAssignment" class="btn btn-primary" />
             </div>
         </form>
     </div>
