@@ -72,7 +72,7 @@
             <div class="container">
                 <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
                     <h4 class=" font-italic mt-sm-5">@post.Title </h4>
-                    <p class="show-read-more mb-4">
+                    <p class=" show-read-more mb-4">
                         @post.Content
                     </p>
                     <p style="font-size: 75%;" class="mt-sm-5"><em> Publicerat @Convert.ToString(string.Format("{0:yyyy/MM/dd kl HH:mm}", post.PublishDate))</em></p>
@@ -80,7 +80,7 @@
                     {
                         if (ViewBag.User.IsSuperUser == true)
                         {
-                            <a class="nav-link text-danger" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                            <a class="btn text-danger" href="@Url.Action("RemoveStartBlogPost", new { Id = post.Id })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
                         }
                     }
                     <hr class="hr-light">
