@@ -268,23 +268,26 @@ namespace WebApp.Controllers
             var userResponse = await APIGetAllUsers();
             if (userResponse.Data != null)
             {
-                if (!string.IsNullOrEmpty(vm.SearchFirstName) && !string.IsNullOrEmpty(vm.SearchLastNames))
+
+                if (!string.IsNullOrEmpty(vm.Search))
                 {
-                    model.UserList = userResponse.Data.Where(s => (s.FirstName.ToLower().Contains(vm.SearchFirstName.ToLower().Trim()) && (s.LastNames.ToLower().Contains(vm.SearchLastNames.ToLower().Trim()))));
-                }
-                else if (!string.IsNullOrEmpty(vm.SearchFirstName) && string.IsNullOrEmpty(vm.SearchLastNames))
-                {
-                    model.UserList = userResponse.Data.Where(s => (s.FirstName.ToLower().Contains(vm.SearchFirstName.ToLower().Trim()) ));
-                }
-                else if (string.IsNullOrEmpty(vm.SearchFirstName) && !string.IsNullOrEmpty(vm.SearchLastNames))
-                {
-                    model.UserList = userResponse.Data.Where(s => (s.LastNames.ToLower().Contains(vm.SearchLastNames.ToLower().Trim())));
+                    var searchResponse = await APIGetUsersBySearchString(vm.Search);
+                    if (searchResponse.Data != null)
+                    {
+                        model.UserList = searchResponse.Data;
+                    }
+                    else
+                    {
+                        model.UserList = userResponse.Data;
+                    }
+
                 }
                 else
                 {
                     model.UserList = userResponse.Data;
                 }
             }
+
            
             return View("UserListPage",model);
         }

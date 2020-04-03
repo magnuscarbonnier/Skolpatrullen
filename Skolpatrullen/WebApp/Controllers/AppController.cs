@@ -341,5 +341,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIPost("/StartBlog/Add/", blogPost);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
+        public async Task<APIResponse<IEnumerable<User>>> APIGetUsersBySearchString(String Search)
+        {
+            HttpResponseMessage response = await APIGet($"/User/Search/{Search}");
+            return (APIResponse<IEnumerable<User>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<User>>));
+        }
     }
 }
