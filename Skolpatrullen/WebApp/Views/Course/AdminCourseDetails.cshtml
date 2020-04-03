@@ -69,7 +69,7 @@
                 <h6 class="">@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
                 <h5>@blogpost.Title</h5>
                 <p class="show-read-more">@blogpost.Content</p>
-                <a class="btn text-secondary" href="@Url.Action("RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                <a class="btn text-danger" href="@Url.Action("RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
             </div>
         </div>
         <br />
