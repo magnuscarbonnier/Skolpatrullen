@@ -125,25 +125,23 @@
 
         </main>
     </div>
+    <div class="footer">
+        <footer class="border-top embed-responsive border-top box-shadow">
+            <div class="row">
 
-    @*#main {
-        overflow:auto;
-        padding-bottom:150px; /* this needs to be bigger than footer height*/
-        }
-
-        .footer {
-        position: relative;
-        margin-top: -150px; /* negative value of footer height */
-        height: 150px;
-        clear:both;
-        padding-top:20px;
-        }*@
-
-
-
-
-            <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-            <script src="~/js/site.js" asp-append-version="true"></script>
-            @RenderSection("Scripts", required: false)
-        </body>
+                <div class="col col-sm-8 text-center">
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
+                </div>
+                <div class="col col-sm-4 text-center">
+                    <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
 </html>
