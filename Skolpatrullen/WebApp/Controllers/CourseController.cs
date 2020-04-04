@@ -19,13 +19,18 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                IEnumerable<Course> courses = new List<Course>();
-                var response = await APIGetAllCourses();
-                if (response.Data != null)
+                var courseresponse = await APIGetAllCourses();
+                var schoolresponse = await APIGetAllSchools();
+                if (courseresponse.Data != null && schoolresponse.Data != null)
                 {
-                    courses = response.Data;
+                    var response= from co in courseresponse.Data
+                                  join sc in schoolresponse.Data on co.SchoolId equals sc.Id
+                                  select new Course
+                                  {
+                                      Id=co.Id, Name=co.Name, SchoolId=co.SchoolId, StartDate=co.StartDate, EndDate=co.EndDate, School=sc
+                                  };
+                    return View(response);
                 }
-                return View(courses);
             }
             return RedirectToAction("Index", "Home");
         }
