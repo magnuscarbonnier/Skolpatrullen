@@ -104,32 +104,5 @@ namespace WebAPI.Controllers
             }
             return response;
         }
-        [HttpGet]
-        [Route("[controller]/GetCoursesBySchoolId/{Id}")]
-        public APIResponse<IEnumerable<Course>> GetCoursesBySchoolId(int Id)
-        {
-            APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
-            var courses = _context.Courses.Where(co => co.SchoolId == Id);
-            if (courses != null)
-            {
-                if (courses.Any())
-                {
-                    response.Data = courses;
-                    response.Success = true;
-                    response.SuccessMessage = $"Hämtade alla kurser för skola med id {Id}";
-                }
-                else
-                {
-                    response.Success = false;
-                    response.FailureMessage = $"Fanns inga kurser för skola med id {Id}";
-                }
-            }
-            else
-            {
-                response.Success = false;
-                response.FailureMessage = $"Kunde inte hämta kurser";
-            }
-            return response;
-        }
     }
 }
