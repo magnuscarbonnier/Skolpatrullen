@@ -277,7 +277,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> SchoolCourseList(int SchoolId)
         {
             string message = await GetUser();
-            var model = new CourseListViewModel();
+            var model = new SchoolCourseListViewModel();
             var courseResponse = await APIGetCoursesBySchoolId(SchoolId);
             if (courseResponse.Data != null)
             {
