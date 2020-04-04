@@ -17,7 +17,15 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new CourseParticipantViewModel();
-            model.UserId = User.Id;
+            if (User != null)
+            {
+                model.UserId = User.Id;
+            }
+            else
+            {
+                User = new User();
+                User.Id = 0;
+            }
 
             var courseResponse = await APIGetCourseById(Id);
             if (courseResponse.Data != null)
