@@ -25,12 +25,13 @@
                         else if (Model.Status == Database.Models.Status.Antagen)
                         {
                             <div>Du är redan med i den här kursen</div>
+                            <a class="btn btn-secondary" href="/Course/@Model.CourseId">Gå till kurssidan</a>
                         }
                         else if (Model.Status == Database.Models.Status.Inaktiv)
                         {
                             <div>Du har gjort någet fel (behöver något bättre medelande)</div>
                         }
-                        else if(Model.Status == Database.Models.Status.Avslag)
+                        else if (Model.Status == Database.Models.Status.Avslag)
                         {
                             <div class="form-group">
                                 <input type="submit" value="Ansök" class="btn btn-primary" />
