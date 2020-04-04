@@ -32,7 +32,7 @@
 @foreach (var item in Model.SchoolList) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.ActionLink(item.Name, "SchoolCourseList", "Course", new { SchoolId = item.Id })
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
