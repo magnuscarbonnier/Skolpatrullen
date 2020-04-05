@@ -41,7 +41,9 @@
                         @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
                     </td>
                     <td>
-                        @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
+                        <a class="btn text-danger" href="@Url.Action("RemoveCourse", new { Id = item.Id })"><i class="fa fa-trash-alt fa-lg"></i></a>
+                        @*modal not working
+                        @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })*@
                     </td>
                 </tr>
             }

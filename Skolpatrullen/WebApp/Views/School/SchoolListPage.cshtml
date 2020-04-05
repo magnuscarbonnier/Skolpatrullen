@@ -48,7 +48,9 @@
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
-                @await Html.PartialAsync("_RemoveSchool", new WebApp.ViewModels.SchoolViewModel { Id = item.Id })
+                <a class="btn text-danger" href="@Url.Action("RemoveSchoolPage", new { Id = item.Id })"><i class="fa fa-trash-alt fa-lg"></i></a>
+                @*modal not working
+                @await Html.PartialAsync("_RemoveSchool", new WebApp.ViewModels.SchoolViewModel { Id = item.Id })*@
             </td>
         </tr>
 }
