@@ -67,7 +67,7 @@ namespace WebApp.Controllers
                     body.AssignmentId = vm.AssignmentId;
                     body.ContentType = file.ContentType;
                     body.Name = file.FileName;
-                    body.Type = AssignmentFileType.StudentFile;
+                    body.Type = FileTypes.UserAssignment;
 
                     APIUploadAssignmentFile(body);
                 }

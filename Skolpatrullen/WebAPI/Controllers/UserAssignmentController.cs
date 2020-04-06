@@ -58,6 +58,7 @@ namespace WebAPI.Controllers
             if(existingUserAssignment != null)
             {
                 existingUserAssignment.Description = userAssignment.Description;
+                userAssignment.ReturnDate = existingUserAssignment.ReturnDate;
                 _context.UserAssignments.Update(existingUserAssignment);
                 _context.SaveChanges();
                 response.Data = userAssignment;

@@ -48,7 +48,7 @@ namespace WebApp.Controllers
                     body.AssignmentId = response.Data.Id;
                     body.ContentType = file.ContentType;
                     body.Name = file.FileName;
-                    body.Type = AssignmentFileType.AssignmentFile;
+                    body.Type = FileTypes.Assignment;
 
                     APIUploadAssignmentFile(body);
                 }
@@ -92,7 +92,7 @@ namespace WebApp.Controllers
             if (assignment.Data != null)
             {
                 var assignmentfiles = await APIGetFilesByAssignment(id);
-                model.AssignmentFiles = assignmentfiles.Data;
+                model.AssignmentFiles = assignmentfiles.Data.Where(af => af.Type == FileTypes.Assignment);
                 model.CourseId = assignment.Data.CourseId;
                 model.Deadline = assignment.Data.Deadline;
                 model.Description = assignment.Data.Description;
