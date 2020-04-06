@@ -17,14 +17,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]/{UserAssignmentId}")]
-        public APIResponse<UserAssignment> GetUserAssignment(int UserAssignmentId)
+        [Route("[controller]/IsReturned/{AssignmentId}/{UserId}")]
+        public APIResponse<bool> GetUserAssignment(int AssignmentId, int UserId)
         {
-            APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            response.Data = _context.UserAssignments.SingleOrDefault(ua => ua.Id == UserAssignmentId);
-
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade elevs inlämning med id {UserAssignmentId}";
+            APIResponse<bool> response = new APIResponse<bool>();
+            var isReturned = _context.UserAssignments.SingleOrDefault(ua => ua.AssignmentId == AssignmentId && ua.UserId == UserId);
+            if (isReturned != null)
+            {
+                response.Data = true;
+                response.Success = true;
+                response.SuccessMessage = $"Elevens inlämning är inlämnad";
+            } else
+            {
+                response.Data = false;
+                response.Success = false;
+                response.SuccessMessage = $"Elevens inlämning är inte inlämnad";
+            }
             return response;
         }
         [HttpGet]

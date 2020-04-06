@@ -326,10 +326,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/File/GetFilesByAssignment/{id}");
             return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
         }
-        public async Task<APIResponse<UserAssignment>> APIGetUserAssignment(int id)
+        public async Task<APIResponse<bool>> APIUserAssignmentReturnedStatus(int assignmentId, int userId)
         {
-            HttpResponseMessage response = await APIGet($"/UserAssignment/{id}");
-            return (APIResponse<UserAssignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserAssignment>));
+            HttpResponseMessage response = await APIGet($"/UserAssignment/IsReturned/{assignmentId}/{userId}");
+            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
         }
         public async Task<APIResponse<IEnumerable<UserAssignment>>> APIGetAllUserAssignmentByUser(int id)
         {
