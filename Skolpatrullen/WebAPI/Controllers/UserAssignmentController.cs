@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
         public APIResponse<bool> GetUserAssignment(int AssignmentId, int UserId)
         {
             APIResponse<bool> response = new APIResponse<bool>();
-            var isReturned = _context.UserAssignments.SingleOrDefault(ua => ua.AssignmentId == AssignmentId && ua.UserId == UserId);
+            var isReturned = _context.UserAssignments.SingleOrDefault(ua => ua.AssignmentId == AssignmentId && ua.UserId == UserId && ua.ReturnDate != null);
             if (isReturned != null)
             {
                 response.Data = true;
@@ -62,7 +62,7 @@ namespace WebAPI.Controllers
         public APIResponse<UserAssignment> AddOrUpdate(UserAssignment userAssignment)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            var existingUserAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.AssignmentId == userAssignment.AssignmentId);
+            var existingUserAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.AssignmentId == userAssignment.AssignmentId && ua.UserId == userAssignment.UserId);
             if(existingUserAssignment != null)
             {
                 existingUserAssignment.Description = userAssignment.Description;

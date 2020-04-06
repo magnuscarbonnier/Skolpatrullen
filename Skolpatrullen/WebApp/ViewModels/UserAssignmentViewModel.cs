@@ -16,5 +16,6 @@ namespace WebApp.ViewModels
         public DateTime ReturnDate { get; set; }
         public Assignment Assignment{ get; set; }
         public IEnumerable<IFormFile> Files { get; set; }
+        public bool TurnedIn { get; set; }
     }
 }

@@ -19,16 +19,15 @@ namespace WebApp.Controllers
             string message = await GetUser();
             var model = new UserAssignmentViewModel();
             var response = await APIGetAssignmentById(assignmentId);
-            //Check if user has already turned in an assignment
 
+            //not being used atm, can be used to display that you already turned it in.
+            var turnedin = await APIUserAssignmentReturnedStatus(assignmentId, User.Id);
 
             if (response.Data != null)
             {
+                model.TurnedIn = turnedin.Data;
                 model.Assignment = response.Data;
             }
-
-
-
             return View(model);
         }
         [HttpPost]
