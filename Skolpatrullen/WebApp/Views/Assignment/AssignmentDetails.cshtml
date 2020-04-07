@@ -39,7 +39,14 @@
                     </a>
                 </div>
             }
+
         </div>
     </div>
 </div>
-<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+@if (Model.TurnedIn)
+{
+    <span class="text-success">Den är redan inlämnad</span>
+} else
+{
+    @Html.ActionLink("Lämna in", "AddUserAssignment", "UserAssignment", new { assignmentId = Model.Id })
+}
