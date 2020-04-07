@@ -31,7 +31,7 @@ namespace WebAPI.Controllers
             {
                 response.Data = false;
                 response.Success = false;
-                response.SuccessMessage = $"Elevens inlämning är inte inlämnad";
+                response.FailureMessage = $"Elevens inlämning är inte inlämnad";
             }
             return response;
         }
@@ -54,7 +54,7 @@ namespace WebAPI.Controllers
             response.Data = _context.UserAssignments.Select(ua => ua);
 
             response.Success = true;
-            response.SuccessMessage = $"Hämtade alla student inlämningar";
+            response.SuccessMessage = $"Hämtade alla studentinlämningar";
             return response;
         }
         [HttpPost]
