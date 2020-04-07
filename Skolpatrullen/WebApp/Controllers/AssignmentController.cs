@@ -50,7 +50,7 @@ namespace WebApp.Controllers
                     body.Name = file.FileName;
                     body.Type = FileTypes.Assignment;
 
-                    APIUploadAssignmentFile(body);
+                    await APIUploadAssignmentFile(body);
                 }
             }
             return RedirectToAction("GetCourseById", "course", new { Id = assignment.CourseId });

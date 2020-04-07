@@ -46,6 +46,10 @@ namespace WebApp.Controllers
             userassignment.AssignmentId = vm.AssignmentId;
 
             var response = await APIAddOrUpdateUserAssignment(userassignment);
+            if (response.Success)
+                SetSuccessMessage(response.SuccessMessage);
+            else
+                SetFailureMessage(response.FailureMessage);
 
             if (vm.Files != null && vm.Files.Any())
             {
@@ -68,7 +72,7 @@ namespace WebApp.Controllers
                     body.Name = file.FileName;
                     body.Type = FileTypes.UserAssignment;
 
-                    APIUploadAssignmentFile(body);
+                    await APIUploadAssignmentFile(body);
                 }
             }
             return RedirectToAction("GetAssignmentById", "Assignment", new { id = vm.AssignmentId });
