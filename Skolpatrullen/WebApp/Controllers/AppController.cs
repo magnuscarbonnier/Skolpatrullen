@@ -351,5 +351,30 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/UserAssignment/Remove/{id}");
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
         }
+        public async Task<APIResponse<IEnumerable<StartBlogPost>>> APIGetAllStartBlogPosts()
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/GetAll");
+            return (APIResponse<IEnumerable<StartBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<StartBlogPost>>));
+        }
+        public async Task<APIResponse> APIRemoveStartBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIAddStartBlogPost(StartBlogPost blogPost)
+        {
+            HttpResponseMessage response = await APIPost("/StartBlog/Add/", blogPost);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<IEnumerable<User>>> APIGetUsersBySearchString(String Search)
+        {
+            HttpResponseMessage response = await APIGet($"/User/Search/{Search}");
+            return (APIResponse<IEnumerable<User>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<User>>));
+        }
+        public async Task<APIResponse<IEnumerable<Course>>> APIGetCoursesBySchoolId(int Id)
+        {
+            HttpResponseMessage response = await APIGet($"/Course/GetCoursesBySchoolId/{Id}");
+            return (APIResponse<IEnumerable<Course>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Course>>));
+        }
     }
 }

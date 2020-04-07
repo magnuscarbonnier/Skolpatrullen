@@ -30,6 +30,7 @@ namespace Database.Models
         public int? ProfilePictureId { get; set; }
         public IEnumerable<CourseParticipant> CourseParticipants { get; set; }
         public IEnumerable<UserSchool> UserSchools { get; set; }
+        public IEnumerable<StartBlogPost> StartBlogPosts { get; set; }
         public File ProfilePicture { get; set; }
     }
 }

@@ -3,11 +3,11 @@
     ViewData["Title"] = "Dina kurser";
 }
 <h1>Dina kurser</h1>
-@if (!Model.CourseParticipantList.Any())
+@if (Model.CourseParticipantList == null)
 {
     <h5>Du har inte sökt några kurser än.</h5>
 }
-@if (Model.CourseParticipantList.Any())
+@if (Model.CourseParticipantList !=null)
 { 
     <h5>Kurser du är antagen till:</h5>
 
