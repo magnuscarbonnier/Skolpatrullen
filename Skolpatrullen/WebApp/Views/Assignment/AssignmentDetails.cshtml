@@ -46,7 +46,15 @@
 @if (Model.TurnedIn)
 {
     <span class="text-success">Den är redan inlämnad</span>
-} else
+}
+else
 {
     @Html.ActionLink("Lämna in", "AddUserAssignment", "UserAssignment", new { assignmentId = Model.Id })
+}
+
+@if (Model.IsTeacher)
+{
+    <div>
+        @Html.ActionLink("Visa alla elevinlämningar", "UserAssignmentList", "UserAssignment", new { assignmentId = Model.Id })   
+    </div>
 }

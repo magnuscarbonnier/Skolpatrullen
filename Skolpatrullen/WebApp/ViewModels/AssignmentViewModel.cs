@@ -18,5 +18,6 @@ namespace WebApp.ViewModels
         public IEnumerable<IFormFile> File { get; set; }
         public IEnumerable<File> AssignmentFiles { get; set; }
         public bool TurnedIn { get; set; }
+        public bool IsTeacher { get; set; }
     }
 }
