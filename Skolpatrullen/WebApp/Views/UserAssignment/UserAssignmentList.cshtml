@@ -1,0 +1,55 @@
+﻿@model WebApp.ViewModels.UserAssignmentListViewModel
+
+@{
+    ViewData["Title"] = "Alla inlämningar";
+}
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+
+@foreach (var user in Model.Users)
+{
+
+<div class="row">
+    <div class="col col-lg-8">
+        <h6>@user.FirstName @user.LastNames</h6>
+        @if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
+        {
+            <p>Inlämnad datum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate))</p>
+            <p>
+              Beskrivning: @Model.UserAssignments.SingleOrDefault(ua=>ua.UserId==user.Id).Description
+            </p>
+            <p>Betyg: </p>@Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).Grade
+        }
+        else
+        {
+        <h4 class="alert-danger">Ej inlämnad</h4>
+        }
+
+    </div>
+
+
+    <div class="col col-lg-4 card bg-light">
+        <div class="card-body">
+            <h6 class="card-title">
+                Filer
+            </h6>
+            @*@foreach (var file in userassignment..AssignmentFiles)
+            {
+                <div class="row">
+                    <a class="card-link">
+                        @if (file.Name.Length > 20)
+                        {
+                            @Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
+                        }
+                        else
+                        {
+                            @Html.ActionLink(file.Name, "DownloadFile", "course", new { id = file.Id })
+                        }
+                    </a>
+                </div>
+            }*@
+
+        </div>
+    </div>
+</div>
+<hr />
+}

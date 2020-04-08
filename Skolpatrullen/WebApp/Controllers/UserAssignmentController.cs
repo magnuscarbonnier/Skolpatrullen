@@ -77,5 +77,38 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("GetAssignmentById", "Assignment", new { id = vm.AssignmentId });
         }
+        [HttpGet]
+        [Route("[controller]/UserAssignmentList/{assignmentId}")]
+        public async Task<IActionResult> UserAssignmentList(int assignmentId)
+        {
+            string message = await GetUser();
+            var model = new UserAssignmentListViewModel();
+            var UAresponse = await APIGetAllUserAssignmentsByAssignmentId(assignmentId);
+            var assignmentresponse = await APIGetAssignmentById(assignmentId);
+            if (assignmentresponse.Data != null && UAresponse.Data != null)
+            {
+                var userresponse = await APIGetStudentsByCourseId(assignmentresponse.Data.CourseId);
+                if (userresponse.Data != null)
+                {
+                    var result = from ua in UAresponse.Data
+                                 join us in userresponse.Data on ua.UserId equals us.Id
+                                 orderby ua.ReturnDate ascending
+                                 select new UserAssignment
+                                 {
+                                     AssignmentId = ua.AssignmentId,
+                                     Description = ua.Description,
+                                     Grade = ua.Grade,
+                                     Id = ua.Id,
+                                     ReturnDate = ua.ReturnDate,
+                                     UserId = ua.UserId,
+                                     User = us
+                                 };
+
+                    model.UserAssignments = result;
+                    model.Users = userresponse.Data;
+                }
+            }
+            return View(model);
+        }
     }
 }

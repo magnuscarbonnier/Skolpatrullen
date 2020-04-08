@@ -47,6 +47,17 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
+        [Route("[controller]/GetAllByAssignmentId/{assignmentId}")]
+        public APIResponse<IEnumerable<UserAssignment>> GetAllByAssignmentId(int assignmentId)
+        {
+            APIResponse<IEnumerable<UserAssignment>> response = new APIResponse<IEnumerable<UserAssignment>>();
+            response.Data = _context.UserAssignments.Where(ua => ua.AssignmentId == assignmentId);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade alla inlämningar till uppgift med id: {assignmentId}";
+            return response;
+        }
+        [HttpGet]
         [Route("[controller]/GetAll")]
         public APIResponse<IEnumerable<UserAssignment>> GetAll()
         {
