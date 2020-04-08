@@ -9,9 +9,6 @@ namespace WebApp.ViewModels
 {
     public class UserAssignmentListViewModel
     {
-        
-        public IEnumerable<IFormFile> Files { get; set; }
-       
         public IEnumerable<UserAssignment> UserAssignments { get; set; }
         public IEnumerable<User> Users { get; set; }
     }

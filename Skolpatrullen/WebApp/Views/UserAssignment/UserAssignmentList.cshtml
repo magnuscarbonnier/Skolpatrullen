@@ -9,7 +9,7 @@
 {
 
 <div class="row">
-    <div class="col col-lg-8">
+    <div class="col-lg-8">
         <h6>@user.FirstName @user.LastNames</h6>
         @if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
         {
@@ -17,17 +17,17 @@
             <p>
               Beskrivning: @Model.UserAssignments.SingleOrDefault(ua=>ua.UserId==user.Id).Description
             </p>
-            <p>Betyg: </p>@Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).Grade
+            <p>Betyg: </p>  @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).Grade
         }
         else
         {
-        <h4 class="alert-danger">Ej inlämnad</h4>
+        <h4 class="text-danger">Ej inlämnad</h4>
         }
-
+        <a class="btn btn-outline-secondary">Ändra</a>
     </div>
 
 
-    <div class="col col-lg-4 card bg-light">
+    <div class="col-lg-4 card bg-light">
         <div class="card-body">
             <h6 class="card-title">
                 Filer
