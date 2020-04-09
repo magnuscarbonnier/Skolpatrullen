@@ -4,52 +4,51 @@
     ViewData["Title"] = "Alla inlämningar";
 }
 <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
-
-@foreach (var user in Model.Users)
-{
+<h2>Alla studentinlämningar</h2>
+<div>
+<h5>@Model.Assignment.Name</h5>
+<h6 class="font-italic">Sista inlämningsdag: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Assignment.Deadline))</h6>
+</div>
 
 <div class="row">
-    <div class="col-lg-8">
-        <h6>@user.FirstName @user.LastNames</h6>
-        @if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
-        {
-            <p>Inlämnad datum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate))</p>
-            <p>
-              Beskrivning: @Model.UserAssignments.SingleOrDefault(ua=>ua.UserId==user.Id).Description
-            </p>
-            <p>Betyg: </p>  @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).Grade
-        }
-        else
-        {
-        <h4 class="text-danger">Ej inlämnad</h4>
-        }
-        <a class="btn btn-outline-secondary">Ändra</a>
-    </div>
 
+    <div class="d-none d-sm-table-cell col-lg-8 col-md-7 col-sm-6"></div>
+    <div class="d-none d-sm-table-cell col-md-4 col-sm-5">Inlämnad</div>
+    <div class="d-none d-sm-table-cell col-lg-1 col-md-1 col-sm-1"></div>
 
-    <div class="col-lg-4 card bg-light">
-        <div class="card-body">
-            <h6 class="card-title">
-                Filer
-            </h6>
-            @*@foreach (var file in userassignment..AssignmentFiles)
-            {
-                <div class="row">
-                    <a class="card-link">
-                        @if (file.Name.Length > 20)
-                        {
-                            @Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
-                        }
-                        else
-                        {
-                            @Html.ActionLink(file.Name, "DownloadFile", "course", new { id = file.Id })
-                        }
-                    </a>
-                </div>
-            }*@
-
-        </div>
-    </div>
 </div>
 <hr />
+@foreach (var user in Model.Users)
+{
+    <div class="row">
+        <div class="col-lg-8 col-md-7 col-sm-6">
+            <h6>@user.FirstName @user.LastNames</h6>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-5">
+            @{
+                if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
+                {
+                    if (Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate.Date <= Model.Assignment.Deadline)
+                    {
+                        <label class="text-success">@Convert.ToString(string.Format("{0:yyyy/MM/dd}", @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate))</label>
+                    }
+                    else
+                    {
+                        <label class="text-danger">@Convert.ToString(string.Format("{0:yyyy/MM/dd}", @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate))</label>
+                    }
+                }
+                else
+                {
+                    <label class="text-danger">Ej inlämnad</label>
+                }
+            }
+        </div>
+
+        <div class="col-lg-1 col-md-1 col-sm-1">
+            @Html.ActionLink(linkText: "Visa", actionName: "GetUserAssignment", controllerName: "UserAssignment", new { userid=user.Id, courseid=Model.Assignment.CourseId })
+        </div>
+
+    </div>
+    <hr />
 }

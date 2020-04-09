@@ -106,6 +106,7 @@ namespace WebApp.Controllers
 
                     model.UserAssignments = result;
                     model.Users = userresponse.Data;
+                    model.Assignment = assignmentresponse.Data;
                 }
             }
             return View(model);

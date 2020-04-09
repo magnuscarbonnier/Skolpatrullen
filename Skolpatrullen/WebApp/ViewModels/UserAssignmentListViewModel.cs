@@ -11,5 +11,6 @@ namespace WebApp.ViewModels
     {
         public IEnumerable<UserAssignment> UserAssignments { get; set; }
         public IEnumerable<User> Users { get; set; }
+        public Assignment Assignment { get; set; }
     }
 }
