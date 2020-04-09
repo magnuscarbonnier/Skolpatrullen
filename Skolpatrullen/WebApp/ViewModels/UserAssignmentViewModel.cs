@@ -17,6 +17,7 @@ namespace WebApp.ViewModels
         public Assignment Assignment{ get; set; }
         public IEnumerable<IFormFile> Files { get; set; }
         public bool TurnedIn { get; set; }
+        public User User { get; set; }
         public List<string> Grades = new List<string>
     {
       null,"IG","G","VG","MVG","A","B","C","D","E","F"

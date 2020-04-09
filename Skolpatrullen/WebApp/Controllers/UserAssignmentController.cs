@@ -111,5 +111,37 @@ namespace WebApp.Controllers
             }
             return View(model);
         }
+        [HttpGet]
+        [Route("[controller]/EditUserAssignment/{CourseId}/{AssignmentId}/{UserId}")]
+        public async Task<IActionResult> EditUserAssignment(int CourseId, int AssignmentId, int UserId)
+        {
+            string message = await GetUser();
+            var model = new UserAssignmentViewModel();
+            var UAresponse = await APIGetUserAssignmentByCourseAndUser(CourseId, UserId);
+            var userresponse = await APIGetUserById(UserId);
+            var assignmentresponse = await APIGetAssignmentById(AssignmentId);
+
+            if (UAresponse.Data != null && userresponse.Data != null)
+            {
+                model.AssignmentId = UAresponse.Data.AssignmentId;
+                model.Assignment = UAresponse.Data.Assignment;
+                model.Description = UAresponse.Data.Description;
+                model.Grade = UAresponse.Data.Grade;
+                model.ReturnDate = UAresponse.Data.ReturnDate;
+                model.UserId = UAresponse.Data.UserId;
+                model.User = userresponse.Data;
+            }
+            else
+            {
+                model.TurnedIn = false;
+                model.UserId = UserId;
+                model.AssignmentId=AssignmentId;
+                if (assignmentresponse.Data != null)
+                    model.Assignment = assignmentresponse.Data;
+                if(userresponse.Data != null)
+                    model.User = userresponse.Data;
+            }
+            return View(model);
+        }
     }
 }

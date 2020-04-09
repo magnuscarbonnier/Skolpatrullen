@@ -1,0 +1,23 @@
+﻿@model WebApp.ViewModels.UserAssignmentViewModel
+
+@{
+    ViewData["Title"] = "EditUserAssignment";
+}
+
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+
+    <h3>
+        @Model.User.FirstName @Model.User.LastNames inlämning.
+    </h3>
+<h4>@Model.Assignment.Name</h4>
+<div class="form-group">
+    <div class="col">@Model.Description</div>
+</div>
+<form>
+    <div class="form-group col-lg-2">
+        <label asp-for="Grade" class="control-label">Betyg</label>
+        @Html.DropDownListFor(x => Model.Grade, new SelectList(Model.Grades), htmlAttributes: new { @class = "custom-select", id = "Grade" })
+        <span asp-validation-for="Grade" class="text-danger"></span>
+    </div>
+    <input type="submit" value="Spara" />
+</form>

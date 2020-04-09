@@ -29,7 +29,11 @@
             @{
                 if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
                 {
-                    if (Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate.Date <= Model.Assignment.Deadline)
+                    if (Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate.Date == DateTime.MinValue)
+                    {
+                        <label class="text-danger">Ej inlämnad</label>
+                    }
+                    else if (Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate.Date <= Model.Assignment.Deadline)
                     {
                         <label class="text-success">@Convert.ToString(string.Format("{0:yyyy/MM/dd}", @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).ReturnDate))</label>
                     }
@@ -46,7 +50,7 @@
         </div>
 
         <div class="col-lg-1 col-md-1 col-sm-1">
-            @Html.ActionLink(linkText: "Visa", actionName: "GetUserAssignment", controllerName: "UserAssignment", new { userid=user.Id, courseid=Model.Assignment.CourseId })
+            @Html.ActionLink(linkText: "Visa", actionName: "EditUserAssignment", controllerName: "UserAssignment", new { CourseId=Model.Assignment.CourseId, AssignmentId=Model.Assignment.Id, UserId=user.Id })
         </div>
 
     </div>
