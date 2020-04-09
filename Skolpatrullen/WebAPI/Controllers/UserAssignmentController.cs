@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -117,6 +119,26 @@ namespace WebAPI.Controllers
                 response.FailureMessage = $"Inlämningen fanns ej";
                 response.Success = false;
             }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetByCourseAndUser/{CourseId}/{UserId}")]
+        public APIResponse<UserAssignment> GetByCourseAndUser(int CourseId, int UserId)
+        {
+            APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
+            var uaresponse = _context.UserAssignments.Include(ua=>ua.Assignment).Where(ua=>ua.Assignment.CourseId==CourseId).SingleOrDefault(ua => ua.UserId == UserId);
+            if (uaresponse != null)
+            {
+                response.Data = uaresponse;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade inlämning med id {uaresponse.Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns ingen inlämning";
+            }
+
             return response;
         }
     }
