@@ -119,11 +119,11 @@ namespace WebApp.Controllers
         {
 
             string message = await GetUser();
-            var model = new List<User>();
+            var model = new UserListViewModel();
             var response = await APIGetAllUsers();
             if (response.Data != null)
             {
-                model = response.Data.ToList();
+                model.UserList = response.Data.OrderBy(us=>us.LastNames).ToList();
             }
             if (!string.IsNullOrEmpty(response.FailureMessage))
             {
@@ -258,6 +258,35 @@ namespace WebApp.Controllers
             }
             return View("CourseParticipantList");
 
+        }
+        [HttpPost]
+        [Route("[controller]/SearchUsers")]
+        public async Task<IActionResult> SearchUsers(UserListViewModel vm)
+        {
+            string message = await GetUser();
+            var model = new UserListViewModel();
+            var userResponse = await APIGetAllUsers();
+            if (userResponse.Data != null)
+            {
+                if (!string.IsNullOrEmpty(vm.SearchFirstName) && !string.IsNullOrEmpty(vm.SearchLastNames))
+                {
+                    model.UserList = userResponse.Data.Where(s => (s.FirstName.ToLower().Contains(vm.SearchFirstName.ToLower().Trim()) && (s.LastNames.ToLower().Contains(vm.SearchLastNames.ToLower().Trim()))));
+                }
+                else if (!string.IsNullOrEmpty(vm.SearchFirstName))
+                {
+                    model.UserList = userResponse.Data.Where(s => (s.FirstName.ToLower().Contains(vm.SearchFirstName.ToLower().Trim()) ));
+                }
+                else if (!string.IsNullOrEmpty(vm.SearchLastNames))
+                {
+                    model.UserList = userResponse.Data.Where(s => (s.LastNames.ToLower().Contains(vm.SearchLastNames.ToLower().Trim())));
+                }
+                else
+                {
+                    model.UserList = userResponse.Data;
+                }
+            }
+           
+            return View("UserListPage",model);
         }
     }
 }
