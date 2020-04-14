@@ -15,27 +15,35 @@
             <div class="font-weight-bold">Kurs: @Html.DisplayFor(m => m.Course.Name)</div>
             <div>Startdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.StartDate))</div>
             <div>Slutdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.EndDate))</div>
-            <div>Max antal platser på kurs: </div>
 
             @{
-                if (Model.Status == Database.Models.Status.Ansökt)
+                if (ViewBag.User != null)
                 {
-                    <div>Du har redan ansökt till den här kursen</div>
+                    if (Model.Status == Database.Models.Status.Ansökt)
+                    {
+                        <div>Du har redan ansökt till den här kursen</div>
+                    }
+                    else if (Model.Status == Database.Models.Status.Antagen)
+                    {
+                        <div>Du är redan med i den här kursen</div>
+                        <a class="btn btn-secondary" href="/Course/@Model.CourseId">Gå till kurssidan</a>
+                    }
+                    else if (Model.Status == Database.Models.Status.Inaktiv)
+                    {
+                        <div>Du har gjort någet fel (behöver något bättre medelande)</div>
+                    }
+                    else if (Model.Status == Database.Models.Status.Avslag)
+                    {
+                        <div class="form-group">
+                            <input type="submit" value="Ansök" class="btn btn-primary" />
+                        </div>
+                    }
                 }
-                else if (Model.Status == Database.Models.Status.Antagen)
+
+                else
                 {
-                    <div>Du är redan med i den här kursen</div>
-                    @Html.ActionLink("Gå till kurssidan", "GetCourseById", "Course", new { id = Model.CourseId }, new { @class = "btn btn-secondary" })
-                }
-                else if (Model.Status == Database.Models.Status.Inaktiv)
-                {
-                    <div>Du har gjort någet fel (behöver något bättre medelande)</div>
-                }
-                else if (Model.Status == Database.Models.Status.Avslag)
-                {
-                    <div class="form-group">
-                        <input type="submit" value="Ansök" class="btn btn-primary" />
-                    </div>
+                    <div>Du måste vara inloggad för att ansöka till kursen</div>
+                    <div><a class="btn btn-info btn-dark" asp-area="" asp-controller="Login" asp-action="LoginPage">Logga in</a></div>
                 }
             }
         </form>

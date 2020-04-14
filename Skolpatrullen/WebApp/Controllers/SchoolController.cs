@@ -14,18 +14,13 @@ namespace WebApp.Controllers
         public async Task<IActionResult> SchoolListPage()
         {
             string message = await GetUser();
-            if (User != null)
+            var model = new SchoolViewModel();
+            var response = await APIGetAllSchools();
+            if (response.Data != null)
             {
-                var model = new SchoolViewModel();
-                var response = await APIGetAllSchools();
-                if (response.Data != null)
-                {
-                    model.SchoolList = response.Data;
-                }
-                return View(model);
-
+                model.SchoolList = response.Data;
             }
-            return RedirectToAction("Index", "Home");
+            return View(model);
         }
 
         [HttpGet]
