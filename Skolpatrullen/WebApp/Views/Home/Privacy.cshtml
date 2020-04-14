@@ -2,33 +2,34 @@
 @{
     ViewData["Title"] = "Privacy Policy";
 }
-<head>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var maxLength = 200;
-            $(".show-read-more").each(function () {
-                var myStr = $(this).text();
-                if ($.trim(myStr).length > maxLength) {
-                    var newStr = myStr.substring(0, maxLength);
-                    var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-                    $(this).empty().html(newStr);
-                    $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
-                    $(this).append('<span class="more-text">' + removedStr + '</span>');
-                }
-            });
-            $(".read-more").click(function () {
-                $(this).siblings(".more-text").contents().unwrap();
-                $(this).remove();
-            });
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<h1>@ViewData["Title"]</h1>
+
+<script>
+    $(document).ready(function () {
+        var maxLength = 200;
+        $(".show-read-more").each(function () {
+            var myStr = $(this).text();
+            if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                $(this).append('<span class="more-text">' + removedStr + '</span>');
+            }
         });
-    </script>
-    <style>
-        .show-read-more .more-text {
-            display: none;
-        }
-    </style>
-</head>
+        $(".read-more").click(function () {
+            $(this).siblings(".more-text").contents().unwrap();
+            $(this).remove();
+        });
+    });
+</script>
+<style>
+    .show-read-more .more-text {
+        display: none;
+    }
+</style>
+
 <br />
 <br />
 <body>
