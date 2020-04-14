@@ -121,9 +121,11 @@ namespace WebApp.Controllers
             var userresponse = await APIGetUserById(UserId);
             var assignmentresponse = await APIGetAssignmentById(AssignmentId);
             model.TurnedIn = APIUserAssignmentReturnedStatus(AssignmentId, UserId).Result.Data;
+            var userassignmentfiles = await APIGetUserAssignmentFilesByUser(UserId);
 
             if (UAresponse.Data != null && userresponse.Data != null)
             {
+                model.AssignmentFiles = userassignmentfiles.Data.Where(ua => ua.Type == AssignmentFileType.StudentFile && ua.AssignmentId == AssignmentId).Select(ua => ua.File);
                 model.AssignmentId = UAresponse.Data.AssignmentId;
                 model.Assignment = UAresponse.Data.Assignment;
                 model.Description = UAresponse.Data.Description;

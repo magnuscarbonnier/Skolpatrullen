@@ -185,7 +185,7 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<AssignmentFile>> GetUserAssignmentFilesByUser(int UserId)
         {
             APIResponse<IEnumerable<AssignmentFile>> response = new APIResponse<IEnumerable<AssignmentFile>>();
-            var files = _context.AssignmentFiles.Where(af => af.UserId == UserId);
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.UserId == UserId);
             if (files != null)
             {
                 response.Data = files;

@@ -38,13 +38,13 @@
                     <h5 class="card-title">
                         Filer
                     </h5>
-                    @*@foreach (var file in Model.AssignmentFiles)
+                    @foreach (var file in Model.AssignmentFiles)
                     {
                         <div class="row">
                             <a class="card-link">
                                 @if (file.Name.Length > 20)
                                 {
-                                    Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
+                                    @Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
                                 }
                                 else
                                 {
@@ -52,7 +52,7 @@
                                 }
                             </a>
                         </div>
-                    }*@
+                    }
 
                 </div>
             </div>
