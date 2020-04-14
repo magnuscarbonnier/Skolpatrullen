@@ -141,5 +141,19 @@ namespace WebAPI.Controllers
 
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/GetUserAssignmenetById/{UserAssignmentId}")]
+        public APIResponse<UserAssignment> GetLessonById(int id)
+        {
+            APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
+            var userAssignment = _context.UserAssignments.SingleOrDefault(l => l.Id == id);
+            if (userAssignment != null)
+            {
+                response.Data = userAssignment;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade elevs inlämning med id {id}";
+            }
+            return response;
+        }
     }
 }
