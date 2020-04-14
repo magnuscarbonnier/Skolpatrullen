@@ -92,14 +92,14 @@ namespace WebAPI.Controllers
             APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
             var courses = _context.CourseParticipants
                   .Include(cp => cp.Course)
-                  .Where( cp => cp.UserId == Id).Select(cp => new Course
+                  .Where(cp => cp.UserId == Id).Select(cp => new Course
                   {
-                       EndDate=cp.Course.EndDate,
-                       Id=cp.Course.Id,
-                       Name=cp.Course.Name,
-                       SchoolId=cp.Course.SchoolId,
-                       StartDate=cp.Course.StartDate
-                  }); 
+                      EndDate = cp.Course.EndDate,
+                      Id = cp.Course.Id,
+                      Name = cp.Course.Name,
+                      SchoolId = cp.Course.SchoolId,
+                      StartDate = cp.Course.StartDate
+                  });
             if (courses.Any())
             {
                 response.Data = courses;
@@ -110,6 +110,25 @@ namespace WebAPI.Controllers
             {
                 response.Success = false;
                 response.FailureMessage = $"Fanns inga kurser för användare med id {Id}";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetCoursesBySchoolId/{schoolId}")]
+        public APIResponse<IEnumerable<Course>> GetCoursesBySchoolId(int schoolId)
+        {
+            APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
+            var courses = _context.Courses.Where(co => co.SchoolId == schoolId);
+            if (courses != null)
+            {
+                response.Data = courses;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla kurser för skola med id {schoolId}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Kunde inte hämta kurser";
             }
             return response;
         }
