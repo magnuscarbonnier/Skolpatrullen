@@ -396,5 +396,10 @@ namespace WebApp.Controllers
             HttpResponseMessage response = await APIGet($"/UserAssignment/GetUserAssignmentById/{id}");
             return (APIResponse<UserAssignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserAssignment>));
         }
+        public async Task<APIResponse<IEnumerable<AssignmentFile>>> APIGetUserAssignmentFilesByUser(int UserId)
+        {
+            HttpResponseMessage response = await APIGet($"/File/GetUserAssignmentFilesByUser/{UserId}");
+            return (APIResponse<IEnumerable<AssignmentFile>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<AssignmentFile>>));
+        }
     }
 }
