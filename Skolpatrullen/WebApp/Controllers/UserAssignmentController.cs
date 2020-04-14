@@ -135,13 +135,27 @@ namespace WebApp.Controllers
             else
             {
                 model.UserId = UserId;
-                model.AssignmentId=AssignmentId;
+                model.AssignmentId = AssignmentId;
                 if (assignmentresponse.Data != null)
                     model.Assignment = assignmentresponse.Data;
-                if(userresponse.Data != null)
+                if (userresponse.Data != null)
                     model.User = userresponse.Data;
             }
             return View(model);
+        }
+        [HttpPost]
+        [Route("[controller]/EditUserAssignment/{CourseId}/{AssignmentId}/{UserId}")]
+        public async Task<IActionResult> EditUserAssignment(UserAssignment userAssignment)
+        {
+            string message = await GetUser();
+            var response = await APIAddOrUpdateUserAssignment(userAssignment);
+
+            if (response.Success)
+                SetSuccessMessage(response.SuccessMessage);
+            else
+                SetFailureMessage(response.FailureMessage);
+
+            return RedirectToAction("UserAssignmentList", "UserAssignment", new { assignmentId = userAssignment.AssignmentId });
         }
     }
 }

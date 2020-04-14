@@ -5,7 +5,7 @@
 }
 
     <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
-    <form>
+    <form asp-action="EditUserAssignment" method="post">
         <h3>
             @Model.User.FirstName @Model.User.LastNames inlämning.
         </h3>

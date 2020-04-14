@@ -80,6 +80,7 @@ namespace WebAPI.Controllers
             {
                 existingUserAssignment.Description = userAssignment.Description;
                 userAssignment.ReturnDate = existingUserAssignment.ReturnDate;
+                existingUserAssignment.Grade = userAssignment.Grade;
                 _context.UserAssignments.Update(existingUserAssignment);
                 _context.SaveChanges();
                 response.Data = userAssignment;
@@ -126,7 +127,7 @@ namespace WebAPI.Controllers
         public APIResponse<UserAssignment> GetByCourseAndUser(int CourseId, int UserId)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            var uaresponse = _context.UserAssignments.Include(ua=>ua.Assignment).Where(ua=>ua.Assignment.CourseId==CourseId).SingleOrDefault(ua => ua.UserId == UserId);
+            var uaresponse = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId).FirstOrDefault(ua => ua.UserId == UserId);
             if (uaresponse != null)
             {
                 response.Data = uaresponse;
@@ -143,7 +144,7 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("[controller]/GetUserAssignmenetById/{UserAssignmentId}")]
-        public APIResponse<UserAssignment> GetLessonById(int id)
+        public APIResponse<UserAssignment> GetUserAssignmenetById(int id)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
             var userAssignment = _context.UserAssignments.SingleOrDefault(l => l.Id == id);
