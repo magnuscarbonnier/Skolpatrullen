@@ -131,7 +131,7 @@ namespace WebAPI.Controllers
                 file.Binary = body.File;
                 file.UploadDate = body.UploadDate;
                 file.ContentType = body.ContentType;
-                file.Type = FileTypes.CourseFile;
+                file.Type = body.Type;
                 file.Name = body.Name;
 
                 _context.Files.Add(file);
@@ -139,7 +139,13 @@ namespace WebAPI.Controllers
 
                 assignmentfile.AssignmentId = body.AssignmentId;
                 assignmentfile.FileId = file.Id;
-                assignmentfile.Type = body.Type;
+                if(body.Type == FileTypes.UserAssignment)
+                {
+                    assignmentfile.Type = AssignmentFileType.StudentFile;
+                } else if (body.Type == FileTypes.Assignment)
+                {
+                    assignmentfile.Type = AssignmentFileType.AssignmentFile;
+                }
                 assignmentfile.UserId = body.UserId;
 
                 _context.AssignmentFiles.Add(assignmentfile);
