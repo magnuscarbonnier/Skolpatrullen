@@ -268,7 +268,6 @@ namespace WebApp.Controllers
             var userResponse = await APIGetAllUsers();
             if (userResponse.Data != null)
             {
-
                 if (!string.IsNullOrEmpty(vm.Search))
                 {
                     var searchResponse = await APIGetUsersBySearchString(vm.Search);
