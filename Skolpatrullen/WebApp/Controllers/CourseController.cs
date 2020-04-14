@@ -78,7 +78,7 @@ namespace WebApp.Controllers
         {
             var response = await APIRemoveCourse(id);
             SetResponseMessage(response);
-            return RedirectToAction("CourseList", "Course");
+            return RedirectToAction("SuperCourseList", "Course");
         }
         [HttpPost]
         [Route("[controller]/SearchCourses")]
