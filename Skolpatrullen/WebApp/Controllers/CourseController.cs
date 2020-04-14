@@ -272,5 +272,23 @@ namespace WebApp.Controllers
             }
             return View(model);
         }
+        [HttpGet]
+        [Route("[controller]/SchoolCourseList/{SchoolId}")]
+        public async Task<IActionResult> SchoolCourseList(int SchoolId)
+        {
+            string message = await GetUser();
+            var model = new SchoolCourseListViewModel();
+            var courseResponse = await APIGetCoursesBySchoolId(SchoolId);
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse.Data != null)
+            {
+                model.School = schoolResponse.Data.SingleOrDefault(sc=>sc.Id==SchoolId);
+            }
+            return View(model);
+        }
     }
 }
