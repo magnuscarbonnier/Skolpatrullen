@@ -3,24 +3,49 @@
 @{
     ViewData["Title"] = Model.Name;
 }
-    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<script>
+    $(document).ready(function () {
+        var maxLength = 200;
+        $(".show-read-more").each(function () {
+            var myStr = $(this).text();
+            if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                $(this).append('<span class="more-text">' + removedStr + '</span>');
+            }
+        });
+        $(".read-more").click(function () {
+            $(this).siblings(".more-text").contents().unwrap();
+            $(this).remove();
+        });
+    });
+</script>
+<style>
+    .show-read-more .more-text {
+        display: none;
+    }
+</style>
+
 <div class="d-flex" id="wrapper">
     <div class="col-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="#nyheter"><i class="fa fa-newspaper fa-lg"></i> Nyheter</a>
+                <a class="btn text-secondary" href="#nyheter"><i class="fa fa-newspaper fa-lg"></i> Nyheter</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })"><i class="fa fa-user-friends fa-lg"></i> Deltagare</a>
+                <a class="btn text-secondary" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })"><i class="fa fa-user-friends fa-lg"></i> Deltagare</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
+                <a class="btn text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
+                <a class="btn text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
+                <a class="btn text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
             </li>
             <li>
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
@@ -37,15 +62,15 @@
             @await Html.PartialAsync("_AddCourseBlogPost", new Database.Models.CourseBlogPost { CourseId = Model.Id })
             @foreach (var blogpost in Model.CourseBlogPosts)
             {
-        <div class="card">
-            <div class="card-body bg-light">
-                <h6 class="">@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
-                <h5>@blogpost.Title</h5>
-                <p>@blogpost.Content</p>
-                <a class="nav-link text-secondary" href="@Url.Action("RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
-            </div>
-        </div>
-        <br />
+                <div class="card">
+                    <div class="card-body bg-light">
+                        <h6 class="">@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
+                        <h5>@blogpost.Title</h5>
+                        <p class="show-read-more">@blogpost.Content</p>
+                        <a class="btn text-danger" href="@Url.Action("RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                    </div>
+                </div>
+                <br />
             }
         </div>
     </div>
