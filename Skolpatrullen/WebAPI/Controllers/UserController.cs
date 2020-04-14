@@ -340,15 +340,11 @@ namespace WebAPI.Controllers
         }
         [HttpGet]
         [Route("[controller]/Search/{Search}")]
-        public APIResponse<IEnumerable<User>> GetUserBySearchString(string Search)
+        public APIResponse<IEnumerable<User>> GetUsersBySearchString(string Search)
         {
             var search = Search.ToLower().Trim();
             APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
-            response.Data = from us in _context.Users
-                            let fullname =us.FirstName.ToLower() +" "+ us.LastNames.ToLower()
-                            where fullname.Contains(search)||us.SocialSecurityNr.Contains(search)
-                            select us;
-
+            response.Data = _context.Users.Where(u => (u.FirstName.ToLower() + " " + u.LastNames.ToLower()).Contains(search) || u.SocialSecurityNr.Contains(search));
             response.Success = true;
             response.SuccessMessage = $"Hämtade alla användare med söksträng {Search}";
             return response;
