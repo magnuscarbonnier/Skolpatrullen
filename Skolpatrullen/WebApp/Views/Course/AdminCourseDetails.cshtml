@@ -29,34 +29,34 @@
     }
 </style>
 
-<div class="d-flex" id="wrapper">
-    <div class="col-3">
-        <ul class="nav flex-column">
-            <li class="nav-item">
+<div class="row" id="wrapper">
+    <div class="col-lg-3">
+        
+            <div class="nav-item">
                 <a class="btn text-secondary" href="#nyheter"><i class="fa fa-newspaper fa-lg"></i> Nyheter</a>
-            </li>
-            <li class="nav-item">
+            </div>
+            <div class="nav-item">
                 <a class="btn text-secondary" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })"><i class="fa fa-user-friends fa-lg"></i> Deltagare</a>
-            </li>
-            <li class="nav-item">
+            </div>
+            <div class="nav-item">
                 <a class="btn text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
-            </li>
-            <li class="nav-item">
+            </div>
+            <div class="nav-item">
                 <a class="btn text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
-            </li>
-            <li class="nav-item">
+            </div>
+            <div class="nav-item">
                 <a class="btn text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
-            </li>
-            <li>
+            </div>
+            <div>
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
-            </li>
-            <li>
+            </div>
+            <div>
                 @await Html.PartialAsync("_AddCourseAssignment", new WebApp.ViewModels.AssignmentViewModel { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
-            </li>
-        </ul>
+            </div>
+        
     </div>
 
-    <div class="col-9">
+    <div class="col-lg-9">
         <div class="content">
             <h1 class="mt-4">Kurs: @Model.Name</h1>
             @await Html.PartialAsync("_AddCourseBlogPost", new Database.Models.CourseBlogPost { CourseId = Model.Id })
