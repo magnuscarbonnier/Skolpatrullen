@@ -119,11 +119,11 @@ namespace WebApp.Controllers
         {
 
             string message = await GetUser();
-            var model = new List<User>();
+            var model = new UserListViewModel();
             var response = await APIGetAllUsers();
             if (response.Data != null)
             {
-                model = response.Data.ToList();
+                model.UserList = response.Data.OrderBy(us=>us.LastNames).ToList();
             }
             if (!string.IsNullOrEmpty(response.FailureMessage))
             {
@@ -258,6 +258,37 @@ namespace WebApp.Controllers
             }
             return View("CourseParticipantList");
 
+        }
+        [HttpPost]
+        [Route("[controller]/SearchUsers")]
+        public async Task<IActionResult> SearchUsers(UserListViewModel vm)
+        {
+            string message = await GetUser();
+            var model = new UserListViewModel();
+            var userResponse = await APIGetAllUsers();
+            if (userResponse.Data != null)
+            {
+                if (!string.IsNullOrEmpty(vm.Search))
+                {
+                    var searchResponse = await APIGetUsersBySearchString(vm.Search);
+                    if (searchResponse.Data != null)
+                    {
+                        model.UserList = searchResponse.Data;
+                    }
+                    else
+                    {
+                        model.UserList = userResponse.Data;
+                    }
+
+                }
+                else
+                {
+                    model.UserList = userResponse.Data;
+                }
+            }
+
+           
+            return View("UserListPage",model);
         }
     }
 }

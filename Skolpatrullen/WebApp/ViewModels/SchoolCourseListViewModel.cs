@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace WebApp.ViewModels
 {
-    public class UserListViewModel
+    public class SchoolCourseListViewModel
     {
-        public IEnumerable<User> UserList { get; set; }
-        public string Search { get; set; }
+        public IEnumerable<Course> CourseList { get; set; }
+        public School School { get; set; }
     }
    
 }

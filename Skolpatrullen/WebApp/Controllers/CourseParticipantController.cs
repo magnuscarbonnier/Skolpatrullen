@@ -17,7 +17,6 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new CourseParticipantViewModel();
-            model.UserId = User.Id;
 
             var courseResponse = await APIGetCourseById(Id);
             if (courseResponse.Data != null)
@@ -25,17 +24,21 @@ namespace WebApp.Controllers
                 model.Course = courseResponse.Data;
                 model.CourseId = courseResponse.Data.Id;
             }
-            var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
-            if (cpResponse.Data != null)
+            model.Status = Status.Avslag;
+            if (User != null)
             {
-                var courseParticipant = cpResponse.Data.SingleOrDefault(cp => cp.CourseId == Id);
-                if (courseParticipant != null)
+                model.UserId = User.Id;
+                var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
+                if (cpResponse.Data != null)
                 {
-                    model.Status = courseParticipant.Status;
-                    return View(model);
+                    var courseParticipant = cpResponse.Data.SingleOrDefault(cp => cp.CourseId == Id);
+                    if (courseParticipant != null)
+                    {
+                        model.Status = courseParticipant.Status;
+                        return View(model);
+                    }
                 }
             }
-            model.Status = Status.Avslag;
             return View(model);
         }
 

@@ -354,6 +354,17 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/Search/{Search}")]
+        public APIResponse<IEnumerable<User>> GetUsersBySearchString(string Search)
+        {
+            var search = Search.ToLower().Trim();
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.Users.Where(u => (u.FirstName.ToLower() + " " + u.LastNames.ToLower()).Contains(search) || u.SocialSecurityNr.Contains(search));
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade alla användare med söksträng {Search}";
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
