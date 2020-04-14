@@ -92,14 +92,14 @@ namespace WebAPI.Controllers
             APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
             var courses = _context.CourseParticipants
                   .Include(cp => cp.Course)
-                  .Where( cp => cp.UserId == Id).Select(cp => new Course
+                  .Where(cp => cp.UserId == Id).Select(cp => new Course
                   {
-                       EndDate=cp.Course.EndDate,
-                       Id=cp.Course.Id,
-                       Name=cp.Course.Name,
-                       SchoolId=cp.Course.SchoolId,
-                       StartDate=cp.Course.StartDate
-                  }); 
+                      EndDate = cp.Course.EndDate,
+                      Id = cp.Course.Id,
+                      Name = cp.Course.Name,
+                      SchoolId = cp.Course.SchoolId,
+                      StartDate = cp.Course.StartDate
+                  });
             if (courses.Any())
             {
                 response.Data = courses;
@@ -114,24 +114,16 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetCoursesBySchoolId/{Id}")]
-        public APIResponse<IEnumerable<Course>> GetCoursesBySchoolId(int Id)
+        [Route("[controller]/GetCoursesBySchoolId/{schoolId}")]
+        public APIResponse<IEnumerable<Course>> GetCoursesBySchoolId(int schoolId)
         {
             APIResponse<IEnumerable<Course>> response = new APIResponse<IEnumerable<Course>>();
-            var courses = _context.Courses.Where(co => co.SchoolId == Id);
+            var courses = _context.Courses.Where(co => co.SchoolId == schoolId);
             if (courses != null)
             {
-                if (courses.Any())
-                {
-                    response.Data = courses;
-                    response.Success = true;
-                    response.SuccessMessage = $"Hämtade alla kurser för skola med id {Id}";
-                }
-                else
-                {
-                    response.Success = false;
-                    response.FailureMessage = $"Fanns inga kurser för skola med id {Id}";
-                }
+                response.Data = courses;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla kurser för skola med id {schoolId}";
             }
             else
             {

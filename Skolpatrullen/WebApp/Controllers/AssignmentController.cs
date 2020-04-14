@@ -48,9 +48,9 @@ namespace WebApp.Controllers
                     body.AssignmentId = response.Data.Id;
                     body.ContentType = file.ContentType;
                     body.Name = file.FileName;
-                    body.Type = AssignmentFileType.AssignmentFile;
+                    body.Type = FileTypes.Assignment;
 
-                    APIUploadAssignmentFile(body);
+                    await APIUploadAssignmentFile(body);
                 }
             }
             return RedirectToAction("GetCourseById", "course", new { Id = assignment.CourseId });
@@ -86,17 +86,19 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new AssignmentViewModel();
-            
             var assignment = await APIGetAssignmentById(id);
 
             if (assignment.Data != null)
             {
                 var assignmentfiles = await APIGetFilesByAssignment(id);
-                model.AssignmentFiles = assignmentfiles.Data;
+                var turnedin = await APIUserAssignmentReturnedStatus(id, User.Id);
+                model.AssignmentFiles = assignmentfiles.Data.Where(af => af.Type == FileTypes.Assignment);
                 model.CourseId = assignment.Data.CourseId;
                 model.Deadline = assignment.Data.Deadline;
                 model.Description = assignment.Data.Description;
                 model.Name = assignment.Data.Name;
+                model.Id = assignment.Data.Id;
+                model.TurnedIn = turnedin.Data;
 
                 return View("AssignmentDetails", model);
             }

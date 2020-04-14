@@ -20,6 +20,7 @@ namespace Database.Models
         public DbSet<CourseBlogPost> CourseBlogPosts { get; set; }
         public DbSet<StartBlogPost> StartBlogPosts { get; set; }
         public DbSet<AssignmentFile> AssignmentFiles { get; set; }
+        public DbSet<UserAssignment> UserAssignments { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
