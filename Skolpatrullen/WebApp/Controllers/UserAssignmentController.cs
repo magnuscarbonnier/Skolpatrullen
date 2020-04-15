@@ -117,7 +117,7 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new UserAssignmentViewModel();
-            var UAresponse = await APIGetUserAssignmentByCourseAndUser(CourseId, UserId);
+            var UAresponse = await APIGetUserAssignmentByCourseUserAndAssignment(CourseId, UserId, AssignmentId);
             var userresponse = await APIGetUserById(UserId);
             var assignmentresponse = await APIGetAssignmentById(AssignmentId);
             model.TurnedIn = (await APIUserAssignmentReturnedStatus(AssignmentId, UserId)).Data;

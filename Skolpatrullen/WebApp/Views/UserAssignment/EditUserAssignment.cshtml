@@ -22,7 +22,7 @@
         if (Model.ReturnDate.Date == DateTime.MinValue)
         {
 
-            <div class="col text-danger font-weight-bold">Sent inlämnad: @Model.ReturnDate</div>
+            <div class="col text-danger font-weight-bold">Ej inlämnad</div>
 
         }
         else if (Model.ReturnDate.Date <= Model.Assignment.Deadline)

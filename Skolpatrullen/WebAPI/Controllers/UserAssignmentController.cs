@@ -78,7 +78,6 @@ namespace WebAPI.Controllers
             var existingUserAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.AssignmentId == userAssignment.AssignmentId && ua.UserId == userAssignment.UserId);
             if(existingUserAssignment != null)
             {
-                userAssignment.ReturnDate = existingUserAssignment.ReturnDate;
                 existingUserAssignment.Grade = userAssignment.Grade;
                 _context.UserAssignments.Update(existingUserAssignment);
                 _context.SaveChanges();
@@ -122,11 +121,11 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetByCourseAndUser/{CourseId}/{UserId}")]
-        public APIResponse<UserAssignment> GetByCourseAndUser(int CourseId, int UserId)
+        [Route("[controller]/GetByCourseUserAndAssignment/{CourseId}/{UserId}/{AssignmentId}")]
+        public APIResponse<UserAssignment> GetByCourseUserAndAssignment(int CourseId, int UserId, int AssignmentId)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            var userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId).FirstOrDefault(ua => ua.UserId == UserId);
+            var userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId && ua.AssignmentId == AssignmentId).FirstOrDefault(ua => ua.UserId == UserId);
             if (userAssignment != null)
             {
                 response.Data = userAssignment;
