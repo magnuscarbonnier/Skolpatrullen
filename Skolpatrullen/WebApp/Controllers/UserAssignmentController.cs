@@ -120,7 +120,7 @@ namespace WebApp.Controllers
             var UAresponse = await APIGetUserAssignmentByCourseAndUser(CourseId, UserId);
             var userresponse = await APIGetUserById(UserId);
             var assignmentresponse = await APIGetAssignmentById(AssignmentId);
-            model.TurnedIn = APIUserAssignmentReturnedStatus(AssignmentId, UserId).Result.Data;
+            model.TurnedIn = (await APIUserAssignmentReturnedStatus(AssignmentId, UserId)).Data;
 
             if (UAresponse.Data != null && userresponse.Data != null)
             {
