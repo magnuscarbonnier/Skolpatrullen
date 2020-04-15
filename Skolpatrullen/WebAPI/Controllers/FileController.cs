@@ -181,8 +181,8 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
-        [Route("[controller]/GetUserAssignmentFilesByUser/{UserId}")]
-        public APIResponse<IEnumerable<AssignmentFile>> GetUserAssignmentFilesByUser(int UserId)
+        [Route("[controller]/GetUserAssignmentFilesByUserId/{UserId}")]
+        public APIResponse<IEnumerable<AssignmentFile>> GetUserAssignmentFilesByUserId(int UserId)
         {
             APIResponse<IEnumerable<AssignmentFile>> response = new APIResponse<IEnumerable<AssignmentFile>>();
             var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.UserId == UserId);

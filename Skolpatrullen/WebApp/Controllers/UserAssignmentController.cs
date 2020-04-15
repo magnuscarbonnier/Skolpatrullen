@@ -121,7 +121,7 @@ namespace WebApp.Controllers
             var userresponse = await APIGetUserById(UserId);
             var assignmentresponse = await APIGetAssignmentById(AssignmentId);
             model.TurnedIn = (await APIUserAssignmentReturnedStatus(AssignmentId, UserId)).Data;
-            var userassignmentfiles = await APIGetUserAssignmentFilesByUser(UserId);
+            var userassignmentfiles = await APIGetUserAssignmentFilesByUserId(UserId);
 
             if (UAresponse.Data != null && userresponse.Data != null)
             {
