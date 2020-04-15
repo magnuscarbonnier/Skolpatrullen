@@ -6,30 +6,30 @@
 <html lang="en">
 <head>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-        <script>
-            $(document).ready(function () {
-                var maxLength = 300;
-                $(".show-read-more").each(function () {
-                    var myStr = $(this).text();
-                    if ($.trim(myStr).length > maxLength) {
-                        var newStr = myStr.substring(0, maxLength);
-                        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-                        $(this).empty().html(newStr);
-                        $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
-                        $(this).append('<span class="more-text">' + removedStr + '</span>');
-                    }
-                });
-                $(".read-more").click(function () {
-                    $(this).siblings(".more-text").contents().unwrap();
-                    $(this).remove();
-                });
+    <script>
+        $(document).ready(function () {
+            var maxLength = 300;
+            $(".show-read-more").each(function () {
+                var myStr = $(this).text();
+                if ($.trim(myStr).length > maxLength) {
+                    var newStr = myStr.substring(0, maxLength);
+                    var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                    $(this).empty().html(newStr);
+                    $(this).append(' <a href="javascript:void(0);" class="read-more">read more...</a>');
+                    $(this).append('<span class="more-text">' + removedStr + '</span>');
+                }
             });
-        </script>
-        <style>
-            .show-read-more .more-text {
-                display: none;
-            }
-        </style>
+            $(".read-more").click(function () {
+                $(this).siblings(".more-text").contents().unwrap();
+                $(this).remove();
+            });
+        });
+    </script>
+    <style>
+        .show-read-more .more-text {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +41,7 @@
                     <div class="row">
                         <div class="col-md-6 white-text text-center text-md-left mt-xl-5 mb-5">
                             <h1 class="h1-responsive font-weight-bold mt-sm-5">Välkommen till Skolpatrullen </h1>
-                            <h3 class=" font-italic mt-sm-5">Vi utbildar framtiden</h3>
+                            <h3 class=" font-italic mt-sm-5">Vi bygger skolor online</h3>
                             <hr class="hr-light">
                             <h6 class="mb-4">
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem repellendus quasi fuga nesciunt
