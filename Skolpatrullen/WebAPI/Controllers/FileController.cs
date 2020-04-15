@@ -82,7 +82,7 @@ namespace WebAPI.Controllers
         public APIResponse UploadCourseFile(CourseFileBody body)
         {
             APIResponse response = new APIResponse();
-            
+
             User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
             if (user != null && body.File.Length > 0)
             {
@@ -139,7 +139,7 @@ namespace WebAPI.Controllers
 
                 assignmentfile.AssignmentId = body.AssignmentId;
                 assignmentfile.FileId = file.Id;
-                if(body.Type == FileTypes.UserAssignment)
+                if (body.Type == FileTypes.UserAssignment)
                 {
                     assignmentfile.Type = AssignmentFileType.StudentFile;
                 } else if (body.Type == FileTypes.Assignment)
@@ -172,6 +172,25 @@ namespace WebAPI.Controllers
                 response.Data = files;
                 response.Success = true;
                 response.SuccessMessage = "Hämtade alla filer";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetUserAssignmentFilesByUserId/{UserId}")]
+        public APIResponse<IEnumerable<AssignmentFile>> GetUserAssignmentFilesByUserId(int UserId)
+        {
+            APIResponse<IEnumerable<AssignmentFile>> response = new APIResponse<IEnumerable<AssignmentFile>>();
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.UserId == UserId);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla filer som tillhör Id: {UserId}";
             }
             else
             {

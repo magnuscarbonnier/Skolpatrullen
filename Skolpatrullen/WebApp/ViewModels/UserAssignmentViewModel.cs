@@ -16,6 +16,7 @@ namespace WebApp.ViewModels
         public DateTime ReturnDate { get; set; }
         public Assignment Assignment{ get; set; }
         public IEnumerable<IFormFile> Files { get; set; }
+        public IEnumerable<File> AssignmentFiles { get; set; }
         public bool TurnedIn { get; set; }
         public User User { get; set; }
         public List<string> Grades = new List<string>

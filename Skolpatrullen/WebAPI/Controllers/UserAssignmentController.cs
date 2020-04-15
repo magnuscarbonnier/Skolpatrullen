@@ -78,7 +78,6 @@ namespace WebAPI.Controllers
             var existingUserAssignment = _context.UserAssignments.FirstOrDefault(ua => ua.AssignmentId == userAssignment.AssignmentId && ua.UserId == userAssignment.UserId);
             if(existingUserAssignment != null)
             {
-                existingUserAssignment.Description = userAssignment.Description;
                 userAssignment.ReturnDate = existingUserAssignment.ReturnDate;
                 existingUserAssignment.Grade = userAssignment.Grade;
                 _context.UserAssignments.Update(existingUserAssignment);

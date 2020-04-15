@@ -43,18 +43,17 @@
         </div>
     </div>
 </div>
-@if (Model.TurnedIn)
+@if (Model.TurnedIn && !Model.IsTeacher)
 {
     <span class="text-success">Den är redan inlämnad</span>
+}
+else if (Model.IsTeacher)
+{
+    <div>
+    @Html.ActionLink("Visa alla elevinlämningar", "UserAssignmentList", "UserAssignment", new { assignmentId = Model.Id })
+    </div>
 }
 else
 {
     @Html.ActionLink("Lämna in", "AddUserAssignment", "UserAssignment", new { assignmentId = Model.Id })
-}
-
-@if (Model.IsTeacher)
-{
-    <div>
-        @Html.ActionLink("Visa alla elevinlämningar", "UserAssignmentList", "UserAssignment", new { assignmentId = Model.Id })   
-    </div>
 }

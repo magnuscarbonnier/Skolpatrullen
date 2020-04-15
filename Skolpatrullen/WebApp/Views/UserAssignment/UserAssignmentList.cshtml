@@ -12,8 +12,9 @@
 
 <div class="row">
 
-    <div class="d-none d-sm-table-cell col-lg-8 col-md-7 col-sm-6"></div>
+    <div class="d-none d-sm-table-cell col-lg-7 col-md-6 col-sm-5"></div>
     <div class="d-none d-sm-table-cell col-md-4 col-sm-5">Inlämnad</div>
+    <div class="d-none d-sm-table-cell col-lg-1 col-md-1 col-sm-1"></div>
     <div class="d-none d-sm-table-cell col-lg-1 col-md-1 col-sm-1"></div>
 
 </div>
@@ -21,7 +22,7 @@
 @foreach (var user in Model.Users)
 {
     <div class="row">
-        <div class="col-lg-8 col-md-7 col-sm-6">
+        <div class="col-lg-7 col-md-6 col-sm-5">
             <h6>@user.FirstName @user.LastNames</h6>
         </div>
 
@@ -48,7 +49,12 @@
                 }
             }
         </div>
-
+        <div class="col-lg-1 col-md-1 col-sm-1">
+            @if (Model.UserAssignments.Any(ua => ua.UserId == user.Id))
+            {
+            @Model.UserAssignments.SingleOrDefault(ua => ua.UserId == user.Id).Grade
+            }
+        </div>
         <div class="col-lg-1 col-md-1 col-sm-1">
             @Html.ActionLink(linkText: "Visa", actionName: "EditUserAssignment", controllerName: "UserAssignment", new { CourseId=Model.Assignment.CourseId, AssignmentId=Model.Assignment.Id, UserId=user.Id })
         </div>
