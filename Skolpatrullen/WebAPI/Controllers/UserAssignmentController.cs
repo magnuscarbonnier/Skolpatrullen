@@ -127,12 +127,12 @@ namespace WebAPI.Controllers
         public APIResponse<UserAssignment> GetByCourseAndUser(int CourseId, int UserId)
         {
             APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
-            var uaresponse = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId).FirstOrDefault(ua => ua.UserId == UserId);
-            if (uaresponse != null)
+            var userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId).FirstOrDefault(ua => ua.UserId == UserId);
+            if (userAssignment != null)
             {
-                response.Data = uaresponse;
+                response.Data = userAssignment;
                 response.Success = true;
-                response.SuccessMessage = $"Hämtade inlämning med id {uaresponse.Id}";
+                response.SuccessMessage = $"Hämtade inlämning med id {userAssignment.Id}";
             }
             else
             {
