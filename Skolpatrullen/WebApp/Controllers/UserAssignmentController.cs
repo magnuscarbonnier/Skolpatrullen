@@ -151,9 +151,13 @@ namespace WebApp.Controllers
             var response = await APIAddOrUpdateUserAssignment(userAssignment);
 
             if (response.Success)
+            {
                 SetSuccessMessage(response.SuccessMessage);
+            }
             else
+            {
                 SetFailureMessage(response.FailureMessage);
+            }
 
             return RedirectToAction("UserAssignmentList", "UserAssignment", new { assignmentId = userAssignment.AssignmentId });
         }
