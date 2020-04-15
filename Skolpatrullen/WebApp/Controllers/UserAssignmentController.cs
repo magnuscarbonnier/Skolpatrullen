@@ -120,7 +120,7 @@ namespace WebApp.Controllers
             var UAresponse = await APIGetUserAssignmentByCourseAndUser(CourseId, UserId);
             var userresponse = await APIGetUserById(UserId);
             var assignmentresponse = await APIGetAssignmentById(AssignmentId);
-            model.TurnedIn = APIUserAssignmentReturnedStatus(AssignmentId, UserId).Result.Data;
+            model.TurnedIn = (await APIUserAssignmentReturnedStatus(AssignmentId, UserId)).Data;
             var userassignmentfiles = await APIGetUserAssignmentFilesByUser(UserId);
 
             if (UAresponse.Data != null && userresponse.Data != null)
@@ -153,9 +153,13 @@ namespace WebApp.Controllers
             var response = await APIAddOrUpdateUserAssignment(userAssignment);
 
             if (response.Success)
+            {
                 SetSuccessMessage(response.SuccessMessage);
+            }
             else
+            {
                 SetFailureMessage(response.FailureMessage);
+            }
 
             return RedirectToAction("UserAssignmentList", "UserAssignment", new { assignmentId = userAssignment.AssignmentId });
         }

@@ -109,9 +109,6 @@ namespace WebApp.Controllers
                 model.Name = assignment.Data.Name;
                 model.Id = assignment.Data.Id;
                 model.TurnedIn = turnedin.Data;
-                
-                
-
 
                 return View("AssignmentDetails", model);
             }
