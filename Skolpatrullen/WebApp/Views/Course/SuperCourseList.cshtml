@@ -41,7 +41,7 @@
                         @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
                     </td>
                     <td>
-                        @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
+                        @Html.ActionLink("Ta bort", "RemoveCourse", new { id = item.Id })
                     </td>
                 </tr>
             }
