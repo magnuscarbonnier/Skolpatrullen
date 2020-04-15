@@ -77,5 +77,89 @@ namespace WebApp.Controllers
             }
             return RedirectToAction("GetAssignmentById", "Assignment", new { id = vm.AssignmentId });
         }
+        [HttpGet]
+        [Route("[controller]/UserAssignmentList/{assignmentId}")]
+        public async Task<IActionResult> UserAssignmentList(int assignmentId)
+        {
+            string message = await GetUser();
+            var model = new UserAssignmentListViewModel();
+            var UAresponse = await APIGetAllUserAssignmentsByAssignmentId(assignmentId);
+            var assignmentresponse = await APIGetAssignmentById(assignmentId);
+            if (assignmentresponse.Data != null && UAresponse.Data != null)
+            {
+                var userresponse = await APIGetStudentsByCourseId(assignmentresponse.Data.CourseId);
+                if (userresponse.Data != null)
+                {
+                    var result = from ua in UAresponse.Data
+                                 join us in userresponse.Data on ua.UserId equals us.Id
+                                 orderby ua.ReturnDate ascending
+                                 select new UserAssignment
+                                 {
+                                     AssignmentId = ua.AssignmentId,
+                                     Description = ua.Description,
+                                     Grade = ua.Grade,
+                                     Id = ua.Id,
+                                     ReturnDate = ua.ReturnDate,
+                                     UserId = ua.UserId,
+                                     User = us
+                                 };
+
+                    model.UserAssignments = result;
+                    model.Users = userresponse.Data;
+                    model.Assignment = assignmentresponse.Data;
+                }
+            }
+            return View(model);
+        }
+        [HttpGet]
+        [Route("[controller]/EditUserAssignment/{CourseId}/{AssignmentId}/{UserId}")]
+        public async Task<IActionResult> EditUserAssignment(int CourseId, int AssignmentId, int UserId)
+        {
+            string message = await GetUser();
+            var model = new UserAssignmentViewModel();
+            var UAresponse = await APIGetUserAssignmentByCourseAndUser(CourseId, UserId);
+            var userresponse = await APIGetUserById(UserId);
+            var assignmentresponse = await APIGetAssignmentById(AssignmentId);
+            model.TurnedIn = (await APIUserAssignmentReturnedStatus(AssignmentId, UserId)).Data;
+
+            if (UAresponse.Data != null && userresponse.Data != null)
+            {
+                model.AssignmentId = UAresponse.Data.AssignmentId;
+                model.Assignment = UAresponse.Data.Assignment;
+                model.Description = UAresponse.Data.Description;
+                model.Grade = UAresponse.Data.Grade;
+                model.ReturnDate = UAresponse.Data.ReturnDate;
+                model.UserId = UAresponse.Data.UserId;
+                model.User = userresponse.Data;
+            }
+            else
+            {
+                model.UserId = UserId;
+                model.AssignmentId = AssignmentId;
+                if (assignmentresponse.Data != null)
+                    model.Assignment = assignmentresponse.Data;
+                if (userresponse.Data != null)
+                    model.User = userresponse.Data;
+            }
+            return View(model);
+        }
+        [HttpPost]
+        [Route("[controller]/EditUserAssignment/{CourseId}/{AssignmentId}/{UserId}")]
+        public async Task<IActionResult> EditUserAssignment(UserAssignment userAssignment)
+        {
+            string message = await GetUser();
+            var response = await APIAddOrUpdateUserAssignment(userAssignment);
+
+            if (response.Success)
+            {
+                SetSuccessMessage(response.SuccessMessage);
+            }
+            else
+            {
+                SetFailureMessage(response.FailureMessage);
+            }
+
+            return RedirectToAction("UserAssignmentList", "UserAssignment", new { assignmentId = userAssignment.AssignmentId });
+        }
     }
 }

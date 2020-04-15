@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -47,6 +49,17 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
+        [Route("[controller]/GetAllByAssignmentId/{assignmentId}")]
+        public APIResponse<IEnumerable<UserAssignment>> GetAllByAssignmentId(int assignmentId)
+        {
+            APIResponse<IEnumerable<UserAssignment>> response = new APIResponse<IEnumerable<UserAssignment>>();
+            response.Data = _context.UserAssignments.Where(ua => ua.AssignmentId == assignmentId);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade alla inlämningar till uppgift med id: {assignmentId}";
+            return response;
+        }
+        [HttpGet]
         [Route("[controller]/GetAll")]
         public APIResponse<IEnumerable<UserAssignment>> GetAll()
         {
@@ -67,6 +80,7 @@ namespace WebAPI.Controllers
             {
                 existingUserAssignment.Description = userAssignment.Description;
                 userAssignment.ReturnDate = existingUserAssignment.ReturnDate;
+                existingUserAssignment.Grade = userAssignment.Grade;
                 _context.UserAssignments.Update(existingUserAssignment);
                 _context.SaveChanges();
                 response.Data = userAssignment;
@@ -105,6 +119,40 @@ namespace WebAPI.Controllers
             {
                 response.FailureMessage = $"Inlämningen fanns ej";
                 response.Success = false;
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetByCourseAndUser/{CourseId}/{UserId}")]
+        public APIResponse<UserAssignment> GetByCourseAndUser(int CourseId, int UserId)
+        {
+            APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
+            var userAssignment = _context.UserAssignments.Include(ua => ua.Assignment).Where(ua => ua.Assignment.CourseId == CourseId).FirstOrDefault(ua => ua.UserId == UserId);
+            if (userAssignment != null)
+            {
+                response.Data = userAssignment;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade inlämning med id {userAssignment.Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns ingen inlämning";
+            }
+
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetUserAssignmenetById/{UserAssignmentId}")]
+        public APIResponse<UserAssignment> GetUserAssignmenetById(int id)
+        {
+            APIResponse<UserAssignment> response = new APIResponse<UserAssignment>();
+            var userAssignment = _context.UserAssignments.SingleOrDefault(l => l.Id == id);
+            if (userAssignment != null)
+            {
+                response.Data = userAssignment;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade elevs inlämning med id {id}";
             }
             return response;
         }

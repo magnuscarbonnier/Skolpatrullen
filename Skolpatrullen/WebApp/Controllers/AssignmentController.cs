@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Database.Models;
 using Lib;
@@ -90,6 +91,15 @@ namespace WebApp.Controllers
 
             if (assignment.Data != null)
             {
+                var courseparticipantresponse = APIGetCourseParticipantsByUserId(User.Id).Result.Data.SingleOrDefault(us=>us.CourseId==assignment.Data.CourseId);
+                if(courseparticipantresponse != null && courseparticipantresponse.Role==Roles.Lärare)
+                {
+                    model.IsTeacher = true;
+                }
+                else
+                {
+                    model.IsTeacher = false;
+                }
                 var assignmentfiles = await APIGetFilesByAssignment(id);
                 var turnedin = await APIUserAssignmentReturnedStatus(id, User.Id);
                 model.AssignmentFiles = assignmentfiles.Data.Where(af => af.Type == FileTypes.Assignment);

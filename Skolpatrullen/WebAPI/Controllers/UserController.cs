@@ -247,6 +247,19 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
+        [Route("[controller]/GetStudentsByCourseId/{courseId}")]
+        public APIResponse<IEnumerable<User>> GetStudentsByCourseId(int courseId)
+        {
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.CourseParticipants
+                  .Include(cp => cp.User)
+                  .Where(cp => cp.CourseId == courseId && cp.Status==Status.Antagen && cp.Role==Roles.Student).Select(cp => cp.User);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade användare med id {courseId}";
+            return response;
+        }
+        [HttpGet]
         [Route("[controller]/GetAllUsers")]
         public APIResponse<IEnumerable<User>> GetAllUsers()
         {
