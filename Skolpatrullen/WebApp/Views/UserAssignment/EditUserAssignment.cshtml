@@ -22,7 +22,7 @@
         if (Model.ReturnDate.Date == DateTime.MinValue)
         {
 
-            <div class="col text-danger font-weight-bold">Sent inlämnad: @Model.ReturnDate</div>
+            <div class="col text-danger font-weight-bold">Ej inlämnad</div>
 
         }
         else if (Model.ReturnDate.Date <= Model.Assignment.Deadline)
@@ -69,14 +69,12 @@
             <div class="col-sm-6"><label class="font-weight-bold">Studentens kommentar:</label><br />@Model.Description</div>
         </div>
     }
-    else if (Model.ReturnDate.Date <= Model.Assignment.Deadline)
-    {
-        <div>Inlämnad: <label class="text-success">@Model.ReturnDate</label></div>
-    }
+
     else
     {
-        <div>Sent inlämnad: <label class="text-danger">@Model.ReturnDate</label></div>
+        <div class="col text-danger font-weight-bold">Ej inlämnad</div>
     }
+
     <br />
     <div class="form-group col-lg-2">
         <label asp-for="Grade" class="control-label">Betyg</label>
