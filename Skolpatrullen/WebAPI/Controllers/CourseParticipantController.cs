@@ -18,6 +18,20 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
+        [Route("[controller]/GetCourseParticipantsNotYetAccepted")]
+        public APIResponse<int> GetCourseParticipantsNotYetAccepted()
+        {
+            var response = new APIResponse<int>();
+            var count = _context.CourseParticipants.Where(cp=>cp.Status==Status.Ansökt);
+            if (count != null)
+            {
+                response.Data = count.Count();
+                response.Success = true;
+            }
+            return response;
+        }
+
+        [HttpGet]
         [Route("[controller]/GetAll")]
         public APIResponse<IEnumerable<CourseParticipant>> GetAll()
         {

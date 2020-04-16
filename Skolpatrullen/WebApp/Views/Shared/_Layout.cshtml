@@ -45,9 +45,10 @@
                                 {
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            SuperPowers
-                                        </a>
-                                        <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                                            @if (ViewBag.CountCP != 0) { <span class="text-success">(@ViewBag.CountCP)</span> } SuperPowers
+                                               </a>
+       
+                                               <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
 
                                             <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Room" asp-action="AddRoomPage">Lägg till rum</a>
                                             <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Admin" asp-action="AddAdminPage">Lägg till admin</a>
@@ -55,7 +56,7 @@
                                             <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="School" asp-action="SchoolListPage">Hantera skolor</a>
                                             <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Profile" asp-action="UserListPage">Hantera användare</a>
                                             <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="SuperCourseList">Hantera kurser</a>
-                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="CourseParticipant" asp-action="AdminCourseParticipant">Hantera kursdeltagare</a>
+                                            <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="CourseParticipant" asp-action="AdminCourseParticipant">Hantera kursdeltagare @if (ViewBag.CountCP != 0) { <span class="text-success">(@ViewBag.CountCP)</span> }</a>
 
                                         </div>
 
