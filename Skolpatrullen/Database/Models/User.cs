@@ -28,8 +28,9 @@ namespace Database.Models
         public string PostalCode { get; set; }
         public bool IsSuperUser { get; set; }
         public int? ProfilePictureId { get; set; }
-        public ICollection<CourseParticipant> CourseParticipants { get; set; }
-        public ICollection<UserSchool> UserSchools { get; set; }
+        public IEnumerable<CourseParticipant> CourseParticipants { get; set; }
+        public IEnumerable<UserSchool> UserSchools { get; set; }
+        public IEnumerable<StartBlogPost> StartBlogPosts { get; set; }
         public File ProfilePicture { get; set; }
     }
 }

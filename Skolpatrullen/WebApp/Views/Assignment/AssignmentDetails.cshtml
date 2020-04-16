@@ -1,0 +1,59 @@
+﻿@model WebApp.ViewModels.AssignmentViewModel
+
+@{
+    ViewData["Title"] = "Inlämning";
+}
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+
+
+
+
+<br />
+<div class="row">
+    <div class="col-sm-8">
+        <h2 class="text-center">@Model.Name</h2>
+        <h6 class="font-italic text-right">Sista inlämningsdag @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Deadline))</h6>
+        <p>
+            @Html.DisplayFor(model => model.Description)
+        </p>
+    </div>
+
+
+    <div class="card bg-light col-sm-3">
+        <div class="card-body">
+            <h5 class="card-title">
+                Filer
+            </h5>
+            @foreach (var file in Model.AssignmentFiles)
+            {
+                <div class="row">
+                    <a class="card-link">
+                        @if (file.Name.Length > 20)
+                        {
+                            @Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
+                        }
+                        else
+                        {
+                            @Html.ActionLink(file.Name, "DownloadFile", "course", new { id = file.Id })
+                        }
+                    </a>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+@if (Model.TurnedIn && !Model.IsTeacher)
+{
+    <span class="text-success">Den är redan inlämnad</span>
+}
+else if (Model.IsTeacher)
+{
+    <div>
+    @Html.ActionLink("Visa alla elevinlämningar", "UserAssignmentList", "UserAssignment", new { assignmentId = Model.Id })
+    </div>
+}
+else
+{
+    @Html.ActionLink("Lämna in", "AddUserAssignment", "UserAssignment", new { assignmentId = Model.Id })
+}

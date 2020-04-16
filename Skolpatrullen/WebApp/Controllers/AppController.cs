@@ -2,6 +2,7 @@
 using Lib;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Text.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -259,11 +260,146 @@ namespace WebApp.Controllers
         {
             HttpResponseMessage response = await APIPost("/File/UploadCourseFile/", body);
             return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
-        }       
+        }
         public async Task<APIResponse<IEnumerable<File>>> APIGetAllCourseFiles(int courseId)
         {
             HttpResponseMessage response = await APIGet($"/File/GetAllFilesByCourse/{courseId}");
             return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
+        }
+        public async Task<APIResponse<Assignment>> APIAddAssignment(Assignment assignment)
+        {
+            HttpResponseMessage response = await APIPost("/Assignment/Add/", assignment);
+            return (APIResponse<Assignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Assignment>));
+        }
+        public async Task<APIResponse<IEnumerable<Assignment>>> APIGetAssignmentByCourseId(int id)
+        {
+            HttpResponseMessage response = await APIGet("/Assignment/GetAssignmentByCourse/" + id);
+            return (APIResponse<IEnumerable<Assignment>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Assignment>>));
+        }
+        public async Task<APIResponse<IEnumerable<LessonViewModel>>> APIGetUserLessons(int userid)
+        {
+            HttpResponseMessage response = await (APIGet($"/Lesson/UserLessons/{userid}"));
+            return (APIResponse<IEnumerable<LessonViewModel>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<LessonViewModel>>));
+        }
+        public async Task<APIResponse<IEnumerable<CourseBlogPost>>> APIGetBlogPostsByCourseId(int id)
+        {
+            HttpResponseMessage response = await (APIGet("/CourseBlog/GetBlogPostsByCourseId/" + id));
+            return (APIResponse<IEnumerable<CourseBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<CourseBlogPost>>));
+        }
+        public async Task<APIResponse> APIAddBlogPost(CourseBlogPost blogPost)
+        {
+            HttpResponseMessage response = await APIPost("/CourseBlog/Add/", blogPost);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<Assignment>> APIGetAssignmentById(int Id)
+        {
+            HttpResponseMessage response = await APIGet("/Assignment/GetAssignmentById/" + Id.ToString());
+            return (APIResponse<Assignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<Assignment>));
+        }
+        public async Task<APIResponse> APIUploadAssignmentFile(AssignmentFileBody body)
+        {
+            HttpResponseMessage response = await APIPost("/File/UploadAssignmentFile/", body);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIRemoveBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/CourseBlog/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIRemoveCourseParticipant(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/CourseParticipant/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<IEnumerable<Course>>> APIGetCoursesByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/Course/GetCoursesByUserId/{id}");
+            return (APIResponse<IEnumerable<Course>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Course>>));
+        }
+        public async Task<APIResponse<IEnumerable<School>>> APIGetSchoolsByUserId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/School/GetSchoolsByUserId/{id}");
+            return (APIResponse<IEnumerable<School>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<School>>));
+        }
+        public async Task<APIResponse<IEnumerable<File>>> APIGetFilesByAssignment(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/File/GetFilesByAssignment/{id}");
+            return (APIResponse<IEnumerable<File>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<File>>));
+        }
+        public async Task<APIResponse<bool>> APIUserAssignmentReturnedStatus(int assignmentId, int userId)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/IsReturned/{assignmentId}/{userId}");
+            return (APIResponse<bool>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<bool>));
+        }
+        public async Task<APIResponse<IEnumerable<UserAssignment>>> APIGetAllUserAssignmentByUser(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/GetAllByUser/{id}");
+            return (APIResponse<IEnumerable<UserAssignment>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<UserAssignment>>));
+        }
+        public async Task<APIResponse<IEnumerable<UserAssignment>>> APIGetAllUserAssignment()
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/GetAll/");
+            return (APIResponse<IEnumerable<UserAssignment>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<UserAssignment>>));
+        }
+        public async Task<APIResponse> APIAddOrUpdateUserAssignment(UserAssignment userAssignment)
+        {
+            HttpResponseMessage response = await APIPost("/UserAssignment/AddOrUpdate/", userAssignment);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIRemoveUserAssignment(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<IEnumerable<StartBlogPost>>> APIGetAllStartBlogPosts()
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/GetAll");
+            return (APIResponse<IEnumerable<StartBlogPost>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<StartBlogPost>>));
+        }
+        public async Task<APIResponse> APIRemoveStartBlogPost(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/StartBlog/Remove/{id}");
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse> APIAddStartBlogPost(StartBlogPost blogPost)
+        {
+            HttpResponseMessage response = await APIPost("/StartBlog/Add/", blogPost);
+            return (APIResponse)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse));
+        }
+        public async Task<APIResponse<IEnumerable<User>>> APIGetUsersBySearchString(String Search)
+        {
+            HttpResponseMessage response = await APIGet($"/User/Search/{Search}");
+            return (APIResponse<IEnumerable<User>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<User>>));
+        }
+        public async Task<APIResponse<IEnumerable<Course>>> APIGetCoursesBySchoolId(int Id)
+        {
+            HttpResponseMessage response = await APIGet($"/Course/GetCoursesBySchoolId/{Id}");
+            return (APIResponse<IEnumerable<Course>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<Course>>));
+        }
+        public async Task<APIResponse<IEnumerable<UserAssignment>>> APIGetAllUserAssignmentsByAssignmentId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/GetAllByAssignmentId/{id}");
+            return (APIResponse<IEnumerable<UserAssignment>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<UserAssignment>>));
+        }
+        public async Task<APIResponse<IEnumerable<User>>> APIGetStudentsByCourseId(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/User/GetStudentsByCourseId/{id}");
+            return (APIResponse<IEnumerable<User>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<User>>));
+        }
+        public async Task<APIResponse<UserAssignment>> APIGetUserAssignmentByCourseUserAndAssignment(int CourseId, int UserId, int AssignmentId)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/GetByCourseUserAndAssignment/{CourseId}/{UserId}/{AssignmentId}");
+            return (APIResponse<UserAssignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserAssignment>));
+        }
+        public async Task<APIResponse<UserAssignment>> APIGetUserAssignmentById(int id)
+        {
+            HttpResponseMessage response = await APIGet($"/UserAssignment/GetUserAssignmentById/{id}");
+            return (APIResponse<UserAssignment>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<UserAssignment>));
+        }
+        public async Task<APIResponse<IEnumerable<AssignmentFile>>> APIGetUserAssignmentFilesByUserId(int UserId)
+        {
+            HttpResponseMessage response = await APIGet($"/File/GetUserAssignmentFilesByUserId/{UserId}");
+            return (APIResponse<IEnumerable<AssignmentFile>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<AssignmentFile>>));
         }
     }
 }

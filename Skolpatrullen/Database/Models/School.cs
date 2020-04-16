@@ -19,8 +19,8 @@ namespace Database.Models
         [Required]
         public string PostalCode { get; set; }
 
-        public ICollection<UserSchool> UserSchools { get; set; }
-        public ICollection<Course> Courses { get; set; }
-        public ICollection<Room> Rooms { get; set; }
+        public IEnumerable<UserSchool> UserSchools { get; set; }
+        public IEnumerable<Course> Courses { get; set; }
+        public IEnumerable<Room> Rooms { get; set; }
     }
 }

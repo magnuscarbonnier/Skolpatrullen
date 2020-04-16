@@ -3,53 +3,107 @@
 @{
     ViewData["Title"] = "Alla skolor";
 }
-
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Alla skolor</h1>
-
-<a class="btn btn-link" asp-area="" asp-controller="School" asp-action="AddSchoolPage">Lägg till ny skola</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Namn
-            </th>
-            <th>
-                Address
-            </th>
-            <th>
-                Telefon
-            </th>
-            <th>
-                Stad
-            </th>
-            <th>
-                Postkod
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.SchoolList) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PostalCode)
-            </td>
-            <td>
-                @await Html.PartialAsync("_RemoveSchool", new WebApp.ViewModels.SchoolViewModel { Id = item.Id })
-            </td>
-        </tr>
+@if (ViewBag.User != null)
+{
+    @if (ViewBag.User.IsSuperUser == true)
+    {
+        <a class="btn btn-link" asp-area="" asp-controller="School" asp-action="AddSchoolPage">Lägg till ny skola</a>
+    }
 }
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Namn
+                </th>
+                <th class="d-none d-lg-table-cell">
+                    Address
+                </th>
+                <th class="d-none d-lg-table-cell">
+                    Telefon
+                </th>
+                <th>
+                    Stad
+                </th>
+                <th class="d-none d-lg-table-cell">
+                    Postkod
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.SchoolList)
+                if (ViewBag.User != null)
+                {
+                    if (ViewBag.User.IsSuperUser == true)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.Name, "SchoolCourseList", "Course", new { SchoolId = item.Id })
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.PostalCode)
+                            </td>
+                            <td>
+                                @await Html.PartialAsync("_RemoveSchool", new WebApp.ViewModels.SchoolViewModel { Id = item.Id })
+                            </td>
+                        </tr>
+                    }
+                    if (ViewBag.User.IsSuperUser != true)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.Name, "SchoolCourseList", "Course", new { SchoolId = item.Id })
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.City)
+                            </td>
+                            <td class="d-none d-lg-table-cell">
+                                @Html.DisplayFor(modelItem => item.PostalCode)
+                            </td>
+                        </tr>
+
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.Name, "SchoolCourseList", "Course", new { SchoolId = item.Id })
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td class="d-none d-lg-table-cell">
+                            @Html.DisplayFor(modelItem => item.PostalCode)
+                        </td>
+                    </tr>
+
+                }
+        </tbody>
+    </table>
+</div>

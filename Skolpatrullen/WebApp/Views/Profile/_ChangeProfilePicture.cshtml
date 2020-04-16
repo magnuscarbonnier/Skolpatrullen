@@ -1,6 +1,5 @@
 ﻿@model WebApp.ViewModels.ChangeProfilePictureViewModel
 
-
 <div class="row">
     <div class="col-12" align="right">
         <a asp-action="ProfilePictureModal" data-toggle="modal" data-target="#ProfilePicModal">Byt profilbild</a>
@@ -9,45 +8,83 @@
 
 </div>
 
-
-
 <div class="modal fade" id="ProfilePicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ändra Profilbild</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <form enctype="multipart/form-data" asp-action="ChangeProfilePicture">
-                <div class=" modal-body">
-                    <input type="file" accept="image/*" asp-for="file" id="file" style="width: 100%;" />
+            <form enctype="multipart/form-data" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Byt profilbild</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-
+                <div class=" modal-body">
+                    <div id="image_demo" style="width:350px; margin-top:30px">
+                    </div>
+                    <input type="file" name="upload_image" id="upload_image" accept="image/*" />
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
-                    <input type="submit" asp-action="ChangeProfilePicture" value="Spara" class="btn btn-primary" />
+                    <input type="button" value="Spara" class="btn btn-primary actionUpload" />
                 </div>
             </form>
         </div>
     </div>
 </div>
 
+<script type="text/javascript">
+    $(document).ready(function () {
 
+        $image_crop = $('#image_demo').croppie({
+            enableExif: true,
 
+            viewport: {
+                width: 200,
+                height: 200,
+                type: 'circle' //circle
+            },
+            boundary: {
+                width: 300,
+                height: 300
+            }
 
+        });
+        $image_crop.croppie('bind', {
+            url: 'https://lh3.googleusercontent.com/proxy/jrlqUssmspHy2yaYPfJ_bG7KDZ7T6Ww-4pnCKntBJmxnH1Ul7yNFC3ju9zwIiwFvDGez0HaICrCqgFUzC1hDEeHIyuSa5zev-tE-xJwxdz7VKFZavbuPEW7mmrYzqMk-QkflTFv4SR_be7F3jXpSTFER9RM3e4VEogHFh5gDeXZ3ci_v'
+        });
 
+        $('#upload_image').on('change', function () {
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                $image_crop.croppie('bind', {
+                    url: event.target.result
+                }).then(function () {
+                    console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+            $('#croppieTest').modal('show');
+        });
+        $('.actionUpload').on('click', function() {
+            $image_crop.croppie('result', 'blob').then(function (blob) {
+                var formData = new FormData();
+                formData.append('blob', blob);
+                formData.append('filename', 'testFileName.png');
 
-
-
-
-
-
-
-
-
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ChangeProfilePicture", "Profile")',
+                    data: formData,
+                    processData: false,  // tell jQuery not to process the data
+                    contentType: false,  // tell jQuery not to set contentType
+                    success: function() {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    });
+</script>
 
 
 @section Scripts {

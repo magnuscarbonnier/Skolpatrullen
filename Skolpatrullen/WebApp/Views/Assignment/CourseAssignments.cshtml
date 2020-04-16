@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Database.Models.Assignment>
+@{
+    ViewData["Title"] = "Inlämningar";
+}
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<h1>Inlämningar</h1>
+
+
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th scope="col">
+                        Namn
+                    </th>
+                    <th scope="col">
+                        Beskrivning
+                    </th>
+                    <th scope="col">
+                        Deadline
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var assignment in Model)
+                {
+                    <tr>
+                        <td style="font-weight: bold">
+                            @Html.ActionLink(assignment.Name, "GetAssignmentById", new { id = assignment.Id })
+
+                        </td>
+                        @if (assignment.Description.Length > 40)
+                        {
+                            <td>
+                                @assignment.Description.Substring(0, 40)...
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                @assignment.Description
+                            </td>
+                        }
+                        <td style="font-weight: bold">
+                            @assignment.Deadline.ToString().Substring(0, 10)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

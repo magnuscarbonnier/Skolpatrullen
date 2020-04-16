@@ -19,13 +19,18 @@ namespace WebApp.Controllers
             string message = await GetUser();
             if (User != null)
             {
-                IEnumerable<Course> courses = new List<Course>();
-                var response = await APIGetAllCourses();
-                if (response.Data != null)
+                var courseresponse = await APIGetAllCourses();
+                var schoolresponse = await APIGetAllSchools();
+                if (courseresponse.Data != null && schoolresponse.Data != null)
                 {
-                    courses = response.Data;
+                    var response= from co in courseresponse.Data
+                                  join sc in schoolresponse.Data on co.SchoolId equals sc.Id
+                                  select new Course
+                                  {
+                                      Id=co.Id, Name=co.Name, SchoolId=co.SchoolId, StartDate=co.StartDate, EndDate=co.EndDate, School=sc
+                                  };
+                    return View(response);
                 }
-                return View(courses);
             }
             return RedirectToAction("Index", "Home");
         }
@@ -73,7 +78,7 @@ namespace WebApp.Controllers
         {
             var response = await APIRemoveCourse(id);
             SetResponseMessage(response);
-            return RedirectToAction("CourseList", "Course");
+            return RedirectToAction("SuperCourseList", "Course");
         }
         [HttpPost]
         [Route("[controller]/SearchCourses")]
@@ -126,6 +131,7 @@ namespace WebApp.Controllers
             var model = new Course();
 
             var course = await APIGetCourseById(id);
+            var courseBlog = await APIGetBlogPostsByCourseId(id);
             var courseRole = await APIGetCourseRole(User.Id, id);
             var isSchoolAdmin = false;
             if (course.Data != null)
@@ -136,10 +142,14 @@ namespace WebApp.Controllers
             }
             if (User.IsSuperUser || isSchoolAdmin || courseRole.Data == Roles.Lärare)
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate);
                 return View("AdminCourseDetails", model);
             }
             else
             {
+                if (courseBlog.Data != null)
+                    model.CourseBlogPosts = courseBlog.Data.OrderByDescending(cb => cb.PublishDate);
                 return View("CourseDetails", model);
             }
         }
@@ -183,7 +193,7 @@ namespace WebApp.Controllers
             {
                 IEnumerable<CourseFileBody> files = new List<CourseFileBody>();
                 var response = await APIGetAllCourseFiles(courseId);
-                if(response.Data != null)
+                if (response.Data != null)
                 {
                     files = response.Data.Select(f => new CourseFileBody()
                     {
@@ -205,7 +215,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DownloadFile(int id)
         {
             var file = await APIGetFileById(id);
-            if(file != null)
+            if (file != null)
             {
                 return File(file.Data.Binary, file.Data.ContentType, file.Data.Name);
             }
@@ -213,6 +223,77 @@ namespace WebApp.Controllers
             {
                 return View();
             }
+        }
+        [HttpPost]
+        [Route("[controller]/AddCourseBlogPost")]
+        public async Task<IActionResult> AddCourseBlogPost(CourseBlogPost blogPost, int courseId)
+        {
+            string message = await GetUser();
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            blogPost.CourseId = courseId;
+            blogPost.UserId = User.Id;
+            blogPost.PublishDate = DateTime.Now;
+            var response = await APIAddBlogPost(blogPost);
+
+            return RedirectToAction("GetCourseById", new { Id = blogPost.CourseId });
+        }
+        [HttpGet]
+        [Route("[controller]/RemoveCourseBlogPost/{id}")]
+        public async Task<IActionResult> RemoveCourseBlogPost(int Id, int CourseId)
+        {
+            var response = await APIRemoveBlogPost(Id);
+            SetResponseMessage(response);
+            return RedirectToAction("GetCourseById", new { id = CourseId});
+        }
+        [HttpGet]
+        [Route("[controller]/UserCourseList")]
+        public async Task<IActionResult> UserCourseList()
+        {
+            string message = await GetUser();
+            var model = new UserCourseListViewModel();
+            var courseParticipantsResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseResponse = await APIGetCoursesByUserId(User.Id);
+            var schoolResponse = await APIGetSchoolsByUserId(User.Id);
+            if (courseParticipantsResponse.Data != null && courseResponse.Data != null && schoolResponse.Data != null)
+            {
+                var courseParticipants = from cp in courseParticipantsResponse.Data
+                                         join co in courseResponse.Data on cp.CourseId equals co.Id
+                                         orderby cp.ApplicationDate ascending, cp.Status
+                                         select new CourseParticipant
+                                         {
+                                             ApplicationDate = cp.ApplicationDate,
+                                             Course = co,
+                                             CourseId = cp.CourseId,
+                                             Grade = cp.Grade,
+                                             Role = cp.Role,
+                                             Status = cp.Status,
+                                             Id = cp.Id,
+                                         };
+                model.CourseParticipantList = courseParticipants.ToList();
+                model.SchoolList = schoolResponse.Data.ToList();
+            }
+            return View(model);
+        }
+        [HttpGet]
+        [Route("[controller]/SchoolCourseList/{SchoolId}")]
+        public async Task<IActionResult> SchoolCourseList(int SchoolId)
+        {
+            string message = await GetUser();
+            var model = new SchoolCourseListViewModel();
+            var courseResponse = await APIGetCoursesBySchoolId(SchoolId);
+            if (courseResponse.Data != null)
+            {
+                model.CourseList = courseResponse.Data;
+            }
+            var schoolResponse = await APIGetAllSchools();
+            if (schoolResponse.Data != null)
+            {
+                model.School = schoolResponse.Data.SingleOrDefault(sc=>sc.Id==SchoolId);
+            }
+            return View(model);
         }
     }
 }

@@ -6,14 +6,19 @@
     <title>Skolpatrullen ITHS - @ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.js"></script>
     <link href="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler_material.css"
           rel="stylesheet" type="text/css" charset="utf-8">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.4/croppie.min.css"
+          rel="stylesheet" type="text/css" charset="utf-8">
+    <script src="https://cdn.dhtmlx.com/scheduler/edge/dhtmlxscheduler.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-light border-bottom border-top box-shadow">
-            <div class="container" >
+            <div class="container">
                 <a class="navbar-brand text-dark" asp-area=" " asp-controller="Home" asp-action="Index"><img src="~/SP.png" height="50" width="50" alt="" /> </a>
                 <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -36,18 +41,6 @@
 
                             if (ViewBag.User != null)
                             {
-                                @*<li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="~/user-solid.svg" width="25" height="25" />
-                    </a>
-                    <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="nav-link text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
-                        <a class="nav-link text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
-                        <a class="nav-link text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
-                        <a class="nav-link text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
-                    </div>
-                </li>*@
-
                                 if (ViewBag.User.IsSuperUser == true)
                                 {
                                     <li class="nav-item dropdown">
@@ -69,24 +62,26 @@
                                     </li>
                                 }
 
+
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         @if (ViewBag.User.ProfilePictureId == null)
                                         {
-                                            <img src="~/user-solid.svg" width="25" height="25" />
+                                            <img src="~/user-solid.svg" width="25" height="25" class="rounded-circle" />
 
                                         }
                                         else
                                         {
                                             var base64 = Convert.ToBase64String(ViewBag.User.ProfilePicture.Binary);
-                                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                                                <img src="@imgsrc" class="img-thumbnail" width="50" height="50" />
+                                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                            <img src="@imgsrc" class=" rounded-circle" alt="logo" width="25" height="25" />
 
                                         }
                                     </a>
                                     <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="CourseList">Ansök till kurs</a>
-                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Lesson" asp-action="LessonList">Mitt Schema</a>
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Lesson" asp-action="UserLessonCalendar">Mitt Schema</a>
+                                        <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Course" asp-action="UserCourseList">Mina Kurser</a>
                                         <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Profile" asp-action="ProfilePage">Min profil</a>
                                         <a class="dropdown-item bg-dark text-light" asp-area="" asp-controller="Login" asp-action="Logout">Logga ut</a>
                                     </div>
@@ -127,25 +122,24 @@
                 </div>
             }
             @RenderBody()
+
         </main>
     </div>
+    <div class="footer">
+        <footer class="border-top embed-responsive border-top box-shadow">
+            <div class="row">
 
-    <footer class="border-top footer embed-responsive border-top box-shadow">
-        <div class="row">
-
-            <div class="col col-sm-8 text-center">
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
+                <div class="col col-sm-8 text-center">
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
+                    <a class="col text-dark">Karriär</a>
+                    <a class="col text-dark">Kontakta oss</a>
+                </div>
+                <div class="col col-sm-4 text-center">
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">&copy; Skolpatrullen ITHS - 2020 </a>
+                </div>
             </div>
-           <div class="col col-sm-4 text-center">
-                <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
-            </div>
-        </div>
-    </footer>
-
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        </footer>
+    </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

@@ -247,6 +247,19 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
+        [Route("[controller]/GetStudentsByCourseId/{courseId}")]
+        public APIResponse<IEnumerable<User>> GetStudentsByCourseId(int courseId)
+        {
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.CourseParticipants
+                  .Include(cp => cp.User)
+                  .Where(cp => cp.CourseId == courseId && cp.Status==Status.Antagen && cp.Role==Roles.Student).Select(cp => cp.User);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade användare med id {courseId}";
+            return response;
+        }
+        [HttpGet]
         [Route("[controller]/GetAllUsers")]
         public APIResponse<IEnumerable<User>> GetAllUsers()
         {
@@ -338,6 +351,17 @@ namespace WebAPI.Controllers
             }
             return response;
         }
+        [HttpGet]
+        [Route("[controller]/Search/{Search}")]
+        public APIResponse<IEnumerable<User>> GetUsersBySearchString(string Search)
+        {
+            var search = Search.ToLower().Trim();
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.Users.Where(u => (u.FirstName.ToLower() + " " + u.LastNames.ToLower()).Contains(search) || u.SocialSecurityNr.Contains(search));
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade alla användare med söksträng {Search}";
+            return response;
+        }
         LoginSession AddOrUpdateLoginSession(User user)
         {
             var session = _context.LoginSessions.FirstOrDefault(ls => ls.UserId == user.Id);
@@ -387,44 +411,5 @@ namespace WebAPI.Controllers
                 return builder.ToString();
             }
         }
-        [HttpPost]
-        [Route("File/UploadCourseFile")]
-        public APIResponse UploadCourseFile(CourseFileBody body)
-        {
-            APIResponse response = new APIResponse();
-
-            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
-
-
-            if (user != null && body.File.Length > 0)
-            {
-                File file = new File();
-                CourseFile coursefile = new CourseFile();
-
-                file.Binary = body.File;
-                file.UploadDate = body.UploadDate;
-                file.ContentType = body.ContentType;
-                file.Type = FileTypes.CourseFile;
-                file.Name = body.Name;
-
-                _context.Files.Add(file);
-                _context.SaveChanges();
-
-                coursefile.CourseId = body.CourseId;
-                coursefile.FileId = file.Id;
-
-                _context.CourseFiles.Add(coursefile);
-                _context.SaveChanges();
-
-                response.Success = true;
-            }
-            else
-            {
-                response.FailureMessage = "Filen laddades inte upp";
-                response.Success = false;
-            }
-            return response;
-        }
-
     }
 }

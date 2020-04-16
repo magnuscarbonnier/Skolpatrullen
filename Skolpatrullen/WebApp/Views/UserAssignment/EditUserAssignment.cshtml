@@ -1,0 +1,88 @@
+﻿@model WebApp.ViewModels.UserAssignmentViewModel
+
+@{
+    ViewData["Title"] = "EditUserAssignment";
+}
+
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<form asp-action="EditUserAssignment" method="post">
+    <h3>
+        Inlämnad av: @Model.User.FirstName @Model.User.LastNames
+    </h3>
+    <div class="row">
+        <div class="col-lg-6">
+            <h4>@Model.Assignment.Name</h4>
+        </div>
+        <div class="col-lg-6">
+            <h6 class="font-italic text-center">Sista inlämningsdag: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Assignment.Deadline))</h6>
+        </div>
+    </div>
+    @if (Model.TurnedIn == true)
+    {
+        if (Model.ReturnDate.Date == DateTime.MinValue)
+        {
+
+            <div class="col text-danger font-weight-bold">Ej inlämnad</div>
+
+        }
+        else if (Model.ReturnDate.Date <= Model.Assignment.Deadline)
+        {
+
+            <div class="col text-success font-weight-bold">Inlämnad i tid: @Model.ReturnDate</div>
+
+
+        }
+        else
+        {
+
+            <div class="col text-danger font-weight-bold">Sent inlämnad: @Model.ReturnDate</div>
+        }
+        <br />
+        <div class="col font-weight-bold">Betyg: @Model.Grade</div>
+        <br />
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card-body card bg-light">
+                    <h5 class="card-title">
+                        Filer
+                    </h5>
+                    @foreach (var file in Model.AssignmentFiles)
+                    {
+                        <div class="row">
+                            <div class="col">
+                                <a class="card-link">
+                                    @if (file.Name.Length > 20)
+                                    {
+                                        @Html.ActionLink(file.Name.Substring(0, 20) + "...", "DownloadFile", "course", new { id = file.Id })
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink(file.Name, "DownloadFile", "course", new { id = file.Id })
+                                    }
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+            <div class="col-sm-6"><label class="font-weight-bold">Studentens kommentar:</label><br />@Model.Description</div>
+        </div>
+    }
+
+    else
+    {
+        <div class="col text-danger font-weight-bold">Ej inlämnad</div>
+    }
+
+    <br />
+    <div class="form-group col-lg-2">
+        <label asp-for="Grade" class="control-label">Betyg</label>
+        @Html.DropDownListFor(x => Model.Grade, new SelectList(Model.Grades), htmlAttributes: new { @class = "custom-select", id = "Grade" })
+        <span asp-validation-for="Grade" class="text-danger"></span>
+    </div>
+    <div class="col">
+        <input class="btn btn-secondary" type="submit" value="Spara" />
+    </div>
+</form>
+<br />

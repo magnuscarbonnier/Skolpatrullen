@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<WebApp.ViewModels.CourseParticipantViewModel>
-
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Deltagare för kursen</h1>
 
-<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <div class="container">
     <div class="row">
         <table class="table table-sm">
@@ -23,7 +22,7 @@
                     @if (item.Role == Database.Models.Roles.Lärare)
                     {
                         <td class="font-weight-bolder table-info">
-                            @item.Name
+                            <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
                         </td>
                         <td class="font-weight-bolder table-info">
                             @item.Role
@@ -32,7 +31,8 @@
                     else
                     {
                         <td>
-                            @item.Name
+                            <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
+                            
                         </td>
                         <td>
                             @item.Role

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Database.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Lib
@@ -37,15 +38,25 @@ namespace Lib
         public DateTime UploadDate { get; set; }
         public string ContentType { get; set; }
     }
-    public class CourseFileBody
+    public class CourseFileBody : FileBody
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         public int CourseId { get; set; }
+    }
+    public class FileBody
+    {
+        public int Id { get; set; }
         public string Name { get; set; }
         public byte[] File { get; set; }
         public DateTime UploadDate { get; set; }
         public string ContentType { get; set; }
+    }
+    public class AssignmentFileBody : FileBody
+    {
+        public int UserId { get; set; }
+        public int CourseId { get; set; }
+        public int AssignmentId { get; set; }
+        public FileTypes Type { get; set; }
     }
     public class AsId
     {

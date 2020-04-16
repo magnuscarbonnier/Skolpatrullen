@@ -7,29 +7,29 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Phone" class="control-label">Telefon</label>
+                <label asp-for="Phone" class="control-label font-weight-bold">Telefon</label>
                 <input asp-for="Phone" value="@Model.User.Phone" class="form-control" />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Email" class="control-label">E-post</label>
+                <label asp-for="Email" class="control-label font-weight-bold">E-post</label>
                 <input asp-for="Email" value="@Model.User.Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Address" class="control-label">Adresss</label>
+                <label asp-for="Address" class="control-label font-weight-bold">Adresss</label>
                 <input asp-for="Address" value="@Model.User.Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="City" class="control-label">Stad</label>
+                <label asp-for="City" class="control-label font-weight-bold">Stad</label>
                 <input asp-for="City" value="@Model.User.City" class="form-control" />
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PostalCode" class="control-label">Postnummer</label>
+                <label asp-for="PostalCode" class="control-label font-weight-bold">Postnummer</label>
                 <input asp-for="PostalCode" value="@Model.User.PostalCode" class="form-control" />
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
@@ -40,24 +40,38 @@
         </form>
     </div>
     <div class="col-md-4">
-        
-        Kurser:
-        @foreach (var courseParticipant in Model.CourseParticipantList)
+        @if (Model.CourseParticipantList == null)
         {
-            <div class="bg-light">
-            @foreach (var course in Model.CourseList.Where(c=>c.Id==courseParticipant.CourseId))
-            { 
-                <div>
-                    @Html.ActionLink(linkText:@course.Name, actionName:"GetCourseById", controllerName:"Course", new { id = course.Id })
-                </div>
-            }
-            
-            <div>
-                Status: @courseParticipant.Status Roll: @courseParticipant.Role
-            </div>
-            </div>
-            <br />
+            <h6>Du har inte sökt några kurser än.</h6>
         }
+        else
+        {
+            @if (Model.CourseParticipantList.Any(cp => cp.Status == Database.Models.Status.Antagen))
+            {
+                <h6>Kurser du är antagen till:</h6>
 
+                @foreach (var courseParticipant in Model.CourseParticipantList)
+                {
+                <div class="bg-light box-shadow">
+                    Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
+                    <div>
+                        Kurs: @Html.ActionLink(linkText: courseParticipant.Course.Name, actionName: "GetCourseById", controllerName: "Course", new { id = courseParticipant.CourseId })
+                    </div>
+                    <div>
+                        Status: @courseParticipant.Status, Roll: @courseParticipant.Role
+                    </div>
+                    @if (courseParticipant.Grade != null && courseParticipant.Role != Database.Models.Roles.Lärare)
+                    {
+                        <div>Betyg: @courseParticipant.Grade</div>
+                    }
+                </div>
+                <br />
+                }
+             }
+             else
+             {
+             <h6>Du har inte blivit antagen till någon kurs än.</h6>
+             }
+        }
     </div>
 </div>

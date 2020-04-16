@@ -1,46 +1,78 @@
 ﻿@model Database.Models.Course
 
 @{
-    ViewData["Title"] = "CourseDetails";
+    ViewData["Title"] = Model.Name;
 }
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<script>
+    $(document).ready(function () {
+        var maxLength = 200;
+        $(".show-read-more").each(function () {
+            var myStr = $(this).text();
+            if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append(' <a href="javascript:void(0);" class="read-more"><label class="btn-link">läs mer...</label></a>');
+                $(this).append('<span class="more-text">' + removedStr + '</span>');
+            }
+        });
+        $(".read-more").click(function () {
+            $(this).siblings(".more-text").contents().unwrap();
+            $(this).remove();
+        });
+    });
+</script>
+<style>
+    .show-read-more .more-text {
+        display: none;
+    }
+</style>
 
-<div class="d-flex" id="wrapper">
-
-    <!-- Sidebar -->
-
-    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-        <ul class="navbar-nav mr-4">
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Nyheter</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Information</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })">Deltagare</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })">Kalender</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link disabled" href="#">Inlämningar</a>
-            </li>
-            <li class="nav-item">
+<div class="row" id="wrapper">
+    <div class="col-lg-3">
+        
+            <div class="nav-item">
+                
+                <a class="btn text-secondary" href="#nyheter"><i class="fa fa-newspaper fa-lg"></i> Nyheter</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn text-secondary" href="@Url.Action("CourseParticipantList", "courseparticipant", new { courseId = Model.Id })"><i class="fa fa-user-friends fa-lg"></i> Deltagare</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn text-secondary" href="@Url.Action("LessonCalendar", "lesson" , new { id = Model.Id })"><i class="fa fa-calendar-alt fa-lg"></i> Kalender</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn text-secondary" href="@Url.Action("CourseAssignments", "Assignment", new { courseId = Model.Id })"><i class="fa fa-toilet-paper fa-lg"></i> Inlämningar</a>
+            </div>
+            <div class="nav-item">
+                <a class="btn text-secondary" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })"><i class="fa fa-file fa-lg"></i> Kursfiler</a>
+            </div>
+            <div>
                 @await Html.PartialAsync("_UploadCourseFiles", new WebApp.ViewModels.UploadCourseFileViewModel { CourseId = Model.Id })
-            </li>
-            <li>
-                <a class="nav-link text-dark" href="@Url.Action("CourseFiles", "course", new { courseId = Model.Id })">Kursfiler</a>
-            </li>
-        </ul>
+            </div>
+            <div>
+                @await Html.PartialAsync("_AddCourseAssignment", new WebApp.ViewModels.AssignmentViewModel { CourseId = Model.Id, Deadline = DateTime.Now.ToLocalTime() })
+            </div>
+        
     </div>
-    <!-- /#sidebar-wrapper -->
-    <!-- Page Content -->
-    <div id="page-content-wrapper">
-        <div class="container-fluid">
-            <h1 class="mt-4">Nyheter</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+    <div class="col-lg-9">
+        <div class="content">
+            <h1 class="mt-4">Kurs: @Model.Name</h1>
+            @await Html.PartialAsync("_AddCourseBlogPost", new Database.Models.CourseBlogPost { CourseId = Model.Id })
+            @foreach (var blogpost in Model.CourseBlogPosts)
+            {
+                <div class="card">
+                    <div class="card-body bg-light">
+                        <h6 class="">@Convert.ToString(string.Format("{0:yyyy/MM/dd  HH:mm}", blogpost.PublishDate)) Publicerat av: @blogpost.User.FirstName @blogpost.User.LastNames</h6>
+                        <h5>@blogpost.Title</h5>
+                        <p class="show-read-more">@blogpost.Content</p>
+                        <a class="btn text-danger" href="@Url.Action("RemoveCourseBlogPost", new { Id = blogpost.Id, CourseId = blogpost.CourseId })"><i class="fa fa-trash-alt fa-lg"></i> Ta bort</a>
+                    </div>
+                </div>
+                <br />
+            }
         </div>
     </div>
-    <!-- /#page-content-wrapper -->
-
 </div>

@@ -1,0 +1,90 @@
+﻿@model Database.Models.User
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100vh;'>
+    <div class="dhx_cal_navline">
+        <div class="dhx_cal_prev_button">&nbsp;</div>
+        <div class="dhx_cal_next_button">&nbsp;</div>
+        <div class="dhx_cal_today_button"></div>
+        <div class="dhx_cal_date"></div>
+        <div class="dhx_cal_tab" name="day_tab"></div>
+        <div class="dhx_cal_tab" name="week_tab"></div>
+        <div class="dhx_cal_tab" name="month_tab">Månad</div>
+    </div>
+    <div class="dhx_cal_header"></div>
+    <div class="dhx_cal_data"></div>
+</div>
+<script>
+    const compactHeader = {
+        rows: [
+            {
+                cols: [
+                    "prev",
+                    "date",
+                    "next",
+                ]
+            },
+            {
+                cols: [
+                    "day",
+                    "week",
+                    "month",
+                    "spacer",
+                    "today"
+                ]
+            }
+        ]
+    };
+
+    const fullHeader = [
+        "day",
+        "week",
+        "month",
+        "date",
+        "prev",
+        "today",
+        "next"
+    ];
+    // add a switch to select an appropriate config for a current screen size
+    function resetConfig(){
+        let header;
+        if (window.innerWidth < 1000) {
+            header = compactHeader;
+        } else {
+            header = fullHeader;
+
+        }
+        scheduler.config.header = header;
+        return true;
+    }
+    resetConfig();
+    scheduler.attachEvent("onBeforeViewChange", resetConfig);
+    scheduler.attachEvent("onSchedulerResize", resetConfig);
+    scheduler.config.responsive_lightbox = true;
+
+
+    scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+    scheduler.attachEvent("onTemplatesReady", function () {
+        scheduler.templates.event_text = function (start, end, event) {
+            return "<i>" + event.course + "</i></br><b>" + event.text + "</b>";
+        }
+    });
+
+    scheduler.config.readonly = true;
+    scheduler.init('scheduler_here', new Date(), "month");
+    //load data from backend
+    scheduler.load("https://localhost:44367/lesson/userlessons/@Model.Id", "json");
+
+    //connect backend to scheduler
+    var dp = new dataProcessor("https://localhost:44367/lesson/userlessons/@Model.Id");
+    dp.init(scheduler);
+    dp.attachEvent("onAfterUpdate", function (id, action, tid, response) {
+        scheduler.clearAll();
+        scheduler.load("https://localhost:44367/lesson/userlessons/@Model.Id", "json");
+    });
+
+    //set data exchange mode
+    dp.setTransactionMode("REST");
+</script>

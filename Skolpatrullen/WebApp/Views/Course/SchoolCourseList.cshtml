@@ -1,0 +1,23 @@
+﻿@model WebApp.ViewModels.SchoolCourseListViewModel
+@{
+    ViewData["Title"] = $"Kurser på {Model.School.Name}";
+}
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<h1>Alla kurser på @Model.School.Name</h1>
+
+<div class="">
+    <div class="alert-secondary"> <i class="fas fa-school" style="margin-left:5px"></i> @Model.School.Name</div>
+
+    @foreach (var course in Model.CourseList.OrderByDescending(d => d.StartDate))
+    {
+        <div class="list-group bg-light">
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="CourseParticipant"
+               asp-action="AddCourseParticipant" asp-route-Id="@course.Id">
+                <label class="font-weight-bold">@Html.DisplayFor(modelItem => course.Name): </label>
+                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.StartDate))-@Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.EndDate))
+            </a>
+        </div>
+    }
+
+    <br />
+</div>

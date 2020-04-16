@@ -1,0 +1,53 @@
+﻿@model WebApp.ViewModels.UserCourseListViewModel
+@{
+    ViewData["Title"] = "Dina kurser";
+}
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<h1>Dina kurser</h1>
+@if (Model.CourseParticipantList == null)
+{
+    <h5>Du har inte sökt några kurser än.</h5>
+}
+@if (Model.CourseParticipantList !=null)
+{ 
+    <h5>Kurser du är antagen till:</h5>
+
+@foreach (var courseParticipant in Model.CourseParticipantList.Where(cp => cp.Status == Database.Models.Status.Antagen))
+{
+    <div class="card-body bg-light">
+        Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
+        <div>
+            Kurs: @Html.ActionLink(linkText: courseParticipant.Course.Name, actionName: "GetCourseById", controllerName: "Course", new { id = courseParticipant.CourseId })
+        </div>
+        <div>
+            Status: @courseParticipant.Status, Roll: @courseParticipant.Role
+        </div>
+        @if (courseParticipant.Grade != null && courseParticipant.Role != Database.Models.Roles.Lärare)
+        {
+            <div>Betyg: @courseParticipant.Grade</div>
+        }
+    </div>
+    <br />
+}
+<h5>Övriga kurser:</h5>
+@foreach (var courseParticipant in Model.CourseParticipantList.Where(cp => cp.Status != Database.Models.Status.Antagen))
+{
+    <div class="card-body bg-light">
+        Skola: @Model.SchoolList.SingleOrDefault(sc => sc.Id == courseParticipant.Course.SchoolId).Name
+        <div>
+            Kurs: @Html.ActionLink(linkText: courseParticipant.Course.Name, actionName: "GetCourseById", controllerName: "Course", new { id = courseParticipant.CourseId })
+        </div>
+        <div>
+            Status: @courseParticipant.Status
+        </div>
+        @if (courseParticipant.Status == Database.Models.Status.Ansökt)
+        {
+            <div>
+                <a class="btn btn-danger" href="@Url.ActionLink("RemoveCourseParticipant", "CourseParticipant", new { id = courseParticipant.Id })">Ta bort ansökan</a>
+            </div>
+        }
+    </div>
+    <br />
+}
+
+}

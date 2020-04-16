@@ -21,6 +21,10 @@
     <Compile Remove="Migrations\20200309130040_Add_FileTable.Designer.cs" />
     <Compile Remove="Migrations\20200309130216_Add_FileTable.cs" />
     <Compile Remove="Migrations\20200309130216_Add_FileTable.Designer.cs" />
+    <Compile Remove="Migrations\20200320094438_AssignmentAdded.cs" />
+    <Compile Remove="Migrations\20200320094438_AssignmentAdded.Designer.cs" />
+    <Compile Remove="Migrations\20200401161544_StartBlog.cs" />
+    <Compile Remove="Migrations\20200401161544_StartBlog.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

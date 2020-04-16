@@ -12,6 +12,7 @@ namespace WebApp.ViewModels
         public IEnumerable<School> SchoolList { get; set; }
         public IEnumerable<Course> CourseList { get; set; }
         public string Search { get; set; }
+        public School School { get; set; }
     }
    
 }

@@ -1,0 +1,7 @@
+﻿@{
+    ViewData["Title"] = "Din kalender";
+}
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
+<h1>Din kalender</h1>
+
+ @{await Html.RenderPartialAsync("_UserCalendar");}

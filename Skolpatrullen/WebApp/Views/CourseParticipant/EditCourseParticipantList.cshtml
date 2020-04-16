@@ -1,8 +1,7 @@
 ﻿@model IEnumerable<WebApp.ViewModels.CourseParticipantViewModel>
-
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Deltagare för kursen</h1>
 
-<a href="##" onClick="history.go(-1); return false;">Gå tillbaks</a>
 <div class="container">
     <div class="row">
         <table class="table table-sm">
@@ -25,48 +24,47 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    @if (item.Role == Database.Models.Roles.Lärare)
-                    {
-                        <td class="font-weight-bolder table-info">
-                            @item.Name
-                        </td>
-                        <td class="font-weight-bolder table-info">
-                            @item.Role
+                    <tr>
+                        @if (item.Role == Database.Models.Roles.Lärare)
+                        {
+                            <td class="font-weight-bolder table-info">
+                                <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
+                            </td>
+                            <td class="font-weight-bolder table-info">
+                                @item.Role
 
-                        </td>
-                        <td class="font-weight-bolder table-info">
-                            @item.Status
-                        </td>
-                        <td class="font-weight-bolder table-info">
-                            @item.Grade
-                        </td>
-                        <td class="font-weight-bolder table-info">
-                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
-                        </td>
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    @item.Status
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    @item.Grade
+                                </td>
+                                <td class="font-weight-bolder table-info">
+                                    <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
+                                </td>
 
-                    }
-                    else
-                    {
-                        <td>
-                            @item.Name
-                        </td>
-                        <td>
-                            @item.Role
+                        }
+                        else
+                        {
+                            <td>
+                                <a href="@Url.ActionLink("GetPublicProfile", "Profile", new { userId = item.UserId })">@item.Name</a>
+                            </td>
+                            <td>
+                                @item.Role
 
-                        </td>
-                        <td>
-                            @item.Status
-                        </td>
-                        <td>
-                            @item.Grade
-                        </td>
-                        <td>
-                            <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
-                        </td>
-
-                    }
-                </tr>
+                                </td>
+                                <td>
+                                    @item.Status
+                                </td>
+                                <td>
+                                    @item.Grade
+                                </td>
+                                <td>
+                                    <a asp-area="" asp-controller="CourseParticipant" asp-action="EditCourseParticipant" asp-route-Id="@item.Id">Ändra</a>
+                                </td>
+                        }
+                    </tr>
                 }
             </tbody>
         </table>

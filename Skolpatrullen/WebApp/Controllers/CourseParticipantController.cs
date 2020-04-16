@@ -17,7 +17,6 @@ namespace WebApp.Controllers
         {
             string message = await GetUser();
             var model = new CourseParticipantViewModel();
-            model.UserId = User.Id;
 
             var courseResponse = await APIGetCourseById(Id);
             if (courseResponse.Data != null)
@@ -25,15 +24,20 @@ namespace WebApp.Controllers
                 model.Course = courseResponse.Data;
                 model.CourseId = courseResponse.Data.Id;
             }
-            var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
-            var courseParticipant = cpResponse.Data.SingleOrDefault(cp => cp.CourseId == Id);
-            if (courseParticipant != null)
+            model.Status = Status.Avslag;
+            if (User != null)
             {
-                model.Status = courseParticipant.Status;
-            }
-            else
-            {
-                model.Status = Database.Models.Status.Avslag;
+                model.UserId = User.Id;
+                var cpResponse = await APIGetCourseParticipantsByUserId(User.Id);
+                if (cpResponse.Data != null)
+                {
+                    var courseParticipant = cpResponse.Data.SingleOrDefault(cp => cp.CourseId == Id);
+                    if (courseParticipant != null)
+                    {
+                        model.Status = courseParticipant.Status;
+                        return View(model);
+                    }
+                }
             }
             return View(model);
         }
@@ -178,7 +182,9 @@ namespace WebApp.Controllers
                             .Select(comb => new CourseParticipantViewModel
                             {
                                 Id = comb.co.Id,
+                                UserId = comb.u.Id,
                                 CourseId = comb.co.CourseId,
+                                Role = comb.co.Role,
                                 Name = comb.u.FirstName + " " + comb.u.LastNames,
                             });
                 var course = await APIGetCourseById(courseId);
@@ -255,6 +261,14 @@ namespace WebApp.Controllers
 
             }
             return RedirectToAction("CourseParticipantList", "CourseParticipant");
+        }
+        [HttpGet]
+        [Route("[controller]/RemoveCourseParticipant/{id}")]
+        public async Task<IActionResult> RemoveCourseParticipant(int id)
+        {
+            string message = await GetUser();
+            var response = await APIRemoveCourseParticipant(id);
+            return SetResponseMessage(response, RedirectToAction("UserCourseList", "Course"), RedirectToAction("Index", "Home"));
         }
         [HttpPost]
         [Route("[controller]/EditCourseParticipant")]

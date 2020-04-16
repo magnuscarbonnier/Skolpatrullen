@@ -26,15 +26,27 @@ namespace WebApp.Controllers
             {
                 model.PVM.User.ProfilePicture = (await APIGetFileById((int)User.ProfilePictureId)).Data;
             }
-            var courseParticipantsResponse = APIGetAllCourseParticipants();
-            if (courseParticipantsResponse != null)
+            var courseParticipantsResponse = await APIGetCourseParticipantsByUserId(User.Id);
+            var courseResponse = await APIGetCoursesByUserId(User.Id);
+            var schoolResponse = await APIGetSchoolsByUserId(User.Id);
+            if (courseParticipantsResponse.Data != null && courseResponse.Data != null && schoolResponse.Data != null)
             {
-                model.PVM.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == User.Id).ToList();
-            }
-            var courseResponse = APIGetAllCourses();
-            if (courseResponse != null)
-            {
-                model.PVM.CourseList = courseResponse.Result.Data.ToList();
+                var courseParticipants = from cp in courseParticipantsResponse.Data
+                                         join co in courseResponse.Data on cp.CourseId equals co.Id
+                                         orderby co.StartDate ascending
+                                         where cp.Status == Status.Antagen
+                                         select new CourseParticipant
+                                         {
+                                             ApplicationDate = cp.ApplicationDate,
+                                             Course = co,
+                                             CourseId = cp.CourseId,
+                                             Grade = cp.Grade,
+                                             Role = cp.Role,
+                                             Status = cp.Status,
+                                             Id = cp.Id,
+                                         };
+                model.PVM.CourseParticipantList = courseParticipants.ToList();
+                model.PVM.SchoolList = schoolResponse.Data.ToList();
             }
 
             return View(model);
@@ -107,11 +119,11 @@ namespace WebApp.Controllers
         {
 
             string message = await GetUser();
-            var model = new List<User>();
+            var model = new UserListViewModel();
             var response = await APIGetAllUsers();
             if (response.Data != null)
             {
-                model = response.Data.ToList();
+                model.UserList = response.Data.OrderBy(us=>us.LastNames).ToList();
             }
             if (!string.IsNullOrEmpty(response.FailureMessage))
             {
@@ -159,10 +171,13 @@ namespace WebApp.Controllers
             {
                 return View();
             }
+            if(Request.Form.Files.Count > 0)
+            {
+                vm.file = Request.Form.Files[0];
+            }
             if (vm.file != null && vm.file.Length > 0)
             {
                 ChangeProfilePictureBody body = new ChangeProfilePictureBody();
-
                 byte[] p1 = null;
                 using (var fs1 = vm.file.OpenReadStream())
                 using (var ms1 = new MemoryStream())
@@ -179,14 +194,12 @@ namespace WebApp.Controllers
 
                 var response = await APIChangeProfilePicture(body);
             }
-            else if(vm.file == null)
+            else if (vm == null)
             {
                 var fileResponse = await APIGetFileById(Convert.ToInt32(User.ProfilePictureId));
                 var response = await APIDeleteFileById(fileResponse.Data.Id);
             }
             return RedirectToAction("ProfilePage", "Profile");
-
-
         }
 
         [HttpPost]
@@ -204,6 +217,78 @@ namespace WebApp.Controllers
             return RedirectToAction("UserListPage", "Profile");
 
 
+        }
+        [HttpGet]
+        [Route("[controller]/GetPublicProfile/{userId}")]
+        public async Task<IActionResult> GetPublicProfile(int userId)
+        {
+            string message = await GetUser();
+            var user = await APIGetUserById(userId);
+
+            if (user != null)
+            {
+                ProfileViewModel pvm = new ProfileViewModel();
+                pvm.Address = user.Data.Address;
+                pvm.City = user.Data.City;
+                pvm.Email = user.Data.Email;
+                pvm.Phone = user.Data.Phone;
+                pvm.PostalCode = user.Data.PostalCode;
+                pvm.Name = user.Data.FirstName + " " + user.Data.LastNames;
+                pvm.CourseParticipantList = user.Data.CourseParticipants;
+
+                if (user.Data.ProfilePictureId != null)
+                {
+                    var fileResponse = await APIGetFileById(Convert.ToInt32(user.Data.ProfilePictureId));
+                    pvm.File = fileResponse.Data;
+                }
+
+                var courseParticipantsResponse = APIGetAllCourseParticipants();
+                if (courseParticipantsResponse != null)
+                {
+                    pvm.CourseParticipantList = courseParticipantsResponse.Result.Data.Where(c => c.UserId == user.Data.Id).ToList();
+                }
+                var courseResponse = APIGetAllCourses();
+                if (courseResponse != null)
+                {
+                    pvm.CourseList = courseResponse.Result.Data.ToList();
+                }
+
+
+                return View("PublicProfilePage", pvm);
+            }
+            return View("CourseParticipantList");
+
+        }
+        [HttpPost]
+        [Route("[controller]/SearchUsers")]
+        public async Task<IActionResult> SearchUsers(UserListViewModel vm)
+        {
+            string message = await GetUser();
+            var model = new UserListViewModel();
+            var userResponse = await APIGetAllUsers();
+            if (userResponse.Data != null)
+            {
+                if (!string.IsNullOrEmpty(vm.Search))
+                {
+                    var searchResponse = await APIGetUsersBySearchString(vm.Search);
+                    if (searchResponse.Data != null)
+                    {
+                        model.UserList = searchResponse.Data;
+                    }
+                    else
+                    {
+                        model.UserList = userResponse.Data;
+                    }
+
+                }
+                else
+                {
+                    model.UserList = userResponse.Data;
+                }
+            }
+
+           
+            return View("UserListPage",model);
         }
     }
 }

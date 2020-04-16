@@ -13,6 +13,7 @@ using WebApp.ViewModels;
 
 namespace WebAPI.Controllers
 {
+    [ApiController]
     public class FileController : APIController
     {
         public FileController(Context context, ILogger<UserController> logger) : base(context, logger)
@@ -70,6 +71,128 @@ namespace WebAPI.Controllers
                 response.Success = true;
                 response.SuccessMessage = "Hämtade alla filer";
             } else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("[controller]/UploadCourseFile")]
+        public APIResponse UploadCourseFile(CourseFileBody body)
+        {
+            APIResponse response = new APIResponse();
+
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+            if (user != null && body.File.Length > 0)
+            {
+                File file = new File();
+                CourseFile coursefile = new CourseFile();
+
+                file.Binary = body.File;
+                file.UploadDate = body.UploadDate;
+                file.ContentType = body.ContentType;
+                file.Type = FileTypes.CourseFile;
+                file.Name = body.Name;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                coursefile.CourseId = body.CourseId;
+                coursefile.FileId = file.Id;
+
+                _context.CourseFiles.Add(coursefile);
+                _context.SaveChanges();
+
+                response.Success = true;
+            }
+            else
+            {
+                response.FailureMessage = "Filen laddades inte upp";
+                response.Success = false;
+            }
+            return response;
+        }
+        [HttpPost]
+        [Route("[controller]/UploadAssignmentFile")]
+        public APIResponse UploadAssignmentFile(AssignmentFileBody body)
+        {
+            APIResponse response = new APIResponse();
+
+            //checks if user exists
+            User user = _context.Users.SingleOrDefault(u => u.Id == body.UserId);
+
+
+            if (user != null && body.File.Length > 0)
+            {
+                File file = new File();
+                AssignmentFile assignmentfile = new AssignmentFile();
+
+                file.Binary = body.File;
+                file.UploadDate = body.UploadDate;
+                file.ContentType = body.ContentType;
+                file.Type = body.Type;
+                file.Name = body.Name;
+
+                _context.Files.Add(file);
+                _context.SaveChanges();
+
+                assignmentfile.AssignmentId = body.AssignmentId;
+                assignmentfile.FileId = file.Id;
+                if (body.Type == FileTypes.UserAssignment)
+                {
+                    assignmentfile.Type = AssignmentFileType.StudentFile;
+                } else if (body.Type == FileTypes.Assignment)
+                {
+                    assignmentfile.Type = AssignmentFileType.AssignmentFile;
+                }
+                assignmentfile.UserId = body.UserId;
+
+                _context.AssignmentFiles.Add(assignmentfile);
+                _context.SaveChanges();
+
+                response.SuccessMessage = "Laddade upp inlämningsfil";
+                response.Success = true;
+            }
+            else
+            {
+                response.FailureMessage = "Filen laddades inte upp";
+                response.Success = false;
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetFilesByAssignment/{AssignmentId}")]
+        public APIResponse<IEnumerable<File>> GetFilesByAssignment(int AssignmentId)
+        {
+            APIResponse<IEnumerable<File>> response = new APIResponse<IEnumerable<File>>();
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.AssignmentId == AssignmentId).Select(af => af.File);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = "Hämtade alla filer";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = "Hämtade inga filer";
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/GetUserAssignmentFilesByUserId/{UserId}")]
+        public APIResponse<IEnumerable<AssignmentFile>> GetUserAssignmentFilesByUserId(int UserId)
+        {
+            APIResponse<IEnumerable<AssignmentFile>> response = new APIResponse<IEnumerable<AssignmentFile>>();
+            var files = _context.AssignmentFiles.Include(af => af.File).Where(af => af.UserId == UserId);
+            if (files != null)
+            {
+                response.Data = files;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla filer som tillhör Id: {UserId}";
+            }
+            else
             {
                 response.Success = false;
                 response.FailureMessage = "Hämtade inga filer";

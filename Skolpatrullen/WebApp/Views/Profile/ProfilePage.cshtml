@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Profilsida";
 }
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 @if (Model != null)
 {
     <div class="row">
@@ -12,19 +13,16 @@
             <h4>@Model.PVM.User.FirstName @Model.PVM.User.LastNames</h4>
         </div>
         <div class="col-md-10" align="right">
-
-
-
             @{
                 if (Model.PVM.User.ProfilePicture != null)
                 {
                     var base64 = Convert.ToBase64String(Model.PVM.User.ProfilePicture.Binary);
                     var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-                    <img src="@imgsrc" style="max-width:100px;max-height:120px" class="img-thumbnail" />
+                    <img src="@imgsrc" style="max-width:100px;max-height:120px" class="rounded-circle" />
                 }
                 else
                 {
-                    <img src="~/user-solid.svg" style="max-width:100px;max-height:120px;" class="img-thumbnail" />
+                    <img src="~/user-solid.svg" style="max-width:100px;max-height:120px;" class="rounded-circle" />
                 }
             }
         </div>
@@ -33,11 +31,10 @@
 }
 
 @await Html.PartialAsync("_ChangeProfilePicture", Model.CPPVM)
-
-
 @await Html.PartialAsync("_ChangeProfile", Model.PVM)
-
 @await Html.PartialAsync("_ChangePassword", Model.CPVM)
+
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

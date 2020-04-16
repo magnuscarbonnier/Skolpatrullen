@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Kurslista";
 }
-
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Alla kurser</h1>
 <form asp-controller="Course" asp-action="SearchCourses">
     <p>
@@ -11,19 +11,20 @@
     </p>
 </form>
 @foreach (var school in Model.SchoolList) {
-<div class="bg-light ">
-    <div class="alert-primary">Skola: @Html.DisplayFor(modelItem => school.Name)</div>
-    <div class="list-group">
+<div class="">
+    <div class="alert-secondary"> <i class="fas fa-school" style="margin-left:5px"></i> @Html.DisplayFor(modelItem => school.Name)</div>
 
+    @foreach (var course in Model.CourseList.Where(c => c.SchoolId == school.Id).OrderByDescending(d => d.StartDate))
+    {
+     <div class="list-group bg-light">
+        <a class="list-group-item list-group-item-action" asp-area="" asp-controller="CourseParticipant"
+        asp-action="AddCourseParticipant" asp-route-Id="@course.Id">
+        <label class="font-weight-bold">@Html.DisplayFor(modelItem => course.Name): </label>
+        @Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.StartDate))-@Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.EndDate))
+        </a>
+     </div>
+    }
 
-        @foreach (var course in Model.CourseList.Where(c => c.SchoolId == school.Id).OrderByDescending(d => d.StartDate))
-        {
-            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="CourseParticipant" 
-               asp-action="AddCourseParticipant" asp-route-Id="@course.Id">
-                <label class="font-weight-bold">@Html.DisplayFor(modelItem => course.Name): </label>
-         @Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.StartDate))-@Convert.ToString(string.Format("{0:yyyy/MM/dd}", course.EndDate))</a>
-        }
-    </div>
-    <hr />
+    <br />
 </div>        
 }

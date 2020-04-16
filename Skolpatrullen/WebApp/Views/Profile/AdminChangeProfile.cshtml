@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Admin ändra profil";
 }
-
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Ändra namn</h1>
 
 <h4>@Model.User.FirstName @Model.User.LastNames, @Model.User.SocialSecurityNr</h4>
@@ -48,18 +48,17 @@
         {
             var base64 = Convert.ToBase64String(Model.User.ProfilePicture.Binary);
             var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
-            <img src="@imgsrc" style="max-width:100px;max-height:120px" class="img-thumbnail" />
+            <img src="@imgsrc" style="max-width:100px;max-height:120px" class="rounded-circle" />
             <div>
                 @await Html.PartialAsync("_AdminRemoveProfilePicture", new WebApp.ViewModels.RemoveProfilePicture() { UserId = Model.UserId, Picture = Model.User.ProfilePicture.Binary })
             </div>
         }
         else
         {
-            <img src="~/user-solid.svg" style="max-width:100px;max-height:120px;" class="img-thumbnail" />
+            <img src="~/user-solid.svg" style="max-width:100px;max-height:120px;" class="rounded-circle" />
         }
     }
 </div>
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

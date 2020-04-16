@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Database.Models;
 using Lib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace WebAPI.Controllers
@@ -37,7 +38,7 @@ namespace WebAPI.Controllers
             APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
             response.Data = AddOrUpdateCourseParticipant(courseParticipant);
             response.Success = true;
-            response.SuccessMessage = "La till/updaterade kursdeltagande";
+            response.SuccessMessage = "La till/uppdaterade kursdeltagande";
             return response;
         }
         [HttpGet]
@@ -45,10 +46,21 @@ namespace WebAPI.Controllers
         public APIResponse<IEnumerable<CourseParticipant>> GetCourseParticipantsByUserId(int Id)
         {
             APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
-            response.Data = _context.CourseParticipants.Where(u => u.UserId == Id).ToList();
 
-            response.Success = true;
-            response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
+            var courseParticipants = _context.CourseParticipants.Where(cp => cp.UserId == Id);
+
+            if (courseParticipants.Any())
+            {
+                response.Data = courseParticipants;
+                response.Success = true;
+                response.SuccessMessage = $"Hämtade alla kursdeltaganden för användare med id {Id}";
+            }
+            else
+            {
+                response.Success = false;
+                response.FailureMessage = $"Fanns inga kursdeltaganden för användare med id {Id}";
+            }
+
             return response;
         }
         [HttpGet]
@@ -66,6 +78,31 @@ namespace WebAPI.Controllers
             {
                 response.Success = false;
                 response.FailureMessage = "Kunde inte hitta kursdeltagande med id " + Id;
+            }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/Remove/{id}")]
+        public APIResponse Remove(int id)
+        {
+            APIResponse response = new APIResponse();
+            var removeCP = _context.CourseParticipants.SingleOrDefault(s => s.Id == id);
+            if (removeCP != null && removeCP.Status == Status.Ansökt && removeCP.Grade == null)
+            {
+                _context.Remove(removeCP);
+                _context.SaveChanges();
+                response.Success = true;
+                response.SuccessMessage = $"Tog bort kursdeltagare med id {id}";
+            }
+            else if (removeCP != null && removeCP.Status != Status.Ansökt)
+            {
+                response.Success = false;
+                response.SuccessMessage = $"Du får ej ta bort kursdeltagare med id {id}. Går endast att ta bort om status är Ansökt och betyg ej är satt.";
+            }
+            else
+            {
+                response.FailureMessage = $"Kursdeltagaren fanns inte";
+                response.Success = false;
             }
             return response;
         }

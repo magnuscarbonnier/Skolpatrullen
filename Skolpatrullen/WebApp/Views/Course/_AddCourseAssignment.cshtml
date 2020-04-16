@@ -1,0 +1,43 @@
+﻿@model WebApp.ViewModels.AssignmentViewModel
+
+
+<a data-toggle="modal" href="#" data-target="#CourseAssignmentModal" class="nav-link text-secondary"><i class="fa fa-plus fa-lg"></i> Lägg till inlämning</a>
+
+
+<div class="modal fade" id="CourseAssignmentModal" tabindex="-1" role="dialog" aria-labelledby="CourseAssignment" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="AddCourseAssignment" enctype="multipart/form-data" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="CourseAssignment">Lägg till inlämning</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class=" modal-body">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Namn</label>
+                    <input asp-for="Name" type="text" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+
+                    <label asp-for="Description" class="control-label">Text</label>
+                    <textarea asp-for="Description" type="text" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Deadline" class="control-label">Deadline för inlämning</label>
+                    <input asp-for="Deadline" type="date" class="form-control" />
+                    <span asp-validation-for="Deadline" class="text-danger"></span>
+                </div>
+                <input type="file" multiple="multiple" asp-for="File" id="file" style="width: 100%;" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                <input type="submit" asp-controller="Assignment" asp-action="AddCourseAssignment" asp-route-courseId="@Model.CourseId" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
