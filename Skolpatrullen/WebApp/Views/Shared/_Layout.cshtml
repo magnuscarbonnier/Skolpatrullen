@@ -122,25 +122,24 @@
                 </div>
             }
             @RenderBody()
+
         </main>
     </div>
+    <div class="footer">
+        <footer class="border-top embed-responsive border-top box-shadow">
+            <div class="row">
 
-    <footer class="border-top footer embed-responsive border-top box-shadow">
-        <div class="row">
-
-            <div class="col col-sm-8 text-center">
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Career">Karriär</a>
-                <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Contact">Kontakta oss</a>
+                <div class="col col-sm-8 text-center">
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Index">Om Skolpatrullen</a>
+                    <a class="col text-dark">Karriär</a>
+                    <a class="col text-dark">Kontakta oss</a>
+                </div>
+                <div class="col col-sm-4 text-center">
+                    <a class="col text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">&copy; Skolpatrullen ITHS - 2020 </a>
+                </div>
             </div>
-            <div class="col col-sm-4 text-center">
-                <a class="col text-dark"> &copy; Skolpatrullen ITHS - 2020 </a>
-            </div>
-        </div>
-    </footer>
-
-
-
+        </footer>
+    </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)

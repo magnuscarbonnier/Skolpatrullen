@@ -38,7 +38,7 @@ namespace WebAPI.Controllers
             APIResponse<CourseParticipant> response = new APIResponse<CourseParticipant>();
             response.Data = AddOrUpdateCourseParticipant(courseParticipant);
             response.Success = true;
-            response.SuccessMessage = "La till/updaterade kursdeltagande";
+            response.SuccessMessage = "La till/uppdaterade kursdeltagande";
             return response;
         }
         [HttpGet]
@@ -47,8 +47,8 @@ namespace WebAPI.Controllers
         {
             APIResponse<IEnumerable<CourseParticipant>> response = new APIResponse<IEnumerable<CourseParticipant>>();
 
-            var courseParticipants = _context.CourseParticipants.Where(cp=>cp.UserId==Id);
-                
+            var courseParticipants = _context.CourseParticipants.Where(cp => cp.UserId == Id);
+
             if (courseParticipants.Any())
             {
                 response.Data = courseParticipants;
@@ -60,7 +60,7 @@ namespace WebAPI.Controllers
                 response.Success = false;
                 response.FailureMessage = $"Fanns inga kursdeltaganden för användare med id {Id}";
             }
-            
+
             return response;
         }
         [HttpGet]
@@ -87,7 +87,7 @@ namespace WebAPI.Controllers
         {
             APIResponse response = new APIResponse();
             var removeCP = _context.CourseParticipants.SingleOrDefault(s => s.Id == id);
-            if (removeCP != null && removeCP.Status==Status.Ansökt && removeCP.Grade == null)
+            if (removeCP != null && removeCP.Status == Status.Ansökt && removeCP.Grade == null)
             {
                 _context.Remove(removeCP);
                 _context.SaveChanges();

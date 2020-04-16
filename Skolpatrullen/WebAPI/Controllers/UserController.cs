@@ -247,6 +247,19 @@ namespace WebAPI.Controllers
             return response;
         }
         [HttpGet]
+        [Route("[controller]/GetStudentsByCourseId/{courseId}")]
+        public APIResponse<IEnumerable<User>> GetStudentsByCourseId(int courseId)
+        {
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.CourseParticipants
+                  .Include(cp => cp.User)
+                  .Where(cp => cp.CourseId == courseId && cp.Status==Status.Antagen && cp.Role==Roles.Student).Select(cp => cp.User);
+
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade användare med id {courseId}";
+            return response;
+        }
+        [HttpGet]
         [Route("[controller]/GetAllUsers")]
         public APIResponse<IEnumerable<User>> GetAllUsers()
         {
@@ -336,6 +349,17 @@ namespace WebAPI.Controllers
                 response.Success = false;
                 response.FailureMessage = $"Hittade inte någon skoldeltagare med id {userId} för skola med id {schoolId}";
             }
+            return response;
+        }
+        [HttpGet]
+        [Route("[controller]/Search/{Search}")]
+        public APIResponse<IEnumerable<User>> GetUsersBySearchString(string Search)
+        {
+            var search = Search.ToLower().Trim();
+            APIResponse<IEnumerable<User>> response = new APIResponse<IEnumerable<User>>();
+            response.Data = _context.Users.Where(u => (u.FirstName.ToLower() + " " + u.LastNames.ToLower()).Contains(search) || u.SocialSecurityNr.Contains(search));
+            response.Success = true;
+            response.SuccessMessage = $"Hämtade alla användare med söksträng {Search}";
             return response;
         }
         LoginSession AddOrUpdateLoginSession(User user)

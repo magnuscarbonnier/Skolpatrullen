@@ -3,43 +3,52 @@
 @{
     ViewData["Title"] = "Information om kurs";
 }
-
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Information om kurs</h1>
-<hr />
-        <div class="row">
-            <div class="col-md-4">
-                <form asp-action="AddCourseParticipant">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    @Html.HiddenFor(m => m.UserId)
-                    @Html.HiddenFor(m => m.CourseId)
-                    <div class="font-weight-bold">Kurs: @Html.DisplayFor(m => m.Course.Name)</div>
-                    <div>Startdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.StartDate))</div>
-                    <div>Slutdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.EndDate))</div>
-                    <div>Max antal platser på kurs: </div>
 
-                    @{
-                        if (Model.Status == Database.Models.Status.Ansökt)
-                        {
-                            <div>Du har redan ansökt till den här kursen</div>
-                        }
-                        else if (Model.Status == Database.Models.Status.Antagen)
-                        {
-                            <div>Du är redan med i den här kursen</div>
-                        }
-                        else if (Model.Status == Database.Models.Status.Inaktiv)
-                        {
-                            <div>Du har gjort någet fel (behöver något bättre medelande)</div>
-                        }
-                        else if(Model.Status == Database.Models.Status.Avslag)
-                        {
-                            <div class="form-group">
-                                <input type="submit" value="Ansök" class="btn btn-primary" />
-                            </div>
-                        }
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddCourseParticipant">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @Html.HiddenFor(m => m.UserId)
+            @Html.HiddenFor(m => m.CourseId)
+            <div class="font-weight-bold">Kurs: @Html.DisplayFor(m => m.Course.Name)</div>
+            <div>Startdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.StartDate))</div>
+            <div>Slutdatum: @Convert.ToString(string.Format("{0:yyyy/MM/dd}", Model.Course.EndDate))</div>
+
+            @{
+                if (ViewBag.User != null)
+                {
+                    if (Model.Status == Database.Models.Status.Ansökt)
+                    {
+                        <div>Du har redan ansökt till den här kursen</div>
                     }
-                </form>
-            </div>
-        </div>
+                    else if (Model.Status == Database.Models.Status.Antagen)
+                    {
+                        <div>Du är redan med i den här kursen</div>
+                        <a class="btn btn-secondary" href="/Course/@Model.CourseId">Gå till kurssidan</a>
+                    }
+                    else if (Model.Status == Database.Models.Status.Inaktiv)
+                    {
+                        <div>Du har gjort någet fel (behöver något bättre medelande)</div>
+                    }
+                    else if (Model.Status == Database.Models.Status.Avslag)
+                    {
+                        <div class="form-group">
+                            <input type="submit" value="Ansök" class="btn btn-primary" />
+                        </div>
+                    }
+                }
+
+                else
+                {
+                    <div>Du måste vara inloggad för att ansöka till kursen</div>
+                    <div><a class="btn btn-info btn-dark" asp-area="" asp-controller="Login" asp-action="LoginPage">Logga in</a></div>
+                }
+            }
+        </form>
+    </div>
+</div>
 
 
 @section Scripts {

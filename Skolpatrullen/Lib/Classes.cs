@@ -56,7 +56,7 @@ namespace Lib
         public int UserId { get; set; }
         public int CourseId { get; set; }
         public int AssignmentId { get; set; }
-        public AssignmentFileType Type { get; set; }
+        public FileTypes Type { get; set; }
     }
     public class AsId
     {

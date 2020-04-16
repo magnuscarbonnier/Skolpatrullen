@@ -19,12 +19,12 @@ namespace WebApp.Controllers
 
             if (schoolResponse.Data != null)
             {
-                model.SchoolList = schoolResponse.Data;
+                model.SchoolList = schoolResponse.Data.OrderBy(sc=>sc.Name);
             }
             var userResponse = await APIGetAllUsers();
             if (schoolResponse.Data != null)
             {
-                model.UserList = userResponse.Data;
+                model.UserList = userResponse.Data.OrderBy(us=>us.SocialSecurityNr);
             }
             return View(model);
         }

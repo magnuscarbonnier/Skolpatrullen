@@ -2,9 +2,8 @@
 @{
     ViewData["Title"] = "Lektioner";
 }
-
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Lektioner</h1>
 
-@section Scripts {
+
     @{await Html.RenderPartialAsync("_Calendar", Model);}
-}

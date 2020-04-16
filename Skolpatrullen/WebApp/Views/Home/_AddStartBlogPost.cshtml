@@ -1,0 +1,37 @@
+﻿@model Database.Models.StartBlogPost
+
+
+<button type="button" data-toggle="modal" href="#" data-target="#StartBlogPostModal" class="btn text-secondary"><i class="fa fa-plus fa-lg"></i> Lägg till nyhet</button>
+
+
+<div class="modal fade" id="StartBlogPostModal" tabindex="-1" role="dialog" aria-labelledby="StartBlogPost" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form asp-action="AddStartBlogPost" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="StartBlogPost">Lägg till inlägg</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class=" modal-body">
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">Titel</label>
+                    <input asp-for="Title" type="text" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+
+                    <label asp-for="Content" class="control-label">Innehåll</label>
+                    <textarea asp-for="Content" type="text" class="form-control"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Avbryt</button>
+                <input type="submit" asp-action="AddStartBlogPost" value="Spara" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -3,40 +3,48 @@
 @{
     ViewData["Title"] = "Kurslista";
 }
-
+    <a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Kurslista</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Kursnamn
-            </th>
-            <th>
-                Startdatum
-            </th>
-            <th>
-                Slutdatum
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.ActionLink(item.Name, "GetCourseById", new { id = item.Id })
-            </td>
-            <td>
-                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.StartDate))
-            </td>
-            <td>
-                @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
-            </td>
-            <td>
-                @await Html.PartialAsync("_RemoveCourse", new WebApp.ViewModels.CourseViewModel { Id = item.Id })
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Kursnamn
+                </th>
+                <th>
+                    Skola
+                </th>
+                <th class="d-none d-lg-table-cell">
+                    Startdatum
+                </th>
+                <th class="d-none d-lg-table-cell">
+                    Slutdatum
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Name, "GetCourseById", new { id = item.Id })
+                    </td>
+                    <td>
+                        @item.School.Name
+                    </td>
+                    <td class="d-none d-lg-table-cell">
+                        @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.StartDate))
+                    </td>
+                    <td class="d-none d-lg-table-cell">
+                        @Convert.ToString(string.Format("{0:yyyy/MM/dd}", item.EndDate))
+                    </td>
+                    <td>
+                        @Html.ActionLink("Ta bort", "RemoveCourse", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

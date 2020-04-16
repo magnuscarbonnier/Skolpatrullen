@@ -1,21 +1,39 @@
-﻿@model System.Collections.Generic.List<Database.Models.User>
+﻿@model WebApp.ViewModels.UserListViewModel
 
 @{
     ViewData["Title"] = "Alla användare";
 }
-
+<a href="##" onClick="history.go(-1); return false;">Gå tillbaka</a>
 <h1>Alla användare</h1>
+<div class="row justify-content-start">
+    <div class="col col-lg-6">
+        <form asp-controller="Profile" asp-action="SearchUsers">
+            <div class="input-group">
+                <div>
+                    Förnamn, efternamn eller personnummer <input asp-for="Search" type="text" class="form-control">
+                </div>
 
-
-
-@foreach (var item in Model) {
-<div class="bg-light ">
-    <div class="alert-primary">@Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastNames)</div>
-    <div> @Html.DisplayFor(modelItem => item.SocialSecurityNr), SuperUser: @Html.DisplayFor(modelItem => item.IsSuperUser)</div>
-    
-    <div><a class="btn btn-sm btn-primary" asp-area="" asp-controller="Profile" asp-action="AdminChangeProfile" asp-route-Id="@item.Id">Ändra</a></div>
-</div>   
-<hr />     
-         
+                <div class="align-self-end">
+                    <input class="btn btn-outline-secondary" type="submit" value="Filtrera" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+@foreach (var item in Model.UserList)
+{
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="alert-secondary font-weight-bold box-shadow"><i class="fas fa-user" style="margin-left:5px margin-right:5px"></i>
+                @Html.DisplayFor(modelItem => item.FirstName) @Html.DisplayFor(modelItem => item.LastNames) 
+            <a class="text-dark float-right font-weight-normal" asp-area="" asp-controller="Profile" asp-action="AdminChangeProfile" asp-route-Id="@item.Id">
+                <i class="fas fa-edit" style="margin-left:5px"></i>Ändra
+                </a>
+            </div>
+            <div class="bg-light box-shadow"> @Html.DisplayFor(modelItem => item.SocialSecurityNr), SuperUser: @Html.DisplayFor(modelItem => item.IsSuperUser)</div>
+        </div>
+    </div>
+    <br />
 }
 
