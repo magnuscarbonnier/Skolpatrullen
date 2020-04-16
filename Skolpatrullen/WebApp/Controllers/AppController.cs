@@ -25,16 +25,23 @@ namespace WebApp.Controllers
         public async Task<string> GetUser()
         {
             ViewBag.User = null;
+            ViewBag.CountCP = 0;
             KeyValuePair<string, string>? cookie = Request.Cookies.SingleOrDefault(c => c.Key == "LoginToken");
             if (cookie.Value.Value == null)
             {
                 return "Inte inloggad";
             }
             var response = await APIGetLoginSession(cookie.Value.Value);
+            
             if (response.Success)
             {
                 User = response.Data.User;
                 ViewBag.User = User;
+                if (User.IsSuperUser == true)
+                {
+                    var countCP = await APIGetCourseParticipantsNotYetAccepted();
+                    ViewBag.CountCP = countCP.Data;
+                }
                 return response.SuccessMessage;
             }
             else
@@ -400,6 +407,11 @@ namespace WebApp.Controllers
         {
             HttpResponseMessage response = await APIGet($"/File/GetUserAssignmentFilesByUserId/{UserId}");
             return (APIResponse<IEnumerable<AssignmentFile>>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<IEnumerable<AssignmentFile>>));
+        }
+        public async Task<APIResponse<int>> APIGetCourseParticipantsNotYetAccepted()
+        {
+            HttpResponseMessage response = await APIGet($"/CourseParticipant/GetCourseParticipantsNotYetAccepted");
+            return (APIResponse<int>)JsonConvert.DeserializeObject(await response.Content.ReadAsStringAsync(), typeof(APIResponse<int>));
         }
     }
 }
